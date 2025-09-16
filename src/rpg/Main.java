@@ -34,6 +34,6 @@ public class Main {
 
     private static void startGame() {
         System.out.println("The adventure begins...");
-        // Call your Game class here
+        // Call game class
     }
 }
