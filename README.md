@@ -28,11 +28,12 @@ javac -d out src/rpg/Main.java
 # Run
 java -cp out rpg.Main
 
-👥 Team
-@chrkk
-@Cayl-06
-@EthannnJohnnn
+```
+## 👥 Team
+@chrkk  
+@Cayl-06  
+@EthannnJohnnn  
 
-📚 Educational Purpose
-
+## 📚 Educational Purpose
 This project is for learning and academic purposes only, created as part of our OOP1 final project.
+
