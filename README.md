@@ -30,9 +30,9 @@ java -cp out rpg.Main
 
 ```
 ## 👥 Team
-@chrkk  
-@Cayl-06  
-@EthannnJohnnn  
+[@chrkk](https://github.com/chrkk)  
+[@Cayl-06](https://github.com/Cayl-06)  
+[@EthannnJohnnn](https://github.com/EthannnJohnnn)
 
 ## 📚 Educational Purpose
 This project is for learning and academic purposes only, created as part of our OOP1 final project.
