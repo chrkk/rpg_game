@@ -28,8 +28,8 @@ javac -d out src/rpg/Main.java
 # Run
 java -cp out rpg.Main
 
-Or
-We'll just make it an executable
+# Or
+We will just make it an executable
 
 ```
 ## 👥 Team
