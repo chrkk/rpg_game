@@ -23,7 +23,7 @@ It is **not ready to run or play yet** — core systems and features are still b
 Once the game reaches a runnable state, you will be able to compile and run it from the project root:
 ```bash
 # Compile
-javac -d out src/rpg/Main.java
+javac -d out $(find src -name "*.java")
 
 # Run
 java -cp out rpg.Main
