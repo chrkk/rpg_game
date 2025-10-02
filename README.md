@@ -30,7 +30,6 @@ It is **not ready to run or play yet** — core systems and features are still b
 - Mini Bosses: Mascot-themed Fractures
     Example: JoliBeast = Fractured Jolibee
 
-
 ## 🛠 How to Run (For Later)
 Once the game reaches a runnable state, you will be able to compile and run it from the project root:
 ```bash
