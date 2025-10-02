@@ -19,6 +19,18 @@ It is **not ready to run or play yet** — core systems and features are still b
 
 ---
 
+## 📝 Core Concepts Game Ideas 
+- Currency: Shards
+- Valuable Item: Crystals — used for crafting and reviving characters
+- Reviving Mechanic: Requires a specific amount of Crystals
+- Enemies (Mobs): Called Fractures
+- Core Crafting System:
+- Normal Item + Crystals = Special Item
+    Example: Pencil + Crystals = Runic Pencil
+- Mini Bosses: Mascot-themed Fractures
+    Example: JoliBeast = Fractured Jolibee
+
+
 ## 🛠 How to Run (For Later)
 Once the game reaches a runnable state, you will be able to compile and run it from the project root:
 ```bash
@@ -39,4 +51,6 @@ We will just make it an executable
 
 ## 📚 Educational Purpose
 This project is for learning and academic purposes only, created as part of our OOP1 final project.
+
+
 
