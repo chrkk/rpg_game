@@ -26,7 +26,7 @@ It is **not ready to run or play yet** — core systems and features are still b
 - Enemies (Mobs): Called Fractures
 - Core Crafting System:
 - Normal Item + Crystals = Special Item
-    Example: Pencil + Crystals = Runic Pencil
+    Example: Pencil + Crystals = Pencil Blade
 - Mini Bosses: Mascot-themed Fractures
     Example: JoliBeast = Fractured Jolibee
 
