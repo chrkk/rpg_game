@@ -4,20 +4,16 @@ import java.util.Scanner;
 import java.util.Random;
 import rpg.utils.TextEffect;
 import rpg.characters.Player;
-import rpg.characters.Enemy;
-import rpg.systems.CombatSystem;
+import rpg.systems.CraftingSystem;
+import rpg.systems.ExplorationSystem;
+import rpg.systems.SafeZoneSystem;
+import rpg.systems.StatusSystem;
 import rpg.items.Weapon;
 
 public class Game {
     private Scanner scanner = new Scanner(System.in);
-
-    private java.util.Random rand = new java.util.Random();
-
-
-    private int zone = 1;          // start in zone 1
-    private int forwardSteps = 0;  // track steps before boss
-    private int crystals = 0;      // resource
-    private int meat = 0;          // resource
+    private Random rand = new Random();
+    private GameState state = new GameState();
 
     private Player player;
 
@@ -35,8 +31,8 @@ public class Game {
             switch (choice) {
                 case "1":
                     playIntroStory();
-                    createPlayer();   // 👈 moved here
-                    wakeUpScene();    // 👈 then tutorial
+                    createPlayer();
+                    wakeUpScene();
                     break;
                 case "2":
                     TextEffect.typeWriter("Thanks for playing!", 40);
@@ -50,19 +46,19 @@ public class Game {
     }
 
     private void playIntroStory() {
-        TextEffect.typeWriter("[Narrator] A sudden white light freezes humanity into stone...", 80);
-        TextEffect.typeWriter("[POV] You look out the classroom window.", 80);
-        TextEffect.typeWriter("The light grows brighter... until everything turns to stone.", 100);
-        TextEffect.typeWriter("Darkness swallows your vision.", 120);
+    TextEffect.typeWriter("[Narrator] A sudden white light freezes humanity into stone...", 50);
+    TextEffect.typeWriter("[POV] You glance out the classroom window.", 50);
+    TextEffect.typeWriter("The light intensifies... until everything turns to stone.", 70);
+    TextEffect.typeWriter("Darkness engulfs your vision.", 80);
 
-        try { Thread.sleep(1500); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
-        TextEffect.typeWriter("...", 200);
+    try { Thread.sleep(800); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+    TextEffect.typeWriter("...", 120);
 
-        TextEffect.typeWriter("[POV] Crack. You awaken in a ruined classroom.", 80);
-        TextEffect.typeWriter("Desks are broken, vines crawl through the windows, your classmates are petrified.", 80);
+    TextEffect.typeWriter("[POV] Crack. You awaken in a ruined classroom.", 60);
+    TextEffect.typeWriter("Desks lie broken, vines crawl through shattered windows, your classmates stand petrified.", 60);
     }
 
-    // 👇 New method for player creation
+
     private void createPlayer() {
         TextEffect.typeWriter("You focus... Who are you in this new world?", 60);
         System.out.print("Enter your name: ");
@@ -86,7 +82,6 @@ public class Game {
         player = new Player(name, trait);
         TextEffect.typeWriter("Identity set: " + player.getName() + " the " + player.getTrait(), 50);
 
-        // Short story continuation
         TextEffect.typeWriter("[Narrator] You stand amidst silence. The world is broken, but you are alive.", 80);
         TextEffect.typeWriter("Your journey begins here...", 80);
     }
@@ -97,7 +92,6 @@ public class Game {
 
         boolean hasCrystal = false;
         boolean hasPencil = false;
-        boolean hasWeapon = false;
         boolean awake = true;
 
         while (awake) {
@@ -117,26 +111,17 @@ public class Game {
                     break;
 
                 case "craft":
-                    if (hasCrystal && hasPencil && player.getWeapon() == null) {
-                        TextEffect.typeWriter("You combine the Pencil + Crystal Shard...", 60);
-                        player.equipWeapon(new Weapon("Pencil Blade", 10));
-                        TextEffect.typeWriter("You crafted a Pencil Blade! Your first weapon.", 60);
-                        } else if (player.getWeapon() != null) {
-                        TextEffect.typeWriter("You already crafted your weapon.", 60);
+                        if (hasCrystal && hasPencil && player.getWeapon() == null) {
+                            state.crystals -= 1; // use up the crystal shard
+                            player.equipWeapon(new Weapon("Pencil Blade", 10));
+                            TextEffect.typeWriter("You combined a Pencil and a Crystal Shard into a Pencil Blade!", 60);
                         } else {
-                        TextEffect.typeWriter("You don’t have enough materials to craft anything.", 60);
-                        }
+                            state.crystals = CraftingSystem.craftWeapon(player, state.crystals);
+                            }
                     break;
 
                 case "status":
-                    TextEffect.typeWriter(
-                        player.getName() + " the " + player.getTrait() +
-                        " | HP: " + player.getHp() + "/" + player.getMaxHp() +
-                        " | Mana: " + player.getMana() + "/" + player.getMaxMana() +
-                        " | Defense: " + player.getDefense() +
-                        " | Intelligence: " + player.getIntelligence(),
-                        40
-                    );
+                    StatusSystem.showStatus(player, state.crystals, state.meat);
                     break;
 
                 case "move":
@@ -144,8 +129,8 @@ public class Game {
                         TextEffect.typeWriter("You can’t leave yet. You need a weapon first.", 60);
                     } else {
                         TextEffect.typeWriter("Armed with your Pencil Blade, you step forward into the unknown...", 80);
-                        awake = false; // exit tutorial loop
-                        explorationLoop();
+                        awake = false;
+                        ExplorationSystem.explorationLoop(player, scanner, rand, state);
                     }
                     break;
 
@@ -154,128 +139,4 @@ public class Game {
             }
         }
     }
-
-
-        private void explorationLoop() {
-        boolean exploring = true;
-
-        while (exploring) {
-            System.out.print("> (craft / search / status / move): ");
-            String command = scanner.nextLine();
-
-            switch (command.toLowerCase()) {
-                case "craft":
-                    craftWeapon();
-                    break;
-                case "search":
-                    TextEffect.typeWriter("You scavenge the area... but find nothing new outside combat.", 60);
-                    break;
-                case "status":
-                    showStatus();
-                    break;
-                case "move":
-                    handleMove();
-                    break;
-                default:
-                    TextEffect.typeWriter("Unknown command.", 40);
-            }
-        }
-    }
-
-    private void handleMove() {
-        TextEffect.typeWriter("Do you move forward or backward?", 40);
-        System.out.print("> ");
-        String dir = scanner.nextLine();
-
-        if (dir.equalsIgnoreCase("backward")) {
-            safeZone();
-        } else if (dir.equalsIgnoreCase("forward")) {
-            forwardSteps++;
-            if (forwardSteps >= 5) {
-                // Boss encounter
-                Enemy boss = new Enemy("Stone Titan", 120, 15, 25);
-                CombatSystem combat = new CombatSystem();
-                boolean win = combat.startCombat(player, boss);
-                if (win) {
-                    TextEffect.typeWriter("🏆 You defeated the Boss! A new safe zone awaits...", 80);
-                    zone++;
-                    forwardSteps = 0; // reset for next chapter
-                    safeZone();
-                } else {
-                    TextEffect.typeWriter("You awaken back at the safe zone...", 60);
-                    safeZone();
-                }
-            } else {
-                // RNG mob encounter
-                int roll = rand.nextInt(100);
-                if (roll < 70) {
-                    Enemy mob = new Enemy("Wild Beast", 40, 8, 12);
-                    CombatSystem combat = new CombatSystem();
-                    if (combat.startCombat(player, mob)) {
-                        int crystalDrop = 1 + rand.nextInt(2);
-                        int meatDrop = rand.nextInt(2);
-                        crystals += crystalDrop;
-                        meat += meatDrop;
-                        TextEffect.typeWriter("Loot: +" + crystalDrop + " Crystals, +" + meatDrop + " Meat.", 50);
-                    }
-                } else if (roll < 90) {
-                    Enemy elite = new Enemy("Corrupted Guardian", 60, 12, 18);
-                    CombatSystem combat = new CombatSystem();
-                    if (combat.startCombat(player, elite)) {
-                        int crystalDrop = 2 + rand.nextInt(3);
-                        int meatDrop = 1;
-                        crystals += crystalDrop;
-                        meat += meatDrop;
-                        TextEffect.typeWriter("Loot: +" + crystalDrop + " Crystals, +" + meatDrop + " Meat.", 50);
-                    }
-                } else {
-                    TextEffect.typeWriter("The path is eerily quiet... nothing happens.", 60);
-                }
-            }
-        } else {
-            TextEffect.typeWriter("Invalid direction.", 40);
-        }
-    
-    }
-
-        private void safeZone() {
-        // Auto recover after boss
-        player.healFull();
-        TextEffect.typeWriter("You feel renewed as you enter Safe Zone " + zone + ".", 60);
-        TextEffect.typeWriter("Your stats have been fully restored.", 60);
-
-        // Continue with the same 4 commands as always
-        explorationLoop();
-    }
-
-    private void showStatus() {
-        TextEffect.typeWriter(
-            player.getName() + " the " + player.getTrait() +
-            " | HP: " + player.getHp() + "/" + player.getMaxHp() +
-            " | Mana: " + player.getMana() + "/" + player.getMaxMana() +
-            " | Defense: " + player.getDefense() +
-            " | Intelligence: " + player.getIntelligence() +
-            " | Weapon: " + (player.getWeapon() == null ? "None" : player.getWeapon().toString()) +
-            " | Crystals: " + crystals +
-            " | Meat: " + meat,
-            40
-        );
-    }
-        private void craftWeapon() {
-            if (player.getWeapon() != null && player.getWeapon().getName().equals("Pencil Blade") && crystals >= 3) {
-            crystals -= 3;
-            player.equipWeapon(new Weapon("Crystal Dagger", 20));
-            TextEffect.typeWriter("You forged a Crystal Dagger! Stronger than your Pencil Blade.", 60);
-            }       else if (player.getWeapon() != null && player.getWeapon().getName().equals("Crystal Dagger") && crystals >= 5) {
-            crystals -= 5;
-            player.equipWeapon(new Weapon("Crystal Sword", 35));
-            TextEffect.typeWriter("You forged a Crystal Sword! Its edge gleams with power.", 60);
-        }   else {
-            TextEffect.typeWriter("You don’t have enough crystals or the right base weapon.", 60);
-    }
-    }
-
-
-
-
 }
