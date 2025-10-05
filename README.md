@@ -11,7 +11,7 @@ It is **not ready to run or play yet** — core systems and features are still b
 ---
 
 ## 🕹 Planned Features
-- Start menu (Start Game / Exit)
+- Start menu (Start Game/Exit)
 - Player creation
 - Turn-based combat
 - Basic exploration
