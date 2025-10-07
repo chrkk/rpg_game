@@ -35,7 +35,7 @@ public class GameLoop {
                     break;
 
                 case "search":
-                    TextEffect.typeWriter("You scavenge the area... but find nothing new outside combat.", 60);
+                    rpg.systems.SafeZoneSystem.searchSafeZone(player, state);
                     break;
 
                 case "status":
