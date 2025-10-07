@@ -9,33 +9,6 @@ import rpg.game.GameState;
 
 public class ExplorationSystem {
 
-    public static void explorationLoop(Player player, Scanner scanner, Random rand, GameState state) {
-    boolean exploring = true;
-
-    while (exploring) {
-        System.out.print("> (craft / search / status / move): ");
-        String command = scanner.nextLine();
-
-        switch (command.toLowerCase()) {
-            case "craft":
-                state.crystals = rpg.systems.CraftingSystem.craftWeapon(player, state.crystals);
-                break;
-            case "search":
-                TextEffect.typeWriter("You scavenge the area... but find nothing new outside combat.", 60);
-                break;
-            case "status":
-                rpg.systems.StatusSystem.showStatus(player, state.crystals, state.meat);
-                break;
-            case "move":
-                handleMove(player, scanner, rand, state,
-                        () -> rpg.systems.SafeZoneSystem.enterSafeZone(player, state));
-                break;
-            default:
-                TextEffect.typeWriter("Unknown command.", 40);
-        }
-    }
-}
-
 
     public static void handleMove(
             Player player,
