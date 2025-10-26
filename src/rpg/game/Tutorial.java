@@ -9,7 +9,6 @@ import rpg.items.Weapon;
 import rpg.characters.Enemy;
 import rpg.systems.TutorialCombatSystem;
 
-
 public class Tutorial {
     private final Scanner scanner;
     private final Random rand;
@@ -71,24 +70,9 @@ public class Tutorial {
                         boolean win = tutorialCombat.startTutorialCombat(player, tutorialEnemy);
 
                         if (win) {
-                            // After victory, introduce EXP
-                            TextEffect.typeWriter("You feel a strange warmth flow through your body...", 70);
-                            TextEffect.typeWriter(
-                                    "[Narrator] This is experience. With enough battles, you will grow stronger and unlock new powers.",
-                                    70);
-
-                            // Later, when Role 1 finishes EXP system:
-                            // player.gainExp(tutorialEnemy.getExpReward());
-
                             awake = false;
-
-                            // Hand off to main game loop
                             GameLoop loop = new GameLoop(player, state, scanner, rand);
                             loop.start();
-                        } else {
-                            // If somehow lost, restart tutorial fight
-                            TextEffect.typeWriter(
-                                    "You awaken again in the ruined classroom, determined to try once more...", 60);
                         }
                     }
                     break;

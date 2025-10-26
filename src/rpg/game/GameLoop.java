@@ -5,7 +5,6 @@ import java.util.Random;
 import rpg.characters.Player;
 import rpg.systems.CraftingSystem;
 import rpg.systems.ExplorationSystem;
-import rpg.systems.SafeZoneSystem;
 import rpg.systems.StatusSystem;
 import rpg.utils.TextEffect;
 
