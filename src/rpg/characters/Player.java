@@ -104,7 +104,7 @@ public class Player {
     }
 
     public void gainExp(int amount) {
-        System.out.println(name + " gained " + amount + " EXP!");
+        // System.out.println(name + " gained " + amount + " EXP!");
         exp += amount;
 
         while (exp >= expToNextLevel) {

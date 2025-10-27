@@ -11,7 +11,7 @@ import rpg.game.GameState;
 
 public class TutorialCombatSystem {
     private Scanner scanner = new Scanner(System.in);
-    private Random rand = new Random();
+    // private Random rand = new Random();
     private GameState state; //new
 
     //new constuctor to rcv current gameState values
