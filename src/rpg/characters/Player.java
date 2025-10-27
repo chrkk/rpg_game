@@ -74,6 +74,10 @@ public class Player {
     public int getMaxMana() { return maxMana; }
     public int getDefense() { return defense; }
     public int getIntelligence() { return intelligence; }
+    // EXP and Level getters ---> new
+    public int getLevel() { return level; }
+    public int getExp() { return exp; }
+    public int getExpToNextLevel() { return expToNextLevel; }
 
     // Combat methods
     public void takeDamage(int dmg) {
