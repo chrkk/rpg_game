@@ -1,14 +1,12 @@
 package rpg.systems;
 
 import java.util.Scanner;
-import java.util.Random;
 import rpg.utils.TextEffect;
 import rpg.characters.Player;
 import rpg.characters.Enemy;
 
 public class TutorialCombatSystem {
     private Scanner scanner = new Scanner(System.in);
-    private Random rand = new Random();
 
     public boolean startTutorialCombat(Player player, Enemy enemy) {
         TextEffect.typeWriter("⚔️ Tutorial Combat! " + enemy.getName() + " blocks your path!", 50);
