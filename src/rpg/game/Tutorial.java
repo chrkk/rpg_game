@@ -65,7 +65,7 @@ public class Tutorial {
                                 ", you step forward into the unknown...", 80);
 
                         // --- First scripted tutorial fight ---
-                        Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8); // weaker stats for tutorial
+                        Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8, 15); // weaker stats for tutorial
                         TutorialCombatSystem tutorialCombat = new TutorialCombatSystem();
                         boolean win = tutorialCombat.startTutorialCombat(player, tutorialEnemy);
 
