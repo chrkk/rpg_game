@@ -13,10 +13,19 @@ public class Player {
     private int maxMana;
     private int defense;
     private int intelligence;
+    //Exp stats ---> new
+    private int level;
+    private int exp;
+    private int expToNextLevel;
 
     public Player(String name, String trait) {
         this.name = name;
         this.trait = trait;
+        
+        //Exp stats ---> new
+        this.level = 1;
+        this.exp = 0;
+        this.expToNextLevel = 100;
 
         // Base stats (before bonuses)
         this.maxHp = 100;
@@ -83,5 +92,22 @@ public class Player {
 
     public boolean isAlive() {
         return hp > 0;
+    }
+
+    public void gainExp(int amount) {
+        System.out.println(name + " gained " + amount + " EXP!");
+        exp += amount;
+
+        while (exp >= expToNextLevel) {
+            exp -= expToNextLevel;
+            level++;
+            expToNextLevel += 25; // makes it harder each level
+            maxHp += 10;
+            maxMana += 5;
+            defense += 1;
+            intelligence += 1;
+            healFull();
+            System.out.println("✨ Level Up! " + name + " is now Level " + level + "!");
+        }
     }
 }
