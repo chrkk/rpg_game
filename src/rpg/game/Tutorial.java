@@ -9,6 +9,10 @@ import rpg.items.Weapon;
 import rpg.characters.Enemy;
 import rpg.systems.TutorialCombatSystem;
 
+//new imports for meat consumable
+import rpg.items.Consumable;
+import rpg.game.GameState;
+
 public class Tutorial {
     private final Scanner scanner;
     private final Random rand;
@@ -65,8 +69,10 @@ public class Tutorial {
                                 ", you step forward into the unknown...", 80);
 
                         // --- First scripted tutorial fight ---
+//                         Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8); // weaker stats for tutorial -->(removed old code)
+                        TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(state); //--> new object with new constructor
                         Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8, 15); // weaker stats for tutorial
-                        TutorialCombatSystem tutorialCombat = new TutorialCombatSystem();
+//                         TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(); -->(removed old code)
                         boolean win = tutorialCombat.startTutorialCombat(player, tutorialEnemy);
 
                         if (win) {

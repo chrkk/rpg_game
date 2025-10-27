@@ -98,8 +98,13 @@ public class Player {
         return hp > 0;
     }
 
+    //setter for healing from meat
+    public void setHp(int hp) {
+    this.hp = Math.min(hp, maxHp); // prevents overhealing
+    }
+
     public void gainExp(int amount) {
-        System.out.println(name + " gained " + amount + " EXP!");
+        // System.out.println(name + " gained " + amount + " EXP!");
         exp += amount;
 
         while (exp >= expToNextLevel) {

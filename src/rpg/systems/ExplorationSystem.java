@@ -30,7 +30,7 @@ public class ExplorationSystem {
     } else if (dir.equalsIgnoreCase("forward")) {
         state.forwardSteps++;
         if (state.forwardSteps >= 5) {
-            CombatSystem combat = new CombatSystem();
+            CombatSystem combat = new CombatSystem(state);
             boolean win = combat.startCombat(player, zone.boss);
             if (win) {
                 TextEffect.typeWriter("🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
@@ -44,7 +44,7 @@ public class ExplorationSystem {
         } else {
             int roll = rand.nextInt(100);
             Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
-            CombatSystem combat = new CombatSystem();
+            CombatSystem combat = new CombatSystem(state);
             if (combat.startCombat(player, mob)) {
                 int crystalDrop = 1 + rand.nextInt(2);
                 int meatDrop = rand.nextInt(2);
