@@ -55,6 +55,6 @@ public class ExplorationSystem {
         }
     } else {
         TextEffect.typeWriter("Invalid direction.", 40);
-     }
+    }
     }
 }   

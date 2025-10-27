@@ -85,6 +85,12 @@ public class CombatSystem {
         if (player.isAlive()) {
             TextEffect.typeWriter("🎉 You defeated the " + enemy.getName() + "!", 50);
             TextEffect.typeWriter("You loot: Food, Crystals, Shards, Materials.", 50);
+            
+            // 🆕 Give EXP to player ---> new
+            int expGained = enemy.getExpReward();
+            player.gainExp(expGained);
+            TextEffect.typeWriter("You gained " + expGained + " EXP!", 50);
+
             return true;
         } else {
             TextEffect.typeWriter("💀 You were defeated... Respawning at checkpoint.", 50);

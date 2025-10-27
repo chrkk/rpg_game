@@ -1,7 +1,6 @@
 package rpg.systems;
 
 import java.util.Scanner;
-import java.util.Random;
 import rpg.utils.TextEffect;
 import rpg.characters.Player;
 import rpg.characters.Enemy;
