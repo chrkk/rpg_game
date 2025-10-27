@@ -6,10 +6,20 @@ import rpg.utils.TextEffect;
 import rpg.characters.Player;
 import rpg.characters.Enemy;
 
+//new imports for meat consumable
+import rpg.items.Consumable;
+import rpg.game.GameState;
+
 public class CombatSystem {
     private Scanner scanner = new Scanner(System.in);
     private Random rand = new Random();
+    // GameState state = new GameState();
+    private GameState state; //new
 
+    //new constuctor to rcv current gameState values
+    public CombatSystem(GameState state) {
+        this.state = state; // store the shared game state
+    }
     public boolean startCombat(Player player, Enemy enemy) {
         TextEffect.typeWriter("⚔️ Combat Start! " + enemy.getName() + " appears!", 50);
 
@@ -39,7 +49,13 @@ public class CombatSystem {
                     break;
 
                 case "item":
-                    TextEffect.typeWriter("You rummage through your bag... (future: healing items, buffs)", 40);
+
+                    if (state.meat > 0) {
+                        Consumable meat = new Consumable("Meat", 10);
+                        meat.consume(player, state);
+                    } else {
+                        TextEffect.typeWriter("You check your bag... but there's no item to consume!", 40);
+                     }
                     break;
 
                 case "run":

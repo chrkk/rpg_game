@@ -84,4 +84,10 @@ public class Player {
     public boolean isAlive() {
         return hp > 0;
     }
+
+    //setter for healing from meat
+    public void setHp(int hp) {
+    this.hp = Math.min(hp, maxHp); // prevents overhealing
+    }
+
 }
