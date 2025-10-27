@@ -14,20 +14,21 @@ public class CombatSystem {
     private Scanner scanner = new Scanner(System.in);
     private Random rand = new Random();
     // GameState state = new GameState();
-    private GameState state; //new
+    private GameState state; // new
 
-    //new constuctor to rcv current gameState values
+    // new constuctor to rcv current gameState values
     public CombatSystem(GameState state) {
         this.state = state; // store the shared game state
     }
+
     public boolean startCombat(Player player, Enemy enemy) {
         TextEffect.typeWriter("⚔️ Combat Start! " + enemy.getName() + " appears!", 50);
 
         while (player.isAlive() && enemy.isAlive()) {
             // --- Player Turn ---
             TextEffect.typeWriter("\nYour HP: " + player.getHp() + "/" + player.getMaxHp() +
-                                  " | Mana: " + player.getMana() + "/" + player.getMaxMana() +
-                                  " | Enemy HP: " + enemy.getHp(), 40);
+                    " | Mana: " + player.getMana() + "/" + player.getMaxMana() +
+                    " | Enemy HP: " + enemy.getHp(), 40);
 
             TextEffect.typeWriter("Choose action: attack / defend / item / run", 30);
             System.out.print("> ");
@@ -40,7 +41,7 @@ public class CombatSystem {
                     int dmg = player.getWeapon().getDamage() + (player.getIntelligence() / 2);
                     enemy.takeDamage(dmg);
                     TextEffect.typeWriter("You strike with your " + player.getWeapon().getName() +
-                    " for " + dmg + " damage!", 40);
+                            " for " + dmg + " damage!", 40);
                     break;
 
                 case "defend":
@@ -55,7 +56,7 @@ public class CombatSystem {
                         meat.consume(player, state);
                     } else {
                         TextEffect.typeWriter("You check your bag... but there's no item to consume!", 40);
-                     }
+                    }
                     break;
 
                 case "run":
@@ -74,10 +75,11 @@ public class CombatSystem {
             // --- Enemy Turn ---
             if (enemy.isAlive()) {
                 int dmgTaken = enemy.enemyAction();
-                if (defended) dmgTaken /= 2;
+                if (defended)
+                    dmgTaken /= 2;
 
-                player.takeDamage(dmgTaken);
-                TextEffect.typeWriter("The " + enemy.getName() + " attacks! You take " + dmgTaken + " damage.", 40);
+                int actualDamage = player.takeDamage(dmgTaken);
+                TextEffect.typeWriter("The " + enemy.getName() + " attacks! You take " + actualDamage + " damage.", 40);
             }
         }
 
@@ -85,7 +87,7 @@ public class CombatSystem {
         if (player.isAlive()) {
             TextEffect.typeWriter("🎉 You defeated the " + enemy.getName() + "!", 50);
             TextEffect.typeWriter("You loot: Food, Crystals, Shards, Materials.", 50);
-            
+
             // 🆕 Give EXP to player ---> new
             int expGained = enemy.getExpReward();
             player.gainExp(expGained);

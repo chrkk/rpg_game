@@ -13,7 +13,10 @@ public class Player {
     private int maxMana;
     private int defense;
     private int intelligence;
-    //Exp stats ---> new
+
+    // 🆕 store base defense for resetting
+    private int baseDefense;
+    // Exp stats ---> new
     private int level;
     private int exp;
     private int expToNextLevel;
@@ -21,8 +24,8 @@ public class Player {
     public Player(String name, String trait) {
         this.name = name;
         this.trait = trait;
-        
-        //Exp stats ---> new
+
+        // Exp stats ---> new
         this.level = 1;
         this.exp = 0;
         this.expToNextLevel = 100;
@@ -35,10 +38,9 @@ public class Player {
         this.defense = 5;
         this.intelligence = 5;
 
-
-        //weapon
+        // weapon
         this.weapon = null;
-        
+
         // Apply trait bonuses
         switch (trait.toLowerCase()) {
             case "scientist":
@@ -59,30 +61,83 @@ public class Player {
                 // fallback if invalid trait
                 break;
         }
+
+        this.baseDefense = this.defense;
     }
-    //weapon
-    public Weapon getWeapon() { return weapon; }
-    public void equipWeapon(Weapon newWeapon) { this.weapon = newWeapon; }
-    //weapon
+
+    // weapon
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void equipWeapon(Weapon newWeapon) {
+        this.weapon = newWeapon;
+    }
+    // weapon
 
     // Getters
-    public String getName() { return name; }
-    public String getTrait() { return trait; }
-    public int getHp() { return hp; }
-    public int getMaxHp() { return maxHp; }
-    public int getMana() { return mana; }
-    public int getMaxMana() { return maxMana; }
-    public int getDefense() { return defense; }
-    public int getIntelligence() { return intelligence; }
+    public String getName() {
+        return name;
+    }
+
+    public String getTrait() {
+        return trait;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
+    public int getMaxMana() {
+        return maxMana;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public int getIntelligence() {
+        return intelligence;
+    }
+
     // EXP and Level getters ---> new
-    public int getLevel() { return level; }
-    public int getExp() { return exp; }
-    public int getExpToNextLevel() { return expToNextLevel; }
+    public int getLevel() {
+        return level;
+    }
+
+    public int getExp() {
+        return exp;
+    }
+
+    public int getExpToNextLevel() {
+        return expToNextLevel;
+    }
 
     // Combat methods
-    public void takeDamage(int dmg) {
-        int reduced = Math.max(0, dmg - defense); // defense reduces damage
-        hp = Math.max(0, hp - reduced);
+    public int takeDamage(int dmg) {
+        int effectiveDamage;
+
+        if (defense > 0) {
+            // Apply defense once
+            effectiveDamage = Math.max(0, dmg - defense);
+            System.out.println("🛡️ Your defense absorbed " + (dmg - effectiveDamage) + " damage, but broke!");
+            defense = 0; // defense breaks after first use
+        } else {
+            // No defense left, take full damage
+            effectiveDamage = dmg;
+        }
+
+        int beforeHp = hp;
+        hp = Math.max(0, hp - effectiveDamage);
+        return beforeHp - hp; // actual damage applied
     }
 
     public void useMana(int cost) {
@@ -92,15 +147,16 @@ public class Player {
     public void healFull() {
         hp = maxHp;
         mana = maxMana;
+        defense = baseDefense;
     }
 
     public boolean isAlive() {
         return hp > 0;
     }
 
-    //setter for healing from meat
+    // setter for healing from meat
     public void setHp(int hp) {
-    this.hp = Math.min(hp, maxHp); // prevents overhealing
+        this.hp = Math.min(hp, maxHp); // prevents overhealing
     }
 
     public void gainExp(int amount) {
@@ -115,6 +171,9 @@ public class Player {
             maxMana += 5;
             defense += 1;
             intelligence += 1;
+
+            // 🆕 update baseDefense when leveling up
+            baseDefense = defense;
             healFull();
             System.out.println("✨ Level Up! " + name + " is now Level " + level + "!");
         }
