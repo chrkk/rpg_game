@@ -49,7 +49,7 @@ We will just make it an executable
 [@EthannnJohnnn](https://github.com/EthannnJohnnn)
 
 ## 📚 Educational Purpose
-This project is for learning and academic purposes only, created as part of our OOP1 final project.
+This project is for learning and academic purposes only, created as part of our OOP1 final project
 
 
 
