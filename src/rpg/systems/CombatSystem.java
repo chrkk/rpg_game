@@ -68,6 +68,11 @@ public class CombatSystem {
                     }
                     break;
 
+                case "kill":
+                    enemy.takeDamage(enemy.getHp()); // deal full HP as damage
+                    TextEffect.typeWriter("💀 [DEV] You unleash a hidden power... the enemy is instantly slain!", 40);
+                    break;
+
                 default:
                     TextEffect.typeWriter("Invalid action. You hesitate...", 40);
             }
@@ -86,6 +91,35 @@ public class CombatSystem {
         // --- Outcome ---
         if (player.isAlive()) {
             TextEffect.typeWriter("🎉 You defeated the " + enemy.getName() + "!", 50);
+
+            // Boss-specific loot: Revival Potion
+            if (enemy == state.currentZoneBoss) {
+                state.revivalPotions++;
+                TextEffect.typeWriter("✨ As the boss falls, you discover a glowing Revival Potion!", 50);
+
+                // 🆕 Narrative: Hallway encounter with Sir Khai
+                if (state.revivalPotions > 0) {
+                    System.out.println(
+                            "\nYou step into a dimly lit hallway, its walls cracked and lined with broken lockers...");
+                    System.out.println(
+                            "At the far end, you see a petrified statue of your teacher — Sir Khai, frozen mid-stance.");
+                    System.out.print("Do you want to use a Revival Potion to awaken him? (yes/no): ");
+                    String choice = scanner.nextLine();
+
+                    if (choice.equalsIgnoreCase("yes")) {
+                        state.revivalPotions--;
+                        System.out.println(
+                                "✨ The stone shell crumbles away... Sir Khai opens his eyes.");
+                        System.out.println(
+                                "\"You’ve done well to come this far,\" he says. \"Allow me to guide you onward.\"");
+                        // Later: add Sir Khai as a Supporter in GameState
+                    } else {
+                        System.out.println(
+                                "You clutch the potion tightly and walk past the statue, leaving Sir Khai in silence...");
+                    }
+                }
+            }
+
             TextEffect.typeWriter("You loot: Food, Crystals, Shards, Materials.", 50);
 
             // 🆕 Give EXP to player ---> new
