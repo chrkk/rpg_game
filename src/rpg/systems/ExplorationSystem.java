@@ -24,6 +24,7 @@ public class ExplorationSystem {
     String dir = scanner.nextLine();
 
     ZoneConfig zone = WorldData.getZone(state.zone);
+    state.currentZoneBoss = zone.boss;
 
     if (dir.equalsIgnoreCase("backward")) {
         safeZoneAction.run();
