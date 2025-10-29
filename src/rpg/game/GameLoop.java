@@ -30,7 +30,11 @@ public class GameLoop {
 
             switch (command.toLowerCase()) {
                 case "craft":
-                    state.crystals = CraftingSystem.craftWeapon(player, state.crystals);
+                    if (state.inSafeZone) {
+                        state.crystals = CraftingSystem.craftWeapon(player, state.crystals);
+                    } else {
+                        TextEffect.typeWriter("⚒️ You can only craft while inside a Safe Zone.", 50);
+                    }
                     break;
 
                 case "search":
@@ -43,7 +47,7 @@ public class GameLoop {
 
                 case "move":
                     ExplorationSystem.handleMove(player, scanner, rand, state,
-                        () -> rpg.systems.SafeZoneSystem.enterSafeZone(player, state));
+                            () -> rpg.systems.SafeZoneSystem.enterSafeZone(player, state));
                     break;
 
                 default:
