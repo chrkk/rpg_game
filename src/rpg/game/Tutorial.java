@@ -68,7 +68,7 @@ public class Tutorial {
                     if (hasCrystal && hasPencil && player.getWeapon() == null) {
                         state.crystals -= 1;
                         player.equipWeapon(new Weapon("Pencil Blade", 10));
-                        TextEffect.typeWriter("You combined a Pencil and a Crystal Shard into a Pencil Blade!", 60);
+                        TextEffect.typeWriter("You combined a Pencil and a Crystal into a Pencil Blade!", 60);
                     } else {
                         TextEffect.typeWriter("You can’t craft anything new right now.", 60);
                     }
