@@ -25,7 +25,13 @@ public class GameLoop {
         boolean running = true;
 
         while (running) {
-            System.out.print("> (craft / search / status / move): ");
+            // 🆕 Dynamic prompt
+            if (state.inSafeZone) {
+                System.out.print("> (craft / search / status / move): ");
+            } else {
+                System.out.print("> (search / status / move): ");
+            }
+
             String command = scanner.nextLine();
 
             switch (command.toLowerCase()) {
@@ -38,6 +44,7 @@ public class GameLoop {
                     break;
 
                 case "search":
+                    // 🆕 Allow search anywhere
                     rpg.systems.SafeZoneSystem.searchSafeZone(player, state);
                     break;
 
