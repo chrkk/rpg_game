@@ -25,16 +25,30 @@ public class GameLoop {
         boolean running = true;
 
         while (running) {
-            System.out.print("> (craft / search / status / move): ");
+            // 🆕 Dynamic prompt
+            if (state.inSafeZone) {
+                System.out.print("> (craft / search / status / move): ");
+            } else {
+                System.out.print("> (search / status / move): ");
+            }
+
             String command = scanner.nextLine();
 
             switch (command.toLowerCase()) {
                 case "craft":
-                    state.crystals = CraftingSystem.craftWeapon(player, state.crystals);
+                    if (state.inSafeZone) {
+                        state.crystals = CraftingSystem.craftWeapon(player, state.crystals);
+                    } else {
+                        TextEffect.typeWriter("⚒️ You can only craft while inside a Safe Zone.", 50);
+                    }
                     break;
 
                 case "search":
-                    rpg.systems.SafeZoneSystem.searchSafeZone(player, state);
+                    if (state.inSafeZone) {
+                        rpg.systems.SafeZoneSystem.searchSafeZone(player, state);
+                    } else {
+                        rpg.systems.SearchSystem.search(state);
+                    }
                     break;
 
                 case "status":
@@ -43,7 +57,7 @@ public class GameLoop {
 
                 case "move":
                     ExplorationSystem.handleMove(player, scanner, rand, state,
-                        () -> rpg.systems.SafeZoneSystem.enterSafeZone(player, state));
+                            () -> rpg.systems.SafeZoneSystem.enterSafeZone(player, state));
                     break;
 
                 default:

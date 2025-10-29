@@ -7,4 +7,5 @@ public class GameState {
     public int meat = 0;
     public int revivalPotions = 0;
     public Enemy currentZoneBoss; 
+    public boolean inSafeZone = false;
 }

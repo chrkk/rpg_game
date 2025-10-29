@@ -30,6 +30,8 @@ public class Tutorial {
         TextEffect.typeWriter("[Narrator] You feel weak. You need food and a weapon.", 80);
         TextEffect.typeWriter("Objective: Find food + find a weapon.", 80);
 
+        TextEffect.typeWriter("[Narrator] Remember: crafting can only be done while inside a Safe Zone.", 80);
+
         boolean hasCrystal = false;
         boolean hasPencil = false;
         boolean awake = true;
