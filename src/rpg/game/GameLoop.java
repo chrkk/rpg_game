@@ -44,8 +44,11 @@ public class GameLoop {
                     break;
 
                 case "search":
-                    // 🆕 Allow search anywhere
-                    rpg.systems.SafeZoneSystem.searchSafeZone(player, state);
+                    if (state.inSafeZone) {
+                        rpg.systems.SafeZoneSystem.searchSafeZone(player, state);
+                    } else {
+                        rpg.systems.SearchSystem.search(state);
+                    }
                     break;
 
                 case "status":
