@@ -26,12 +26,12 @@ public class ExplorationSystem {
         state.currentZoneBoss = zone.boss;
 
         if (dir.equalsIgnoreCase("backward")) {
-            // 🆕 mark safe zone
+            // entering safe zone
             state.inSafeZone = true;
             safeZoneAction.run();
 
         } else if (dir.equalsIgnoreCase("forward")) {
-            // 🆕 leaving safe zone
+            // leaving safe zone
             state.inSafeZone = false;
             state.forwardSteps++;
 
@@ -42,7 +42,6 @@ public class ExplorationSystem {
                     TextEffect.typeWriter("🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
                     state.zone++;
                     state.forwardSteps = 0;
-                    // 🆕 entering new safe zone
                     state.inSafeZone = true;
                     safeZoneAction.run();
                 } else {
@@ -51,15 +50,11 @@ public class ExplorationSystem {
                     safeZoneAction.run();
                 }
             } else {
-                int roll = rand.nextInt(100);
                 Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
                 CombatSystem combat = new CombatSystem(state);
                 if (combat.startCombat(player, mob)) {
-                    int crystalDrop = 1 + rand.nextInt(2);
-                    int meatDrop = rand.nextInt(2);
-                    state.crystals += crystalDrop;
-                    state.meat += meatDrop;
-                    TextEffect.typeWriter("Loot: +" + crystalDrop + " Crystals, +" + meatDrop + " Meat.", 50);
+                    // 🆕 delegate loot handling
+                    LootSystem.dropLoot(state, rand);
                 }
             }
         } else {

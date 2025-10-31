@@ -44,10 +44,21 @@ public class Tutorial {
                 case "search":
                     if (!hasCrystal && !hasPencil) {
                         TextEffect.typeWriter("You search the ruined classroom...", 60);
-                        TextEffect.typeWriter("You found: 1 Crystal Shard and a Pencil.", 60);
+                        TextEffect.typeWriter("You found: 1 Crystal, 1 Crystal Shard, and a Pencil.", 60);
+
+                        // 🆕 Narrator explains the difference
+                        TextEffect.typeWriter("[Narrator] Crystals are rare crafting materials used to forge weapons.",
+                                70);
+                        TextEffect.typeWriter(
+                                "[Narrator] Crystal Shards, on the other hand, are a form of currency. You'll be able to spend them in shops after Safe Zone 1.",
+                                70);
+
                         hasCrystal = true;
                         hasPencil = true;
-                        state.crystals += 1;
+
+                        // Add both resources
+                        state.crystals += 1; // Crystal for crafting
+                        state.shards += 1; // 🆕 You'll need to add this field in GameState
                     } else {
                         TextEffect.typeWriter("You already searched here. Nothing else useful.", 60);
                     }
@@ -57,7 +68,7 @@ public class Tutorial {
                     if (hasCrystal && hasPencil && player.getWeapon() == null) {
                         state.crystals -= 1;
                         player.equipWeapon(new Weapon("Pencil Blade", 10));
-                        TextEffect.typeWriter("You combined a Pencil and a Crystal Shard into a Pencil Blade!", 60);
+                        TextEffect.typeWriter("You combined a Pencil and a Crystal into a Pencil Blade!", 60);
                     } else {
                         TextEffect.typeWriter("You can’t craft anything new right now.", 60);
                     }
@@ -71,10 +82,13 @@ public class Tutorial {
                                 ", you step forward into the unknown...", 80);
 
                         // --- First scripted tutorial fight ---
-//                         Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8); // weaker stats for tutorial -->(removed old code)
-                        TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(state); //--> new object with new constructor
+                        // Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8); // weaker stats for
+                        // tutorial -->(removed old code)
+                        TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(state); // --> new object with
+                                                                                               // new constructor
                         Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8, 15); // weaker stats for tutorial
-//                         TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(); -->(removed old code)
+                        // TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(); -->(removed
+                        // old code)
                         boolean win = tutorialCombat.startTutorialCombat(player, tutorialEnemy);
 
                         if (win) {
