@@ -29,4 +29,6 @@ public class GameState {
 
     // ✅ Shop unlock flag
     public boolean shopUnlocked = false;
+
+    public boolean zone2IntroShown = false;
 }

@@ -6,6 +6,7 @@ import rpg.characters.Player;
 import rpg.systems.CraftingSystem;
 import rpg.systems.ExplorationSystem;
 import rpg.systems.StatusSystem;
+import rpg.systems.ShopSystem; // ✅ import shop
 import rpg.utils.TextEffect;
 
 public class GameLoop {
@@ -27,7 +28,12 @@ public class GameLoop {
         while (running) {
             // 🆕 Dynamic prompt
             if (state.inSafeZone) {
-                System.out.print("> (craft / search / status / move): ");
+                // ✅ Add shop option if zone > 1 (after defeating Zone 1 boss)
+                if (state.zone > 1) {
+                    System.out.print("> (craft / search / status / shop / move): ");
+                } else {
+                    System.out.print("> (craft / search / status / move): ");
+                }
             } else {
                 System.out.print("> (search / status / move): ");
             }
@@ -37,7 +43,6 @@ public class GameLoop {
             switch (command.toLowerCase()) {
                 case "craft":
                     if (state.inSafeZone) {
-                        // ✅ Pass GameState as third argument
                         state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state);
                     } else {
                         TextEffect.typeWriter("⚒️ You can only craft while inside a Safe Zone.", 50);
@@ -53,15 +58,21 @@ public class GameLoop {
                     break;
 
                 case "status":
-                    StatusSystem.showStatus(player, state.crystals, state.meat);
+                    StatusSystem.showStatus(player, state.meat, state.shards);
+                    break;
+
+                case "shop":
+                    if (state.inSafeZone && state.zone > 1) {
+                        ShopSystem.openShop(state, scanner);
+                    } else {
+                        TextEffect.typeWriter("The shop is not available yet.", 50);
+                    }
                     break;
 
                 case "move":
                     ExplorationSystem.handleMove(
-                        player, scanner, rand, state,
-                        // ✅ Pass scanner into SafeZoneSystem
-                        () -> rpg.systems.SafeZoneSystem.enterSafeZone(player, state, scanner)
-                    );
+                            player, scanner, rand, state,
+                            () -> rpg.systems.SafeZoneSystem.enterSafeZone(player, state, scanner));
                     break;
 
                 default:
