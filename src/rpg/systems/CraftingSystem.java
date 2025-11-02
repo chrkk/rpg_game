@@ -18,7 +18,7 @@ public class CraftingSystem {
 
             crystals -= 5;
             player.equipWeapon(new Weapon("Crystal Sword", 20, 35, 0.10, 2.0));
-            state.hasStageWeapon2 = true;
+            state.stage2WeaponCrafted = true;
             TextEffect.typeWriter("You forged a Crystal Sword! Its edge gleams with power.", 60);
 
         } else if (state.unlockedRecipes.contains(target) && !state.recipeItems.getOrDefault(target, false)) {

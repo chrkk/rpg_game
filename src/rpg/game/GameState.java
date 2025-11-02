@@ -16,9 +16,10 @@ public class GameState {
     public Enemy currentZoneBoss; 
     public boolean inSafeZone = false;
 
-    // ✅ Track crafted stage weapons
-    public boolean hasStageWeapon1 = false;
-    public boolean hasStageWeapon2 = false;
+    // ✅ Track crafted stage weapons (consistent naming)
+    public boolean stage1WeaponCrafted = false;
+    public boolean stage2WeaponCrafted = false;
+    public boolean stage3WeaponCrafted = false; // future-proofing
 
     // ✅ Track unlocked blueprints
     public Set<String> unlockedRecipes = new HashSet<>();
@@ -26,6 +27,6 @@ public class GameState {
     // ✅ Track obtained recipe items
     public Map<String, Boolean> recipeItems = new HashMap<>();
 
+    // ✅ Shop unlock flag
     public boolean shopUnlocked = false;
-
 }

@@ -1,22 +1,25 @@
 package rpg.systems;
 
 import java.util.Scanner;
+import java.util.Random;
 import rpg.utils.TextEffect;
 import rpg.characters.Player;
 import rpg.characters.Enemy;
 import rpg.items.Consumable;
 import rpg.game.GameState;
+import rpg.items.Weapon;
 
 public class TutorialCombatSystem {
     private Scanner scanner = new Scanner(System.in);
     private GameState state;
+    private Random rand = new Random();
 
     public TutorialCombatSystem(GameState state) {
         this.state = state;
     }
 
     public boolean startTutorialCombat(Player player, Enemy enemy) {
-        TextEffect.typeWriter("⚔️ Tutorial Combat! " + enemy.getName() + " blocks your path!", 50);
+        TextEffect.typeWriter("⚔️ Combat! " + enemy.getName() + " blocks your path!", 50);
 
         while (player.isAlive() && enemy.isAlive()) {
             TextEffect.typeWriter("\nYour HP: " + player.getHp() + "/" + player.getMaxHp() +
@@ -31,10 +34,19 @@ public class TutorialCombatSystem {
 
             switch (action.toLowerCase()) {
                 case "attack":
-                    int dmg = player.getWeapon().getDamage() + (player.getIntelligence() / 2);
-                    enemy.takeDamage(dmg);
-                    TextEffect.typeWriter("You strike with your " + player.getWeapon().getName() +
-                                          " for " + dmg + " damage!", 40);
+                    Weapon weapon = player.getWeapon();
+                    if (weapon != null) {
+                        // ✅ Use rollDamage instead of getDamage
+                        int dmg = weapon.rollDamage(rand) + (player.getIntelligence() / 2);
+                        enemy.takeDamage(dmg);
+                        TextEffect.typeWriter("You strike with your " + weapon.getName() +
+                                              " for " + dmg + " damage!", 40);
+                    } else {
+                        // fallback if no weapon equipped
+                        int dmg = 1 + rand.nextInt(2);
+                        enemy.takeDamage(dmg);
+                        TextEffect.typeWriter("You punch wildly for " + dmg + " damage!", 40);
+                    }
                     break;
 
                 case "defend":

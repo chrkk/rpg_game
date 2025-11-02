@@ -69,8 +69,16 @@ public class Tutorial {
                 case "craft":
                     if (hasCrystal && hasPencil && player.getWeapon() == null) {
                         state.crystals -= 1;
-                        player.equipWeapon(new Weapon("Pencil Blade", 10));
+
+                        // ✅ Use the full constructor: name, minDamage, maxDamage, critChance,
+                        // critMultiplier
+                        player.equipWeapon(new Weapon("Pencil Blade", 8, 12, 0.05, 1.5));
+
                         TextEffect.typeWriter("You combined a Pencil and a Crystal into a Pencil Blade!", 60);
+
+                        // Optional: mark stage 1 weapon crafted in GameState
+                        state.stage1WeaponCrafted = true;
+
                     } else {
                         TextEffect.typeWriter("You can’t craft anything new right now.", 60);
                     }

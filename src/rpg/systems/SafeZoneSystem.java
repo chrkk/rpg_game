@@ -27,7 +27,7 @@ public class SafeZoneSystem {
         }
     }
 
-    private static void zone1Interaction(GameState state, Scanner scanner) {
+    private static void zone1Interaction() {
         TextEffect.typeWriter("You rest on the School Rooftop. Your stats are restored.", 60);
     }
 

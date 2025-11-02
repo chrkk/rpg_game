@@ -61,7 +61,7 @@ public class ExplorationSystem {
                 CombatSystem combat = new CombatSystem(state);
                 if (combat.startCombat(player, mob)) {
                     // 🆕 delegate loot handling
-                    LootSystem.dropLoot(state, rand);
+                    LootSystem.dropLoot(state); // ✅ fixed: only pass GameState
                 }
             }
         } else {
