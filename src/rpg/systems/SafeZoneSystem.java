@@ -27,8 +27,8 @@ public class SafeZoneSystem {
         }
     }
 
-    private static void zone1Interaction() {
-        TextEffect.typeWriter("This place feels calm. You take a moment to breathe.", 60);
+    private static void zone1Interaction(GameState state, Scanner scanner) {
+        TextEffect.typeWriter("You rest on the School Rooftop. Your stats are restored.", 60);
     }
 
     private static void zone2Interaction(GameState state, Scanner scanner) {
