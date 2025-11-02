@@ -58,9 +58,15 @@ public class Game {
         }
         TextEffect.typeWriter("...", 120);
 
-        TextEffect.typeWriter("[POV] Crack. You awaken in a ruined classroom.", 60);
+        // ✅ Updated to rooftop instead of classroom
+        TextEffect.typeWriter("[POV] Crack. You awaken on the School Rooftop.", 60);
         TextEffect.typeWriter(
-                "Desks lie broken, vines crawl through shattered windows, your classmates stand petrified.", 60);
+                "The city below is eerily silent. Statues of your classmates stand frozen in time, " +
+                        "while vines creep across the broken walls around you.",
+                60);
+        TextEffect.typeWriter(
+                "The rooftop feels like a fragile sanctuary amidst the chaos — your first Safe Zone.", 60);
+
     }
 
     private void createPlayer() {

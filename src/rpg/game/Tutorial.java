@@ -27,7 +27,9 @@ public class Tutorial {
     }
 
     public void start() {
-        TextEffect.typeWriter("[Narrator] You feel weak. You need food and a weapon.", 80);
+        TextEffect.typeWriter("🏫 [Narrator] You awaken on the School Rooftop — your first Safe Zone.", 80);
+        TextEffect.typeWriter("The world below is silent, statues of your classmates frozen in time.", 80);
+        TextEffect.typeWriter("You feel weak. You need food and a weapon.", 80);
         TextEffect.typeWriter("Objective: Find food + find a weapon.", 80);
 
         TextEffect.typeWriter("[Narrator] Remember: crafting can only be done while inside a Safe Zone.", 80);
@@ -43,7 +45,7 @@ public class Tutorial {
             switch (command.toLowerCase()) {
                 case "search":
                     if (!hasCrystal && !hasPencil) {
-                        TextEffect.typeWriter("You search the ruined classroom...", 60);
+                        TextEffect.typeWriter("You search the school rooftop...", 60);
                         TextEffect.typeWriter("You found: 1 Crystal, 1 Crystal Shard, and a Pencil.", 60);
 
                         // 🆕 Narrator explains the difference
@@ -67,8 +69,16 @@ public class Tutorial {
                 case "craft":
                     if (hasCrystal && hasPencil && player.getWeapon() == null) {
                         state.crystals -= 1;
-                        player.equipWeapon(new Weapon("Pencil Blade", 10));
+
+                        // ✅ Use the full constructor: name, minDamage, maxDamage, critChance,
+                        // critMultiplier
+                        player.equipWeapon(new Weapon("Pencil Blade", 8, 12, 0.05, 1.5));
+
                         TextEffect.typeWriter("You combined a Pencil and a Crystal into a Pencil Blade!", 60);
+
+                        // Optional: mark stage 1 weapon crafted in GameState
+                        state.stage1WeaponCrafted = true;
+
                     } else {
                         TextEffect.typeWriter("You can’t craft anything new right now.", 60);
                     }

@@ -8,13 +8,16 @@ public class WorldData {
         switch (zone) {
             case 1:
                 return new ZoneConfig(
-                    "Ruined Classroom",
+                    "School Rooftop", // ✅ updated name
                     new Enemy[]{
-                        new Enemy("Wild Beast", 40, 8, 12, 15),
-                        new Enemy("Corrupted Guardian", 60, 12, 18, 20)
+                        new Enemy("Wolf", 40, 8, 12, 15),
+                        new Enemy("Boar", 50, 10, 14, 18),
+                        new Enemy("Crystal Creature", 60, 12, 16, 20)
                     },
-                    new Enemy("Stone Titan", 120, 15, 25, 40),
-                    new Weapon("Pencil Blade", 10)
+                    // Mini‑boss for Zone 1
+                    new Enemy("CITU Logo (Fractured)", 120, 15, 25, 40),
+                    // Starter weapon reward
+                    new Weapon("Pencil Blade", 8, 12, 0.05, 1.5)
                 );
             case 2:
                 return new ZoneConfig(
@@ -24,7 +27,7 @@ public class WorldData {
                         new Enemy("Ent Guardian", 80, 14, 20, 30)
                     },
                     new Enemy("Forest Guardian", 180, 20, 30, 60),
-                    new Weapon("Rusty Sword", 15)
+                    new Weapon("Rusty Sword", 12, 18, 0.08, 1.5)
                 );
             default:
                 return new ZoneConfig(

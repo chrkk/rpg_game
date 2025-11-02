@@ -36,6 +36,12 @@ public class ExplorationSystem {
             state.forwardSteps++;
 
             if (state.forwardSteps >= 5) {
+                // 🛡️ Check if player can fight boss (weapon requirement)
+                if (!BossGateSystem.canFightBoss(state, player, safeZoneAction)) {
+                    return; // stop here if requirement not met
+                }
+
+                // ✅ If requirement met, proceed to boss fight
                 CombatSystem combat = new CombatSystem(state);
                 boolean win = combat.startCombat(player, zone.boss);
                 if (win) {
@@ -50,11 +56,12 @@ public class ExplorationSystem {
                     safeZoneAction.run();
                 }
             } else {
+                // Random mob encounter
                 Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
                 CombatSystem combat = new CombatSystem(state);
                 if (combat.startCombat(player, mob)) {
                     // 🆕 delegate loot handling
-                    LootSystem.dropLoot(state, rand);
+                    LootSystem.dropLoot(state); // ✅ fixed: only pass GameState
                 }
             }
         } else {
