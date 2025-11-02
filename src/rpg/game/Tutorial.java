@@ -27,7 +27,9 @@ public class Tutorial {
     }
 
     public void start() {
-        TextEffect.typeWriter("[Narrator] You feel weak. You need food and a weapon.", 80);
+        TextEffect.typeWriter("🏫 [Narrator] You awaken on the School Rooftop — your first Safe Zone.", 80);
+        TextEffect.typeWriter("The world below is silent, statues of your classmates frozen in time.", 80);
+        TextEffect.typeWriter("You feel weak. You need food and a weapon.", 80);
         TextEffect.typeWriter("Objective: Find food + find a weapon.", 80);
 
         TextEffect.typeWriter("[Narrator] Remember: crafting can only be done while inside a Safe Zone.", 80);
@@ -43,7 +45,7 @@ public class Tutorial {
             switch (command.toLowerCase()) {
                 case "search":
                     if (!hasCrystal && !hasPencil) {
-                        TextEffect.typeWriter("You search the ruined classroom...", 60);
+                        TextEffect.typeWriter("You search the school rooftop...", 60);
                         TextEffect.typeWriter("You found: 1 Crystal, 1 Crystal Shard, and a Pencil.", 60);
 
                         // 🆕 Narrator explains the difference
