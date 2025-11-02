@@ -9,4 +9,6 @@ public class GameState {
     public int revivalPotions = 0;
     public Enemy currentZoneBoss; 
     public boolean inSafeZone = false;
+    public boolean hasStageWeapon1 = false;
+    public boolean hasStageWeapon2 = false;
 }
