@@ -7,24 +7,25 @@ import rpg.game.GameState;
 
 public class CraftingSystem {
     public static int craftWeapon(Player player, int crystals, GameState state) {
-        // Upgrade Pencil Blade → Crystal Sword (requires blueprint)
-        if (player.getWeapon() != null
-                && player.getWeapon().getName().equals("Pencil Blade")
-                && crystals >= 5
-                && state.unlockedRecipes.contains("Crystal Sword")
-                && state.hasCrystalSwordRecipeItem) {
+        // Example: Pencil Blade → Crystal Sword
+        String target = "Crystal Sword";
+
+        if (player.getWeapon() != null 
+            && player.getWeapon().getName().equals("Pencil Blade") 
+            && crystals >= 5 
+            && state.unlockedRecipes.contains(target) 
+            && state.recipeItems.getOrDefault(target, false)) {
 
             crystals -= 5;
-            player.equipWeapon(new Weapon("Crystal Sword", 35));
+            player.equipWeapon(new Weapon("Crystal Sword", 20, 35, 0.10, 2.0));
             state.hasStageWeapon2 = true;
             TextEffect.typeWriter("You forged a Crystal Sword! Its edge gleams with power.", 60);
 
-        } else if (state.unlockedRecipes.contains("Crystal Sword") && !state.hasCrystalSwordRecipeItem) {
+        } else if (state.unlockedRecipes.contains(target) && !state.recipeItems.getOrDefault(target, false)) {
             TextEffect.typeWriter("You know the blueprint, but you haven’t found the recipe item yet.", 60);
         } else {
             TextEffect.typeWriter("You don’t have the requirements to craft this weapon.", 60);
         }
-
         return crystals;
     }
 }

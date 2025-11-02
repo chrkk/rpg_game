@@ -1,7 +1,9 @@
 package rpg.game;
 
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Set;
+import java.util.Map;
 import rpg.characters.Enemy;
 
 public class GameState {
@@ -16,12 +18,11 @@ public class GameState {
 
     // ✅ Track crafted stage weapons
     public boolean hasStageWeapon1 = false;
-    public boolean hasStageWeapon2 = false;\
-
+    public boolean hasStageWeapon2 = false;
 
     // ✅ Track unlocked blueprints
     public Set<String> unlockedRecipes = new HashSet<>();
 
-    public boolean hasCrystalSwordRecipeItem = false; // obtained via drop/search
-
+    // ✅ Track obtained recipe items
+    public Map<String, Boolean> recipeItems = new HashMap<>();
 }
