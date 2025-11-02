@@ -21,6 +21,14 @@ public class LootSystem {
         if (crystalDrop > 0) lootMsg.append(", +" + crystalDrop + " Crystal");
         if (meatDrop > 0) lootMsg.append(", +" + meatDrop + " Meat");
 
+        // ✅ Check for recipe item drop (only if blueprint unlocked)
+        if (state.unlockedRecipes.contains("Crystal Sword") && !state.hasCrystalSwordRecipeItem) {
+            if (rand.nextInt(100) < 15) { // 15% chance from loot
+                state.hasCrystalSwordRecipeItem = true;
+                lootMsg.append(", ✨ Crystal Sword Recipe");
+            }
+        }
+
         TextEffect.typeWriter(lootMsg.toString(), 50);
     }
 }
