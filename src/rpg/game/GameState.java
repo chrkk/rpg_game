@@ -25,4 +25,7 @@ public class GameState {
 
     // ✅ Track obtained recipe items
     public Map<String, Boolean> recipeItems = new HashMap<>();
+
+    public boolean shopUnlocked = false;
+
 }
