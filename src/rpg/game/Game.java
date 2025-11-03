@@ -98,21 +98,33 @@ public class Game {
         TextEffect.typeWriter("     - Meteor Storm: Call down a cataclysmic storm of meteors (Ultimate)", 15);
 
         System.out.print("Choice: ");
-        String choice = scanner.nextLine();
+        String choice;
+        String trait = null;
 
-        String trait;
-        switch (choice) {
-            case "1":
-                trait = "Scientist";
-                break;
-            case "2":
-                trait = "Fighter";
-                break;
-            case "3":
-                trait = "Archmage";
-                break;
-            default:
-                trait = "Fighter";
+        while (trait == null) {
+            choice = scanner.nextLine();
+
+            try {
+                int option = Integer.parseInt(choice);
+
+                switch (option) {
+                    case 1:
+                        trait = "Scientist";
+                        break;
+                    case 2:
+                        trait = "Fighter";
+                        break;
+                    case 3:
+                        trait = "Archmage";
+                        break;
+                    default:
+                        TextEffect.typeWriter("Invalid choice. Please enter 1, 2, or 3.", 40);
+                        System.out.print("Choice: ");
+                }
+            } catch (NumberFormatException e) {
+                TextEffect.typeWriter("Invalid input. Please enter a number (1, 2, or 3).", 40);
+                System.out.print("Choice: ");
+            }
         }
 
         player = new Player(name, trait);
