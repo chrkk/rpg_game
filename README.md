@@ -37,7 +37,8 @@ Once the game reaches a runnable state, you will be able to compile and run it f
 javac -d out $(find src -name "*.java")
 
 # Run
-java -cp out rpg.Main
+java -cp out rpg.Main or
+javac -d out (Get-ChildItem -Recurse -Filter *.java src | ForEach-Object { $_.FullName })
 
 # Or
 We will just make it an executable
