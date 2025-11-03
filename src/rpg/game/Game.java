@@ -75,9 +75,28 @@ public class Game {
         String name = scanner.nextLine();
 
         TextEffect.typeWriter("Choose your class:", 40);
+
+        // Scientist
         TextEffect.typeWriter("1. Scientist (+Intelligence, +Defense)", 20);
+        TextEffect.typeWriter("   Skills:", 20);
+        TextEffect.typeWriter("     - Chemical Strike: You hurl a vial of corrosive chemicals (Basic)", 15);
+        TextEffect.typeWriter("     - Plasma Field: Unleash a field of charged plasma (Secondary)", 15);
+        TextEffect.typeWriter("     - Nuclear Blast: A blinding explosion engulfs everything (Ultimate)", 15);
+
+        // Fighter
         TextEffect.typeWriter("2. Fighter (+HP, +Defense)", 20);
+        TextEffect.typeWriter("   Skills:", 20);
+        TextEffect.typeWriter("     - Power Punch: Deliver a bone-crushing punch (Basic)", 15);
+        TextEffect.typeWriter("     - War Cry: Boost morale with a ferocious cry (Secondary)", 15);
+        TextEffect.typeWriter("     - Earth Breaker: Slam the ground with a devastating shockwave (Ultimate)", 15);
+
+        // Archmage
         TextEffect.typeWriter("3. Archmage (+Intelligence, +Mana)", 20);
+        TextEffect.typeWriter("   Skills:", 20);
+        TextEffect.typeWriter("     - Fire Bolt: Conjure a blazing bolt of fire (Basic)", 15);
+        TextEffect.typeWriter("     - Arcane Shield: Summon a barrier to reduce damage (Secondary)", 15);
+        TextEffect.typeWriter("     - Meteor Storm: Call down a cataclysmic storm of meteors (Ultimate)", 15);
+
         System.out.print("Choice: ");
         String choice = scanner.nextLine();
 
