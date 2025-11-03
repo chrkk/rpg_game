@@ -29,7 +29,12 @@ public class CombatSystem {
                     " | Enemy HP: " + enemy.getHp(), 40);
 
             // 🆕 Newly added - Added "skill" as an action choice
-            TextEffect.typeWriter("Choose action: attack / defend / skill / item / run", 30);
+            if (state.skillsUnlocked) {
+                TextEffect.typeWriter("Choose action: attack / defend / skill / item / run", 30);
+            } else {
+                TextEffect.typeWriter("Choose action: attack / defend / item / run", 30);
+            }
+
             System.out.print("> ");
             String action = scanner.nextLine();
 
@@ -57,49 +62,11 @@ public class CombatSystem {
 
                 // 🆕 Newly added - Skill usage system
                 case "skill":
-                    Skill[] skills = player.getSkills(); // get player’s 3 class-based skills
-                    if (skills == null || skills.length == 0) {
-                        TextEffect.typeWriter("You have no skills available!", 40);
+                    if (!state.skillsUnlocked) {
+                        TextEffect.typeWriter("You haven’t unlocked your skills yet!", 40);
                         break;
                     }
-
-                    // Show list of available skills
-                    TextEffect.typeWriter("\nChoose a skill to use:", 30);
-                    for (int i = 0; i < skills.length; i++) {
-                        System.out.println((i + 1) + ". " + skills[i].getName() + " (Mana Cost: " + skills[i].getManaCost() + ")");
-                    }
-                    System.out.print("> ");
-                    String skillChoice = scanner.nextLine();
-
-                    int chosenIndex;
-                    try {
-                        chosenIndex = Integer.parseInt(skillChoice) - 1;
-                    } catch (NumberFormatException e) {
-                        TextEffect.typeWriter("Invalid choice! You fumble your spellbook...", 40);
-                        break;
-                    }
-
-                    if (chosenIndex < 0 || chosenIndex >= skills.length) {
-                        TextEffect.typeWriter("That skill doesn’t exist!", 40);
-                        break;
-                    }
-
-                    Skill chosenSkill = skills[chosenIndex];
-
-                    // Check mana
-                    if (player.getMana() < chosenSkill.getManaCost()) {
-                        TextEffect.typeWriter("Not enough mana to use " + chosenSkill.getName() + "!", 40);
-                        break;
-                    }
-
-                    // Consume mana and apply skill effect
-                    player.useMana(chosenSkill.getManaCost());
-                    int skillDamage = chosenSkill.getPower() + (player.getIntelligence() / 2);
-                    enemy.takeDamage(skillDamage);
-
-                    // Print skill text
-                    TextEffect.typeWriter(chosenSkill.useSkill(), 40);
-                    TextEffect.typeWriter("You dealt " + skillDamage + " damage using " + chosenSkill.getName() + "!", 40);
+                    SkillSystem.useSkill(player, enemy, scanner);
                     break;
                 // 🆕 End of new Skill case
 
@@ -133,7 +100,8 @@ public class CombatSystem {
             // --- Enemy Turn ---
             if (enemy.isAlive()) {
                 int dmgTaken = enemy.enemyAction();
-                if (defended) dmgTaken /= 2;
+                if (defended)
+                    dmgTaken /= 2;
 
                 int actualDamage = player.takeDamage(dmgTaken);
                 TextEffect.typeWriter("The " + enemy.getName() + " attacks! You take " + actualDamage + " damage.", 40);

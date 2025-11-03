@@ -12,12 +12,11 @@ import rpg.world.WorldData;
 public class ExplorationSystem {
 
     public static void handleMove(
-        Player player,
-        Scanner scanner,
-        Random rand,
-        GameState state,
-        Runnable safeZoneAction
-    ) {
+            Player player,
+            Scanner scanner,
+            Random rand,
+            GameState state,
+            Runnable safeZoneAction) {
         TextEffect.typeWriter("Do you move forward or backward?", 40);
         System.out.print("> ");
         String dir = scanner.nextLine();
@@ -34,6 +33,15 @@ public class ExplorationSystem {
             // leaving safe zone
             state.inSafeZone = false;
             state.forwardSteps++;
+
+            // 🆕 Unlock skills when leaving SafeZone2 for the first time
+            if (state.zone == 2 && !state.skillsUnlocked) {
+                TextEffect.typeWriter(
+                        "\nAs you step out of the rooftop safe zone, a surge of power awakens within you...", 50);
+                TextEffect.typeWriter(
+                        "Your class skills are now available! Use them in combat with the 'skill' command.", 50);
+                state.skillsUnlocked = true;
+            }
 
             if (state.forwardSteps >= 5) {
                 // 🛡️ Check if player can fight boss (weapon requirement)
