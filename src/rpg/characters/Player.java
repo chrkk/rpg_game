@@ -2,6 +2,13 @@ package rpg.characters;
 
 import rpg.items.Weapon;
 
+// 🆕 Newly added - Skills
+import rpg.skills.Skill;
+import rpg.skills.ScientistSkills;
+import rpg.skills.FighterSkills;
+import rpg.skills.ArchmageSkills;
+import rpg.characters.Enemy;
+
 public class Player {
     private Weapon weapon;
     private String name;
@@ -14,18 +21,22 @@ public class Player {
     private int defense;
     private int intelligence;
 
-    // 🆕 store base defense for resetting
+    // store base defense for resetting
     private int baseDefense;
-    // Exp stats ---> new
+
+    // Exp stats
     private int level;
     private int exp;
     private int expToNextLevel;
+
+    // 🆕 Newly added - Skills
+    private Skill[] skills; // store 3 class-specific skills
 
     public Player(String name, String trait) {
         this.name = name;
         this.trait = trait;
 
-        // Exp stats ---> new
+        // Exp stats
         this.level = 1;
         this.exp = 0;
         this.expToNextLevel = 100;
@@ -46,19 +57,44 @@ public class Player {
             case "scientist":
                 this.intelligence += 5;
                 this.defense += 3;
+
+                // 🆕 Newly added - Skills
+                this.skills = new Skill[] {
+                    ScientistSkills.chemicalStrike,
+                    ScientistSkills.plasmaField,
+                    ScientistSkills.nuclearBlast
+                };
                 break;
+
             case "fighter":
                 this.maxHp += 30;
                 this.hp = maxHp;
                 this.defense += 5;
+
+                // 🆕 Newly added - Skills
+                this.skills = new Skill[] {
+                    FighterSkills.powerPunch,
+                    FighterSkills.warCry,
+                    FighterSkills.earthBreaker
+                };
                 break;
+
             case "archmage":
                 this.intelligence += 7;
                 this.maxMana += 30;
                 this.mana = maxMana;
+
+                // 🆕 Newly added - Skills
+                this.skills = new Skill[] {
+                    ArchmageSkills.fireBolt,
+                    ArchmageSkills.arcaneShield,
+                    ArchmageSkills.meteorStorm
+                };
                 break;
+
             default:
-                // fallback if invalid trait
+                // 🆕 Newly added - Skills
+                this.skills = new Skill[0]; // fallback if no trait found
                 break;
         }
 
@@ -108,7 +144,6 @@ public class Player {
         return intelligence;
     }
 
-    // EXP and Level getters ---> new
     public int getLevel() {
         return level;
     }
@@ -121,23 +156,58 @@ public class Player {
         return expToNextLevel;
     }
 
+    // 🆕 Newly added - Skills
+    public Skill[] getSkills() {
+        return skills;
+    }
+
+    // 🆕 Newly added - Skills
+    public void useSkillOnEnemy(Enemy enemy, int skillIndex) {
+        if (skills == null || skills.length == 0) {
+            System.out.println("You have no skills assigned!");
+            return;
+        }
+
+        if (skillIndex < 0 || skillIndex >= skills.length) {
+            System.out.println("Invalid skill choice!");
+            return;
+        }
+
+        Skill chosenSkill = skills[skillIndex];
+
+        // Check if player has enough mana
+        if (mana < chosenSkill.getManaCost()) {
+            System.out.println("Not enough mana to use " + chosenSkill.getName() + "!");
+            return;
+        }
+
+        // Deduct mana cost
+        useMana(chosenSkill.getManaCost());
+
+        // Calculate damage based on skill power + intelligence scaling
+        int damage = chosenSkill.getPower() + (intelligence / 2);
+        enemy.takeDamage(damage);
+
+        // Display skill use text and result
+        System.out.println(chosenSkill.useSkill());
+        System.out.println("It dealt " + damage + " damage!");
+    }
+
     // Combat methods
     public int takeDamage(int dmg) {
         int effectiveDamage;
 
         if (defense > 0) {
-            // Apply defense once
             effectiveDamage = Math.max(0, dmg - defense);
             System.out.println("🛡️ Your defense absorbed " + (dmg - effectiveDamage) + " damage, but broke!");
-            defense = 0; // defense breaks after first use
+            defense = 0;
         } else {
-            // No defense left, take full damage
             effectiveDamage = dmg;
         }
 
         int beforeHp = hp;
         hp = Math.max(0, hp - effectiveDamage);
-        return beforeHp - hp; // actual damage applied
+        return beforeHp - hp;
     }
 
     public void useMana(int cost) {
@@ -154,25 +224,22 @@ public class Player {
         return hp > 0;
     }
 
-    // setter for healing from meat
     public void setHp(int hp) {
-        this.hp = Math.min(hp, maxHp); // prevents overhealing
+        this.hp = Math.min(hp, maxHp);
     }
 
     public void gainExp(int amount) {
-        // System.out.println(name + " gained " + amount + " EXP!");
         exp += amount;
 
         while (exp >= expToNextLevel) {
             exp -= expToNextLevel;
             level++;
-            expToNextLevel += 25; // makes it harder each level
+            expToNextLevel += 25;
             maxHp += 10;
             maxMana += 5;
             defense += 1;
             intelligence += 1;
 
-            // 🆕 update baseDefense when leveling up
             baseDefense = defense;
             healFull();
             System.out.println("✨ Level Up! " + name + " is now Level " + level + "!");
