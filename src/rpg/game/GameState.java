@@ -31,4 +31,5 @@ public class GameState {
     public boolean shopUnlocked = false;
 
     public boolean zone2IntroShown = false;
+    public boolean skillsUnlocked = false;
 }
