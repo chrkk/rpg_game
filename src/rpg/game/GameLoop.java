@@ -43,36 +43,61 @@ public class GameLoop {
             switch (command.toLowerCase()) {
                 case "craft":
                     if (state.inSafeZone) {
-                        state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state);
+                        try {
+                            state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state);
+                        } catch (Exception e) {
+                            TextEffect.typeWriter("Crafting failed. Try again.", 40);
+                            System.err.println("Crafting error -> " + e.getMessage());
+                        }
                     } else {
                         TextEffect.typeWriter("⚒️ You can only craft while inside a Safe Zone.", 50);
                     }
                     break;
 
                 case "search":
-                    if (state.inSafeZone) {
-                        rpg.systems.SafeZoneSystem.searchSafeZone(player, state);
-                    } else {
-                        rpg.systems.SearchSystem.search(state);
+                    try {
+                        if (state.inSafeZone) {
+                            rpg.systems.SafeZoneSystem.searchSafeZone(player, state);
+                        } else {
+                            rpg.systems.SearchSystem.search(state);
+                        }
+                    } catch (Exception e) {
+                        TextEffect.typeWriter("Search failed. Something feels off...", 40);
+                        System.err.println("Search error -> " + e.getMessage());
                     }
                     break;
 
                 case "status":
-                    StatusSystem.showStatus(player, state.meat, state.shards);
+                    try {
+                        StatusSystem.showStatus(player, state.meat, state.shards);
+                    } catch (Exception e) {
+                        TextEffect.typeWriter("Unable to display status right now.", 40);
+                        System.err.println("Status error -> " + e.getMessage());
+                    }
                     break;
 
                 case "shop":
                     if (state.inSafeZone && state.zone > 1) {
-                        ShopSystem.openShop(state, scanner);
+                        try {
+                            ShopSystem.openShop(state, scanner);
+                        } catch (Exception e) {
+                            TextEffect.typeWriter("The shopkeeper seems confused... Try again later.", 40);
+                            System.err.println("Shop error -> " + e.getMessage());
+                        }
                     } else {
                         TextEffect.typeWriter("The shop is not available yet.", 50);
                     }
                     break;
 
                 case "move":
-                    ExplorationSystem.handleMove(
-                            player, scanner, rand, state,
-                            () -> rpg.systems.SafeZoneSystem.enterSafeZone(player, state, scanner));
+                    try {
+                        ExplorationSystem.handleMove(
+                                player, scanner, rand, state,
+                                () -> rpg.systems.SafeZoneSystem.enterSafeZone(player, state, scanner));
+                    } catch (Exception e) {
+                        TextEffect.typeWriter("You stumble and fail to move properly.", 40);
+                        System.err.println("Move error -> " + e.getMessage());
+                    }
                     break;
 
                 default:
