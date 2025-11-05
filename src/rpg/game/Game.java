@@ -134,7 +134,7 @@ public class Game {
                         trait = "Archmage";
                         break;
                     default:
-                        TextEffect.typeWriter("Invalid choice. Please enter 1, 2, or 3.", 40);
+                        TextEffect.typeWriter("That number doesn’t match a class. Please enter 1, 2, or 3.", 40);
                         System.out.print("Choice: ");
                 }
             } catch (NumberFormatException e) {
