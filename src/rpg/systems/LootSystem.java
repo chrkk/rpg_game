@@ -16,21 +16,29 @@ public class LootSystem {
         state.meat += meatDrop;
         state.shards += shardDrop;
 
-        StringBuilder lootMsg = new StringBuilder("Loot: ");
-        lootMsg.append("+" + shardDrop + " Shards");
-        if (crystalDrop > 0) lootMsg.append(", +" + crystalDrop + " Crystal");
-        if (meatDrop > 0) lootMsg.append(", +" + meatDrop + " Meat");
+        TextEffect.typeWriter("📦 Loot acquired:", 50);
+
+        // Always show shards
+        TextEffect.typeWriter("  + " + shardDrop + " Shards", 50);
+
+        // Show crystals only if dropped
+        if (crystalDrop > 0) {
+            TextEffect.typeWriter("  + " + crystalDrop + " Crystal", 50);
+        }
+
+        // Show meat only if dropped
+        if (meatDrop > 0) {
+            TextEffect.typeWriter("  + " + meatDrop + " Meat", 50);
+        }
 
         // ✅ Check for recipe item drop
         for (String recipe : state.unlockedRecipes) {
             if (!state.recipeItems.getOrDefault(recipe, false)) {
                 if (rand.nextInt(100) < 15) { // 15% chance
                     state.recipeItems.put(recipe, true);
-                    lootMsg.append(", ✨ " + recipe + " Recipe");
+                    TextEffect.typeWriter("  ✨ " + recipe + " Recipe", 50);
                 }
             }
         }
-
-        TextEffect.typeWriter(lootMsg.toString(), 50);
     }
 }
