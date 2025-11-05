@@ -15,44 +15,54 @@ public class ShopSystem {
     );
 
     public static void openShop(GameState state, Scanner scanner) {
-        TextEffect.typeWriter("🛒 Welcome to my shop! What would you like to buy?", 50);
-
-        // Show inventory
-        for (int i = 0; i < inventory.size(); i++) {
-            Blueprint bp = inventory.get(i);
-            TextEffect.typeWriter((i + 1) + ". " + bp.getName() + " (" + bp.getPrice() + " Shards)", 40);
-        }
-        TextEffect.typeWriter("0. Leave shop", 40);
-
-        System.out.print("> ");
-        String choice = scanner.nextLine();
-
         try {
-            int option = Integer.parseInt(choice);
-            if (option == 0) {
-                TextEffect.typeWriter("You leave the shop.", 40);
-                return;
+            TextEffect.typeWriter("🛒 Welcome to my shop! What would you like to buy?", 50);
+
+            // Show inventory
+            for (int i = 0; i < inventory.size(); i++) {
+                Blueprint bp = inventory.get(i);
+                TextEffect.typeWriter((i + 1) + ". " + bp.getName() + " (" + bp.getPrice() + " Shards)", 40);
             }
+            TextEffect.typeWriter("0. Leave shop", 40);
 
-            if (option > 0 && option <= inventory.size()) {
-                Blueprint selected = inventory.get(option - 1);
+            System.out.print("> ");
+            String choice = scanner.nextLine();
 
-                if (state.shards >= selected.getPrice()) {
-                    state.shards -= selected.getPrice();
-
-                    // ✅ Unlock blueprint
-                    state.unlockedRecipes.add(selected.getUnlocksRecipe());
-
-                    TextEffect.typeWriter("You bought the " + selected.getName() +
-                        "! You can now discover the " + selected.getUnlocksRecipe() + " recipe in the world.", 60);
-                } else {
-                    TextEffect.typeWriter("You don’t have enough shards.", 60);
+            try {
+                int option = Integer.parseInt(choice);
+                if (option == 0) {
+                    TextEffect.typeWriter("You leave the shop.", 40);
+                    return;
                 }
-            } else {
-                TextEffect.typeWriter("Invalid choice.", 40);
+
+                if (option > 0 && option <= inventory.size()) {
+                    Blueprint selected = inventory.get(option - 1);
+
+                    if (state.shards >= selected.getPrice()) {
+                        state.shards -= selected.getPrice();
+
+                        // ✅ Unlock blueprint
+                        state.unlockedRecipes.add(selected.getUnlocksRecipe());
+
+                        TextEffect.typeWriter("You bought the " + selected.getName() +
+                            "! You can now discover the " + selected.getUnlocksRecipe() + " recipe in the world.", 60);
+                    } else {
+                        TextEffect.typeWriter("You don’t have enough shards.", 60);
+                    }
+                } else {
+                    TextEffect.typeWriter("Invalid choice.", 40);
+                }
+            } catch (NumberFormatException e) {
+                TextEffect.typeWriter("Invalid input. Please enter a number.", 40);
+                System.err.println("Shop input error -> " + e.getMessage());
             }
-        } catch (NumberFormatException e) {
-            TextEffect.typeWriter("Invalid input.", 40);
+
+        } catch (Exception e) {
+            TextEffect.typeWriter("Something went wrong while using the shop.", 40);
+            System.err.println("Shop system error -> " + e.getMessage());
+        } finally {
+            // Always runs after shop interaction
+            // Could be used for logging or cleanup
         }
     }
 }
