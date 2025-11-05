@@ -17,14 +17,14 @@ public class Game {
 
         try {
             while (running) {
-                TextEffect.typeWriter("----------------- DR. CAPSTONE -----------------", 20);
-                TextEffect.typeWriter("1. START", 20);
-                TextEffect.typeWriter("2. EXIT", 20);
-                System.out.print("INPUT: ");
-
-                String choice = scanner.nextLine();
-
                 try {
+                    TextEffect.typeWriter("----------------- DR. CAPSTONE -----------------", 20);
+                    TextEffect.typeWriter("1. START", 20);
+                    TextEffect.typeWriter("2. EXIT", 20);
+                    System.out.print("INPUT: ");
+
+                    String choice = scanner.nextLine();
+
                     switch (choice) {
                         case "1":
                             playIntroStory();
@@ -46,9 +46,12 @@ public class Game {
                 } catch (Exception e) {
                     // Hybrid handling: friendly + technical log
                     TextEffect.typeWriter("Something went wrong while processing your choice.", 40);
-                    System.err.println("DEBUG: Error in main menu -> " + e.getMessage());
+                    System.err.println("Main menu error -> " + e.getMessage());
                 }
             }
+        } catch (Exception e) {
+            TextEffect.typeWriter("A critical error occurred. Exiting game.", 40);
+            System.err.println("Game launch error -> " + e.getMessage());
         } finally {
             // Always close scanner at the end
             scanner.close();
@@ -66,7 +69,7 @@ public class Game {
         } catch (InterruptedException e) {
             // Hybrid handling
             TextEffect.typeWriter("Your vision flickers strangely...", 40);
-            System.err.println("DEBUG: Interrupted during intro sleep -> " + e.getMessage());
+            System.err.println("Intro sleep interrupted -> " + e.getMessage());
             Thread.currentThread().interrupt();
         } finally {
             TextEffect.typeWriter("...", 120);
@@ -136,10 +139,10 @@ public class Game {
                 }
             } catch (NumberFormatException e) {
                 TextEffect.typeWriter("Invalid input. Please enter a number (1, 2, or 3).", 40);
-                System.err.println("DEBUG: Invalid class selection -> " + e.getMessage());
+                System.err.println("Invalid class selection -> " + e.getMessage());
                 System.out.print("Choice: ");
             } finally {
-                // Could be used for logging or ensuring prompt is always shown
+                // Always re-prompt if invalid
             }
         }
 
