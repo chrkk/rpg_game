@@ -32,4 +32,7 @@ public class GameState {
 
     public boolean zone2IntroShown = false;
     public boolean skillsUnlocked = false;
+
+    public boolean lootDisplayed = false;   // ✅ already added, prevents duplicate loot text
+
 }
