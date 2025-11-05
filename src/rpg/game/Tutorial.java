@@ -9,7 +9,7 @@ import rpg.items.Weapon;
 import rpg.characters.Enemy;
 import rpg.systems.TutorialCombatSystem;
 
-//new imports for meat consumable
+// new imports for meat consumable
 import rpg.items.Consumable;
 import rpg.game.GameState;
 
@@ -39,82 +39,93 @@ public class Tutorial {
         boolean awake = true;
 
         while (awake) {
-            System.out.print("> What will you do? (craft / search / status / move): ");
-            String command = scanner.nextLine();
+            try {
+                System.out.print("> What will you do? (craft / search / status / move): ");
+                String command = scanner.nextLine();
 
-            switch (command.toLowerCase()) {
-                case "search":
-                    if (!hasCrystal && !hasPencil) {
-                        TextEffect.typeWriter("You search the school rooftop...", 60);
-                        TextEffect.typeWriter("You found: 1 Crystal, 1 Crystal Shard, and a Pencil.", 60);
+                switch (command.toLowerCase()) {
+                    case "search":
+                        try {
+                            if (!hasCrystal && !hasPencil) {
+                                TextEffect.typeWriter("You search the school rooftop...", 60);
+                                TextEffect.typeWriter("You found: 1 Crystal, 1 Crystal Shard, and a Pencil.", 60);
 
-                        // 🆕 Narrator explains the difference
-                        TextEffect.typeWriter("[Narrator] Crystals are rare crafting materials used to forge weapons.",
-                                70);
-                        TextEffect.typeWriter(
-                                "[Narrator] Crystal Shards, on the other hand, are a form of currency. You'll be able to spend them in shops after Safe Zone 1.",
-                                70);
+                                TextEffect.typeWriter("[Narrator] Crystals are rare crafting materials used to forge weapons.", 70);
+                                TextEffect.typeWriter("[Narrator] Crystal Shards, on the other hand, are a form of currency. You'll be able to spend them in shops after Safe Zone 1.", 70);
 
-                        hasCrystal = true;
-                        hasPencil = true;
+                                hasCrystal = true;
+                                hasPencil = true;
 
-                        // Add both resources
-                        state.crystals += 1; // Crystal for crafting
-                        state.shards += 1; // 🆕 You'll need to add this field in GameState
-                    } else {
-                        TextEffect.typeWriter("You already searched here. Nothing else useful.", 60);
-                    }
-                    break;
-
-                case "craft":
-                    if (hasCrystal && hasPencil && player.getWeapon() == null) {
-                        state.crystals -= 1;
-
-                        // ✅ Use the full constructor: name, minDamage, maxDamage, critChance,
-                        // critMultiplier
-                        player.equipWeapon(new Weapon("Pencil Blade", 8, 12, 0.05, 1.5));
-
-                        TextEffect.typeWriter("You combined a Pencil and a Crystal into a Pencil Blade!", 60);
-
-                        // Optional: mark stage 1 weapon crafted in GameState
-                        state.stage1WeaponCrafted = true;
-
-                    } else {
-                        TextEffect.typeWriter("You can’t craft anything new right now.", 60);
-                    }
-                    break;
-
-                case "move":
-                    if (player.getWeapon() == null) {
-                        TextEffect.typeWriter("You can’t leave yet. You need a weapon first.", 60);
-                    } else {
-                        TextEffect.typeWriter("Armed with your " + player.getWeapon().getName() +
-                                ", you step forward into the unknown...", 80);
-
-                        // --- First scripted tutorial fight ---
-                        // Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8); // weaker stats for
-                        // tutorial -->(removed old code)
-                        TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(state); // --> new object with
-                                                                                               // new constructor
-                        Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8, 15); // weaker stats for tutorial
-                        // TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(); -->(removed
-                        // old code)
-                        boolean win = tutorialCombat.startTutorialCombat(player, tutorialEnemy);
-
-                        if (win) {
-                            awake = false;
-                            GameLoop loop = new GameLoop(player, state, scanner, rand);
-                            loop.start();
+                                state.crystals += 1;
+                                state.shards += 1;
+                            } else {
+                                TextEffect.typeWriter("You already searched here. Nothing else useful.", 60);
+                            }
+                        } catch (Exception e) {
+                            TextEffect.typeWriter("Something went wrong while searching.", 40);
+                            System.err.println("Search error -> " + e.getMessage());
                         }
-                    }
-                    break;
+                        break;
 
-                case "status":
-                    StatusSystem.showStatus(player, state.crystals, state.meat);
-                    break;
+                    case "craft":
+                        try {
+                            if (hasCrystal && hasPencil && player.getWeapon() == null) {
+                                state.crystals -= 1;
+                                player.equipWeapon(new Weapon("Pencil Blade", 8, 12, 0.05, 1.5));
+                                TextEffect.typeWriter("You combined a Pencil and a Crystal into a Pencil Blade!", 60);
+                                state.stage1WeaponCrafted = true;
+                            } else {
+                                TextEffect.typeWriter("You can’t craft anything new right now.", 60);
+                            }
+                        } catch (Exception e) {
+                            TextEffect.typeWriter("Crafting failed unexpectedly.", 40);
+                            System.err.println("Crafting error -> " + e.getMessage());
+                        }
+                        break;
 
-                default:
-                    TextEffect.typeWriter("Unknown command. Try craft / search / status / move.", 40);
+                    case "move":
+                        try {
+                            if (player.getWeapon() == null) {
+                                TextEffect.typeWriter("You can’t leave yet. You need a weapon first.", 60);
+                            } else {
+                                TextEffect.typeWriter("Armed with your " + player.getWeapon().getName() +
+                                        ", you step forward into the unknown...", 80);
+
+                                TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(state);
+                                Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8, 15);
+
+                                boolean win = tutorialCombat.startTutorialCombat(player, tutorialEnemy);
+
+                                if (win) {
+                                    awake = false;
+                                    GameLoop loop = new GameLoop(player, state, scanner, rand);
+                                    loop.start();
+                                }
+                            }
+                        } catch (Exception e) {
+                            TextEffect.typeWriter("Something went wrong while trying to move.", 40);
+                            System.err.println("Move error -> " + e.getMessage());
+                        }
+                        break;
+
+                    case "status":
+                        try {
+                            StatusSystem.showStatus(player, state.crystals, state.meat);
+                        } catch (Exception e) {
+                            TextEffect.typeWriter("Unable to display status right now.", 40);
+                            System.err.println("Status error -> " + e.getMessage());
+                        }
+                        break;
+
+                    default:
+                        TextEffect.typeWriter("Unknown command. Try craft / search / status / move.", 40);
+                }
+
+            } catch (Exception e) {
+                TextEffect.typeWriter("An unexpected error occurred during the tutorial.", 40);
+                System.err.println("Tutorial loop error -> " + e.getMessage());
+            } finally {
+                // Runs every loop iteration — could be used for logging or state checks
             }
         }
     }
