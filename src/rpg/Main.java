@@ -23,16 +23,23 @@ public class Main {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // restore interrupt flag
-                System.err.println("Loading interrupted!");
+                System.err.println("Loading interrupted -> " + e.getMessage());
+            } catch (Exception e) {
+                System.err.println("Unexpected error during loading -> " + e.getMessage());
+            } finally {
+                System.out.print(".");
             }
-            System.out.print(".");
         }
         System.out.println("\n");
 
         // Prompt to begin
         System.out.println("Press ENTER to begin your journey...");
         Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
+        try {
+            scanner.nextLine();
+        } catch (Exception e) {
+            System.err.println("Input error at start -> " + e.getMessage());
+        }
 
         Game game = new Game();
 
@@ -44,12 +51,16 @@ public class Main {
         try {
             game.launch();
         } catch (Exception e) {
-            System.err.println("An unexpected error occurred: " + e.getMessage());
+            System.err.println("An unexpected error occurred in the game -> " + e.getMessage());
             e.printStackTrace();
         } finally {
             // Always runs, even if an exception is thrown
             System.out.println(">> Closing resources... Thanks for playing DR. CAPSTONE!");
-            scanner.close();
+            try {
+                scanner.close();
+            } catch (Exception e) {
+                System.err.println("Error closing scanner -> " + e.getMessage());
+            }
         }
     }
 }

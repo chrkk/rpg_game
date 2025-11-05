@@ -15,34 +15,47 @@ public class Game {
     public void launch() {
         boolean running = true;
 
-        while (running) {
-            TextEffect.typeWriter("----------------- DR. CAPSTONE -----------------", 20);
-            TextEffect.typeWriter("1. START", 20);
-            TextEffect.typeWriter("2. EXIT", 20);
-            System.out.print("INPUT: ");
+        try {
+            while (running) {
+                try {
+                    TextEffect.typeWriter("----------------- DR. CAPSTONE -----------------", 20);
+                    TextEffect.typeWriter("1. START", 20);
+                    TextEffect.typeWriter("2. EXIT", 20);
+                    System.out.print("INPUT: ");
 
-            String choice = scanner.nextLine();
+                    String choice = scanner.nextLine();
 
-            switch (choice) {
-                case "1":
-                    playIntroStory();
-                    createPlayer();
-                    new Tutorial(player, state, scanner, rand).start();
-                    break;
-                case "2":
-                    TextEffect.typeWriter("Thanks for playing!", 40);
-                    running = false;
-                    break;
-                case "devskip": // developer command (hidden)
-                    System.out.println(">> Developer shortcut: skipping intro...");
-                    createPlayer();
-                    new Tutorial(player, state, scanner, rand).start();
-                    break;
-                default:
-                    TextEffect.typeWriter("Invalid choice. Please try again.", 40);
+                    switch (choice) {
+                        case "1":
+                            playIntroStory();
+                            createPlayer();
+                            new Tutorial(player, state, scanner, rand).start();
+                            break;
+                        case "2":
+                            TextEffect.typeWriter("Thanks for playing!", 40);
+                            running = false;
+                            break;
+                        case "devskip": // developer command (hidden)
+                            System.out.println(">> Developer shortcut: skipping intro...");
+                            createPlayer();
+                            new Tutorial(player, state, scanner, rand).start();
+                            break;
+                        default:
+                            TextEffect.typeWriter("Invalid choice. Please try again.", 40);
+                    }
+                } catch (Exception e) {
+                    // Hybrid handling: friendly + technical log
+                    TextEffect.typeWriter("Something went wrong while processing your choice.", 40);
+                    System.err.println("Main menu error -> " + e.getMessage());
+                }
             }
+        } catch (Exception e) {
+            TextEffect.typeWriter("A critical error occurred. Exiting game.", 40);
+            System.err.println("Game launch error -> " + e.getMessage());
+        } finally {
+            // Always close scanner at the end
+            scanner.close();
         }
-        scanner.close();
     }
 
     private void playIntroStory() {
@@ -54,9 +67,13 @@ public class Game {
         try {
             Thread.sleep(800);
         } catch (InterruptedException e) {
+            // Hybrid handling
+            TextEffect.typeWriter("Your vision flickers strangely...", 40);
+            System.err.println("Intro sleep interrupted -> " + e.getMessage());
             Thread.currentThread().interrupt();
+        } finally {
+            TextEffect.typeWriter("...", 120);
         }
-        TextEffect.typeWriter("...", 120);
 
         // ✅ Updated to rooftop instead of classroom
         TextEffect.typeWriter("[POV] Crack. You awaken on the School Rooftop.", 60);
@@ -66,7 +83,6 @@ public class Game {
                 60);
         TextEffect.typeWriter(
                 "The rooftop feels like a fragile sanctuary amidst the chaos — your first Safe Zone.", 60);
-
     }
 
     private void createPlayer() {
@@ -118,12 +134,15 @@ public class Game {
                         trait = "Archmage";
                         break;
                     default:
-                        TextEffect.typeWriter("Invalid choice. Please enter 1, 2, or 3.", 40);
+                        TextEffect.typeWriter("That number doesn’t match a class. Please enter 1, 2, or 3.", 40);
                         System.out.print("Choice: ");
                 }
             } catch (NumberFormatException e) {
                 TextEffect.typeWriter("Invalid input. Please enter a number (1, 2, or 3).", 40);
+                System.err.println("Invalid class selection -> " + e.getMessage());
                 System.out.print("Choice: ");
+            } finally {
+                // Always re-prompt if invalid
             }
         }
 
@@ -133,5 +152,4 @@ public class Game {
         TextEffect.typeWriter("[Narrator] You stand amidst silence. The world is broken, but you are alive.", 80);
         TextEffect.typeWriter("Your journey begins here...", 80);
     }
-
 }
