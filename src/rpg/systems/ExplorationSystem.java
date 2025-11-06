@@ -3,6 +3,7 @@ package rpg.systems;
 import java.util.Scanner;
 import java.util.Random;
 import rpg.characters.Player;
+import rpg.characters.Supporter;
 import rpg.characters.Enemy;
 import rpg.utils.TextEffect;
 import rpg.game.GameState;
@@ -48,6 +49,16 @@ public class ExplorationSystem {
                     state.skillsUnlocked = true;
                 }
 
+                if (state.zone > 1) { // only after Stage 1
+                    int chance = rand.nextInt(100);
+                    if (chance < 10) { // 10% chance per forward step
+                        Supporter statue = new Supporter("Aurelia", "Guardian", "Idk");
+                        TextEffect.typeWriter("🗿 A mysterious statue appears in the frozen wasteland...", 60);
+                        ReviveSystem.randomRevive(state, statue);
+                        return; // skip normal mob/boss encounter this step
+                    }
+                }
+
                 if (state.forwardSteps >= 5) {
                     try {
                         if (!BossGateSystem.canFightBoss(state, player, safeZoneAction)) {
@@ -57,7 +68,8 @@ public class ExplorationSystem {
                         CombatSystem combat = new CombatSystem(state);
                         boolean win = combat.startCombat(player, zone.boss);
                         if (win) {
-                            TextEffect.typeWriter("🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
+                            TextEffect.typeWriter(
+                                    "🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
                             state.zone++;
                             state.forwardSteps = 0;
                             state.inSafeZone = true;
