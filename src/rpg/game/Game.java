@@ -35,11 +35,13 @@ public class Game {
                             TextEffect.typeWriter("Thanks for playing!", 40);
                             running = false;
                             break;
-                        case "devskip": // developer command (hidden)
+                        case "devskip":
                             System.out.println(">> Developer shortcut: skipping intro...");
+                            TextEffect.fastMode = true; // 🆕 enable fast mode globally
                             createPlayer();
                             new Tutorial(player, state, scanner, rand).start();
                             break;
+
                         default:
                             TextEffect.typeWriter("Invalid choice. Please try again.", 40);
                     }
@@ -89,11 +91,6 @@ public class Game {
         TextEffect.typeWriter("You focus... Who are you in this new world?", 60);
         System.out.print("Enter your name: ");
         String name = scanner.nextLine();
-
-        // 🆕 Enable fast mode if admin123
-        if (name.equalsIgnoreCase("admin123")) {
-            state.fastMode = true;
-        }
 
         TextEffect.typeWriter("Choose your class:", 40);
 

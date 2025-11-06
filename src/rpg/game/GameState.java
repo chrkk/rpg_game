@@ -10,6 +10,7 @@ import rpg.characters.Enemy;
 import rpg.characters.Supporter;
 
 public class GameState {
+    public boolean fastMode = false;
     public int zone = 1;
     public int forwardSteps = 0;
     public int crystals = 0;
@@ -41,8 +42,6 @@ public class GameState {
     public List<Supporter> supporters = new ArrayList<>();
 
     public boolean bossGateDiscovered = false;
-    public boolean fastMode = false;
-    public static GameState current; // optional singleton reference
 
 
 }
