@@ -70,7 +70,7 @@ public class GameLoop {
 
                     case "status":
                         try {
-                            StatusSystem.showStatus(player, state.meat, state.shards);
+                            StatusSystem.showStatus(player, state.shards, state);
                         } catch (Exception e) {
                             TextEffect.typeWriter("Unable to display status right now.", 40);
                             System.err.println("Status error -> " + e.getMessage());
