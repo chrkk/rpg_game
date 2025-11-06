@@ -92,6 +92,14 @@ public class Tutorial {
                                 TextEffect.typeWriter("You can’t leave yet. You need a weapon first.", 60);
                             } else {
 
+                                TextEffect.typeWriter("🌌 You leave the safety of the School Rooftop behind...", 80);
+                                TextEffect.typeWriter(
+                                        "The path ahead winds through shattered classrooms and broken halls.", 80);
+                                TextEffect.typeWriter(
+                                        "🎯 Goal: Continue forward and get stronger until you face the Fractured Logo to unlock the Ruined Lab.",
+                                        80);
+                                        state.forwardSteps++;
+
                                 TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(state);
                                 Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8, 15);
 

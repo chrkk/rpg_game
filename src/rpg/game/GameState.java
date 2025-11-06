@@ -40,5 +40,8 @@ public class GameState {
     public boolean metSirKhai = false;
     public List<Supporter> supporters = new ArrayList<>();
 
+    
+    public boolean bossGateDiscovered = false;
+
 
 }
