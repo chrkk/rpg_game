@@ -50,8 +50,11 @@ public class Tutorial {
                                 TextEffect.typeWriter("You search the school rooftop...", 60);
                                 TextEffect.typeWriter("You found: 1 Crystal, 1 Crystal Shard, and a Pencil.", 60);
 
-                                TextEffect.typeWriter("[Narrator] Crystals are rare crafting materials used to forge weapons.", 70);
-                                TextEffect.typeWriter("[Narrator] Crystal Shards, on the other hand, are a form of currency. You'll be able to spend them in shops after Safe Zone 1.", 70);
+                                TextEffect.typeWriter(
+                                        "[Narrator] Crystals are rare crafting materials used to forge weapons.", 70);
+                                TextEffect.typeWriter(
+                                        "[Narrator] Crystal Shards, on the other hand, are a form of currency. You'll be able to spend them in shops after Safe Zone 1.",
+                                        70);
 
                                 hasCrystal = true;
                                 hasPencil = true;
@@ -89,7 +92,7 @@ public class Tutorial {
                                 TextEffect.typeWriter("You can’t leave yet. You need a weapon first.", 60);
                             } else {
                                 TextEffect.typeWriter("Armed with your " + player.getWeapon().getName() +
-                                        ", you step forward into the unknown...", 80);
+                                        ",you leave the School Rooftop behind...", 80);
 
                                 TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(state);
                                 Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8, 15);
@@ -97,6 +100,15 @@ public class Tutorial {
                                 boolean win = tutorialCombat.startTutorialCombat(player, tutorialEnemy);
 
                                 if (win) {
+                                    TextEffect.typeWriter("✅ You overcame the Wild Beast. The path forward is clear.",
+                                            80);
+                                    TextEffect.typeWriter("⚔️ Remember: the Wild Beast was only an obstacle.", 80);
+                                    TextEffect.typeWriter(
+                                            "🎯 Your true goal is to keep moving forward until you face the Fractured Logo.",
+                                            80);
+                                    TextEffect.typeWriter(
+                                            "Defeat it to unlock the next destination — the Ruined Lab safe zone.", 80);
+
                                     awake = false;
                                     GameLoop loop = new GameLoop(player, state, scanner, rand);
                                     loop.start();
