@@ -9,11 +9,6 @@ import rpg.utils.TextEffect;
 
 public class SafeZoneSystem {
     public static void enterSafeZone(Player player, GameState state, Scanner scanner) {
-        // 🆕 Guard clause: prevent re-entering
-        if (state.inSafeZone) {
-            TextEffect.typeWriter("You are already in the safe zone.", 60);
-            return;
-        }
 
         // Normal entry logic
         SafeZone zone = SafeZoneFactory.getZone(state.zone);

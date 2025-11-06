@@ -80,6 +80,11 @@ public class ExplorationSystem {
     private static void handleBackward(GameState state, Runnable safeZoneAction,
             ZoneConfig zone, Player player, Random rand) {
         try {
+
+            if (state.inSafeZone) {
+                TextEffect.typeWriter("You are already in the safe zone.", 50);
+                return;
+            }
             if (state.bossGateDiscovered) {
                 // After boss gate discovery → mostly safe retreat, but small chance of mob
                 int chance = rand.nextInt(100);
@@ -208,7 +213,7 @@ public class ExplorationSystem {
                     case "1":
                         if (state.inSafeZone) {
                             TextEffect.typeWriter("You are already in the safe zone.", 50);
-                            return; 
+                            return;
                         }
                         state.inSafeZone = true;
                         safeZoneAction.run();
