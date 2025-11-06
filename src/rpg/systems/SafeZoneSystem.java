@@ -23,7 +23,7 @@ public class SafeZoneSystem {
 
     public static void searchSafeZone(Player player, GameState state) {
         try {
-            TextEffect.typeWriter("You cannot search while in a Safe Zone. Try moving out first.", 60);
+            TextEffect.typeWriter("You found nothing, try moving out.", 60);
         } catch (Exception e) {
             TextEffect.typeWriter("You stumble while trying to search here.", 40);
             System.err.println("Safe zone search error -> " + e.getMessage());
