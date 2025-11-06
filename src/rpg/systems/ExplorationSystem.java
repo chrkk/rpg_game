@@ -206,6 +206,10 @@ public class ExplorationSystem {
                 String choice = scanner.nextLine();
                 switch (choice) {
                     case "1":
+                        if (state.inSafeZone) {
+                            TextEffect.typeWriter("You are already in the safe zone.", 50);
+                            return; 
+                        }
                         state.inSafeZone = true;
                         safeZoneAction.run();
                         break;

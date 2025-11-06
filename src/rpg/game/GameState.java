@@ -13,10 +13,10 @@ public class GameState {
     public int zone = 1;
     public int forwardSteps = 0;
     public int crystals = 0;
-    public int shards = 0;         
+    public int shards = 0;
     public int meat = 0;
     public int revivalPotions = 0;
-    public Enemy currentZoneBoss; 
+    public Enemy currentZoneBoss;
     public boolean inSafeZone = false;
 
     // ✅ Track crafted stage weapons (consistent naming)
@@ -36,12 +36,13 @@ public class GameState {
     public boolean zone2IntroShown = false;
     public boolean skillsUnlocked = false;
 
-    public boolean lootDisplayed = false;   // ✅ already added, prevents duplicate loot text
+    public boolean lootDisplayed = false; // ✅ already added, prevents duplicate loot text
     public boolean metSirKhai = false;
     public List<Supporter> supporters = new ArrayList<>();
 
-    
     public boolean bossGateDiscovered = false;
+    public boolean fastMode = false;
+    public static GameState current; // optional singleton reference
 
 
 }

@@ -90,6 +90,11 @@ public class Game {
         System.out.print("Enter your name: ");
         String name = scanner.nextLine();
 
+        // 🆕 Enable fast mode if admin123
+        if (name.equalsIgnoreCase("admin123")) {
+            state.fastMode = true;
+        }
+
         TextEffect.typeWriter("Choose your class:", 40);
 
         // Scientist
