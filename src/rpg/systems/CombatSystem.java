@@ -146,23 +146,9 @@ public class CombatSystem {
         }
 
         // --- Outcome ---
+        // --- Outcome ---
         if (player.isAlive()) {
             TextEffect.typeWriter("🎉 You defeated the " + enemy.getName() + "!", 50);
-
-            if (enemy == state.currentZoneBoss) {
-                state.revivalPotions++;
-                TextEffect.typeWriter("✨ As the boss falls, you discover a glowing Revival Potion!", 50);
-
-                if (!state.metSirKhai) { // add this flag in GameState
-                    TextEffect.typeWriter("\n👨‍🏫 [Sir Khai] You fought bravely... I’ve been waiting for you here.",
-                            60);
-                    TextEffect.typeWriter("His presence steadies your nerves — a mentor figure in this frozen world.",
-                            60);
-                    TextEffect.typeWriter("Objective Updated: Speak with Sir Khai to learn your next path.", 60);
-
-                    state.metSirKhai = true;
-                }
-            }
 
             LootSystem.dropLoot(state);
 
@@ -176,5 +162,6 @@ public class CombatSystem {
             player.healFull();
             return false;
         }
+
     }
 }
