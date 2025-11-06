@@ -236,8 +236,15 @@ public class ExplorationSystem {
     private static void startBossFight(Player player, GameState state, ZoneConfig zone, Runnable safeZoneAction) {
         CombatSystem combat = new CombatSystem(state);
         boolean win = combat.startCombat(player, zone.boss);
+
         if (win) {
             TextEffect.typeWriter("🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
+
+            // 🆕 Trigger Sir Khai revival event after Zone 1 miniboss
+            if (state.zone == 1) {
+                handleMinibossDefeat(player, new Scanner(System.in), state);
+            }
+
             state.zone++;
             state.forwardSteps = 0;
             state.bossGateDiscovered = false; // reset for next zone
@@ -307,4 +314,40 @@ public class ExplorationSystem {
             LootSystem.dropLoot(state);
         }
     }
+
+    private static void handleMinibossDefeat(Player player, Scanner scanner, GameState state) {
+        // Award revival potion
+        state.revivalPotions++;
+        TextEffect.typeWriter("🏆 as you beat the fractured CITU logo! You obtained a Revival Potion.", 50);
+
+        // Narrative: Hallway encounter with Sir Khai
+        if (state.revivalPotions > 0) {
+            TextEffect.typeWriter(
+                    "You see a petrified statue of your teacher — Sir Khai, frozen mid-stance.", 50);
+            System.out.print("Do you want to use a Revival Potion to awaken him? (yes/no): ");
+            String choice = scanner.nextLine();
+
+            // Create Sir Khai supporter object
+            Supporter sirKhai = new Supporter("Sir Khai", "Mentor", "Guidance Heal");
+
+            if (choice.equalsIgnoreCase("yes")) {
+                state.revivalPotions--;
+                sirKhai.setRevived(true);
+                state.supporters.add(sirKhai);
+                TextEffect.typeWriter("✨ The stone shell crumbles away... Sir Khai opens his eyes.", 50);
+                TextEffect.typeWriter(
+                        "\"You’ve done well to come this far,\" he says. \"Allow me to guide you onward.\"", 50);
+            } else {
+                TextEffect.typeWriter(
+                        "You clutch the potion tightly and walk past the statue, leaving Sir Khai in silence...", 50);
+                // Force revival anyway
+                state.revivalPotions--;
+                sirKhai.setRevived(true);
+                state.supporters.add(sirKhai);
+                TextEffect.typeWriter(
+                        "⚠️ But destiny demands a guide... The potion glows and revives Sir Khai regardless.", 50);
+            }
+        }
+    }
+
 }
