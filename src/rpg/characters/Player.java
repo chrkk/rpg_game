@@ -60,9 +60,9 @@ public class Player {
 
                 // 🆕 Newly added - Skills
                 this.skills = new Skill[] {
-                    ScientistSkills.chemicalStrike,
-                    ScientistSkills.plasmaField,
-                    ScientistSkills.nuclearBlast
+                        ScientistSkills.chemicalStrike,
+                        ScientistSkills.plasmaField,
+                        ScientistSkills.nuclearBlast
                 };
                 break;
 
@@ -73,9 +73,9 @@ public class Player {
 
                 // 🆕 Newly added - Skills
                 this.skills = new Skill[] {
-                    FighterSkills.powerPunch,
-                    FighterSkills.warCry,
-                    FighterSkills.earthBreaker
+                        FighterSkills.powerPunch,
+                        FighterSkills.warCry,
+                        FighterSkills.earthBreaker
                 };
                 break;
 
@@ -86,9 +86,9 @@ public class Player {
 
                 // 🆕 Newly added - Skills
                 this.skills = new Skill[] {
-                    ArchmageSkills.fireBolt,
-                    ArchmageSkills.arcaneShield,
-                    ArchmageSkills.meteorStorm
+                        ArchmageSkills.fireBolt,
+                        ArchmageSkills.arcaneShield,
+                        ArchmageSkills.meteorStorm
                 };
                 break;
 
@@ -245,4 +245,14 @@ public class Player {
             System.out.println("✨ Level Up! " + name + " is now Level " + level + "!");
         }
     }
+
+    // Partial heal method
+    public void heal(int amount) {
+        if (amount <= 0)
+            return; // ignore invalid heals
+        int beforeHp = hp;
+        hp = Math.min(maxHp, hp + amount);
+        System.out.println("❤️ " + name + " healed for " + (hp - beforeHp) + " HP!");
+    }
+
 }
