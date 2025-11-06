@@ -9,6 +9,7 @@ import rpg.utils.TextEffect;
 import rpg.game.GameState;
 import rpg.world.ZoneConfig;
 import rpg.world.WorldData;
+import rpg.world.SupporterPool; // 🆕 import the supporter pool
 
 public class ExplorationSystem {
 
@@ -49,13 +50,17 @@ public class ExplorationSystem {
                     state.skillsUnlocked = true;
                 }
 
+                // 🆕 Random statue encounter after Stage 1
                 if (state.zone > 1) { // only after Stage 1
                     int chance = rand.nextInt(100);
                     if (chance < 10) { // 10% chance per forward step
-                        Supporter statue = new Supporter("Aurelia", "Guardian", "Idk");
-                        TextEffect.typeWriter("🗿 A mysterious statue appears in the frozen wasteland...", 60);
-                        ReviveSystem.randomRevive(state, statue);
-                        return; // skip normal mob/boss encounter this step
+                        Supporter statue = SupporterPool.getRandomSupporter(state.zone, rand);
+                        if (statue != null) {
+                            TextEffect.typeWriter("🗿 A mysterious statue appears in the "
+                                    + zone.name + "...", 60);
+                            ReviveSystem.randomRevive(state, statue);
+                            return;
+                        }
                     }
                 }
 
