@@ -20,6 +20,7 @@ public class CombatSystem {
     }
 
     public boolean startCombat(Player player, Enemy enemy) {
+        state.lootDisplayed = false;
         TextEffect.typeWriter("⚔️ Combat Start! " + enemy.getName() + " appears!", 50);
 
         try {
@@ -150,7 +151,7 @@ public class CombatSystem {
                 TextEffect.typeWriter("✨ As the boss falls, you discover a glowing Revival Potion!", 50);
             }
 
-            TextEffect.typeWriter("You loot: Food, Crystals, Shards, Materials.", 50);
+            LootSystem.dropLoot(state);
 
             int expGained = enemy.getExpReward();
             player.gainExp(expGained);
