@@ -11,26 +11,26 @@ public class ReviveSystem {
 
     // Scripted revival (e.g., Sir Khai after Stage 1 miniboss)
     public static void scriptedRevive(GameState state, Supporter sirKhai, Scanner scanner) {
-        TextEffect.typeWriter("\n🗿 A statue stands before you... Sir Khai, frozen in stone.", 60);
-        TextEffect.typeWriter("A glowing aura surrounds him. Do you wish to revive? (yes/no)", 60);
+        while (!state.metSirKhai) {
+            TextEffect.typeWriter("\n🗿 A statue stands before you... Sir Khai, frozen in stone.", 60);
+            TextEffect.typeWriter("A glowing aura surrounds him. Do you wish to revive? (yes/no)", 60);
 
-        System.out.print("> ");
-        String choice = scanner.nextLine().trim().toLowerCase();
+            System.out.print("> ");
+            String choice = scanner.nextLine().trim().toLowerCase();
 
-        if (choice.equals("yes")) {
-            if (state.revivalPotions > 0) {
-                state.revivalPotions--;
-                sirKhai.setRevived(true);
-                state.supporters.add(sirKhai);
-                state.metSirKhai = true;
-                TextEffect.typeWriter("✨ Sir Khai awakens, joining you as your first supporter!", 60);
+            if (choice.equals("yes")) {
+                if (state.revivalPotions > 0) {
+                    state.revivalPotions--;
+                    sirKhai.setRevived(true);
+                    state.supporters.add(sirKhai);
+                    state.metSirKhai = true;
+                    TextEffect.typeWriter("✨ Sir Khai awakens, joining you as your first supporter!", 60);
+                } else {
+                    TextEffect.typeWriter("❌ You lack a Revival Potion. The statue remains silent.", 60);
+                }
             } else {
-                TextEffect.typeWriter("❌ You lack a Revival Potion. The statue remains silent.", 60);
+                TextEffect.typeWriter("❌ You cannot proceed without reviving a supporter.", 60);
             }
-        } else {
-            // Tutorial enforcement: must revive at least one supporter
-            TextEffect.typeWriter("❌ You cannot proceed without reviving a supporter.", 60);
-            scriptedRevive(state, sirKhai, scanner); // re‑prompt until valid
         }
     }
 
