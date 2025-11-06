@@ -98,7 +98,7 @@ public class Tutorial {
                                 TextEffect.typeWriter(
                                         "🎯 Goal: Continue forward and get stronger until you face the Fractured Logo to unlock the Ruined Lab.",
                                         80);
-                                        state.forwardSteps++;
+                                state.forwardSteps++;
 
                                 TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(state);
                                 Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8, 15);
