@@ -188,6 +188,7 @@ public class ExplorationSystem {
 
     private static void handleBoss(Player player, Scanner scanner, GameState state,
             ZoneConfig zone, Runnable safeZoneAction, Random rand) {
+
         if (state.forwardSteps < 5) {
             TextEffect.typeWriter("🚪 You haven’t reached the boss gate yet. Keep moving forward.", 60);
             return;
@@ -195,18 +196,19 @@ public class ExplorationSystem {
 
         try {
             if (!state.bossGateDiscovered) {
-                // First encounter: fight or farm
+                // First time at the gate
                 TextEffect.typeWriter("🔥 You stand before the boss gate.\n1) Challenge Boss\n2) Farm", 60);
                 String choice = scanner.nextLine();
-                if (choice.equals("1"))
+                if (choice.equals("1")) {
                     startBossFight(player, state, zone, safeZoneAction);
-                else if (choice.equals("2")) {
+                } else if (choice.equals("2")) {
                     state.bossGateDiscovered = true;
                     spawnMob(state, zone, player, rand);
-                } else
+                } else {
                     TextEffect.typeWriter("Invalid choice. Enter 1 or 2.", 40);
+                }
             } else {
-                // After discovery: safe zone / farm / boss
+                // Gate already discovered → single menu
                 TextEffect.typeWriter("Choose your action:\n1) Run to Safe Zone\n2) Farm\n3) Challenge Boss", 40);
                 String choice = scanner.nextLine();
                 switch (choice) {
@@ -226,8 +228,9 @@ public class ExplorationSystem {
                             TextEffect.typeWriter(
                                     "⛔ The boss gate remains sealed. You must meet the requirements before you can fight.",
                                     60);
-                        } else
+                        } else {
                             startBossFight(player, state, zone, safeZoneAction);
+                        }
                         break;
                     default:
                         TextEffect.typeWriter("Invalid choice. Enter 1, 2, or 3.", 40);
