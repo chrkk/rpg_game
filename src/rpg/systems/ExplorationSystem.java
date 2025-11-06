@@ -75,6 +75,17 @@ public class ExplorationSystem {
                         if (win) {
                             TextEffect.typeWriter(
                                     "🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
+
+                            // Tutorial: miniboss drops Revival Potion
+                            TextEffect.typeWriter("✨ As the boss falls, you discover a glowing Revival Potion!", 60);
+                            state.revivalPotions++;
+
+                            // Scripted Sir Khai statue event
+                            if (state.zone == 1 && !state.metSirKhai) {
+                                Supporter sirKhai = new Supporter("Sir Khai", "Teacher", "Guidance");
+                                ReviveSystem.scriptedRevive(state, sirKhai, scanner);
+                            }
+
                             state.zone++;
                             state.forwardSteps = 0;
                             state.inSafeZone = true;
