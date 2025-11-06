@@ -35,4 +35,6 @@ public class GameState {
 
     public boolean lootDisplayed = false;   // ✅ already added, prevents duplicate loot text
 
+    public boolean metSirKhai = false;
+
 }
