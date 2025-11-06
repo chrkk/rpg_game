@@ -41,6 +41,30 @@ public class ExplorationSystem {
                 state.inSafeZone = false;
                 state.forwardSteps++;
 
+                // 🆕 Safe zone exit narration (only once per zone)
+                if (state.forwardSteps == 1) {
+                    switch (state.zone) {
+                        case 1:
+                            TextEffect.typeWriter("\n🌌 You leave the safety of the School Rooftop behind...", 60);
+                            TextEffect.typeWriter("The path ahead winds through shattered classrooms and broken halls.", 60);
+                            TextEffect.typeWriter("Your goal: reach the next safe haven — the Ruined Lab.", 60);
+                            break;
+                        case 2:
+                            TextEffect.typeWriter("\n⚙️ You depart from the Ruined Lab, its broken machines fading into the distance...", 60);
+                            TextEffect.typeWriter("The road ahead twists through collapsed streets and burning wreckage.", 60);
+                            TextEffect.typeWriter("Your destination: the City Ruins, the next hub of survival.", 60);
+                            break;
+                        case 3:
+                            TextEffect.typeWriter("\n🏙️ You step out of the City Ruins, leaving behind its fragile refuge...", 60);
+                            TextEffect.typeWriter("The wasteland stretches before you, scarred by silence and danger.", 60);
+                            TextEffect.typeWriter("Your journey continues toward the next unknown landmark...", 60);
+                            break;
+                        default:
+                            TextEffect.typeWriter("\n🚶 You set out from the safe zone, heading toward your next destination.", 60);
+                            break;
+                    }
+                }
+
                 // Unlock skills when leaving SafeZone2 for the first time
                 if (state.zone == 2 && !state.skillsUnlocked) {
                     TextEffect.typeWriter(
@@ -104,6 +128,7 @@ public class ExplorationSystem {
                 } else {
                     try {
                         Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
+                        TextEffect.typeWriter("⚔️ A " + mob.getName() + " emerges from the shadows!", 60);
                         CombatSystem combat = new CombatSystem(state);
                         if (combat.startCombat(player, mob)) {
                             LootSystem.dropLoot(state);
