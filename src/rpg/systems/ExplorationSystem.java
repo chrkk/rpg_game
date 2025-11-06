@@ -202,7 +202,7 @@ public class ExplorationSystem {
                     TextEffect.typeWriter("Invalid choice. Enter 1 or 2.", 40);
             } else {
                 // After discovery: safe zone / farm / boss
-                TextEffect.typeWriter("Choose your action:\n1) Enter Safe Zone\n2) Farm\n3) Challenge Boss", 40);
+                TextEffect.typeWriter("Choose your action:\n1) Run to Safe Zone\n2) Farm\n3) Challenge Boss", 40);
                 String choice = scanner.nextLine();
                 switch (choice) {
                     case "1":
