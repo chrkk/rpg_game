@@ -38,7 +38,7 @@ public class ExplorationSystem {
                         handleForward(player, scanner, rand, state, zone);
                         break;
                     case "3": // Boss
-                        handleBoss(player, scanner, state, zone, safeZoneAction, rand);
+                        handleBoss(player, dir, state, zone, safeZoneAction, rand);
                         break;
                     default:
                         TextEffect.typeWriter("Invalid choice. Please enter 1, 2, or 3.", 40);
@@ -67,72 +67,53 @@ public class ExplorationSystem {
 
     private static void showPrompt(GameState state) {
         if (state.forwardSteps >= 5 && state.bossGateDiscovered) {
-            // After gate discovery → numeric menu
-            TextEffect.typeWriter("Choose your action:\n1) Enter Safe Zone\n2) Farm\n3) Challenge Boss", 40);
+            TextEffect.typeWriter("Choose your action:\n1) Safe Zone\n2) Farm\n3) Boss", 40);
         } else {
-            // Before discovery → step-based exploration
             TextEffect.typeWriter("Do you move forward or backward? (forward/backward)", 40);
         }
     }
 
     // --- Backward / Safe zone ---
-
     private static void handleBackward(GameState state, Runnable safeZoneAction,
             ZoneConfig zone, Player player, Random rand) {
-        try {
 
-            if (state.inSafeZone) {
-                TextEffect.typeWriter("You are already in the safe zone.", 50);
-                return;
-            }
-            if (state.bossGateDiscovered) {
-                // After boss gate discovery → mostly safe retreat, but small chance of mob
-                int chance = rand.nextInt(100);
-                if (chance < 10) { // 10% chance
-                    Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
-                    TextEffect.typeWriter("⚠️ An enemy suddenly blocks your retreat!", 60);
-                    CombatSystem combat = new CombatSystem(state);
-                    if (combat.startCombat(player, mob)) {
-                        LootSystem.dropLoot(state);
-                    }
-                } else {
-                    TextEffect.typeWriter("🏃 You retreat swiftly back to the safe zone.", 60);
-                }
-                state.inSafeZone = true;
-                safeZoneAction.run();
-                return;
-            }
+        if (state.inSafeZone) {
+            TextEffect.typeWriter("You are already in the safe zone.", 50);
+            return;
+        }
 
-            // Before gate discovery → step-based retreat
-            if (state.forwardSteps > 0) {
-                state.forwardSteps--; // decrement steps
-                TextEffect.typeWriter("🔙 You retrace your steps cautiously...", 50);
-
-                if (state.forwardSteps == 0) {
-                    state.inSafeZone = true;
-                    TextEffect.typeWriter("🏠 You have returned safely to the safe zone.", 60);
-                    safeZoneAction.run();
-                } else {
-                    // 🆕 Chance-based encounter (e.g., 40% chance)
-                    if (rand.nextInt(100) < 40) {
-                        Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
-                        TextEffect.typeWriter("⚔️ A " + mob.getName() + " lurks in the shadows as you retreat!", 60);
-                        CombatSystem combat = new CombatSystem(state);
-                        if (combat.startCombat(player, mob)) {
-                            LootSystem.dropLoot(state);
-                        }
-                    } else {
-                        TextEffect.typeWriter("The path is eerily quiet... you slip back without incident.", 50);
-                    }
-                }
+        if (state.bossGateDiscovered) {
+            if (rand.nextInt(100) < 10) {
+                Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
+                TextEffect.typeWriter("⚠️ An enemy blocks your retreat!", 60);
+                CombatSystem combat = new CombatSystem(state);
+                if (combat.startCombat(player, mob))
+                    LootSystem.dropLoot(state);
             } else {
-                // Already at safe zone
-                state.inSafeZone = true;
-                safeZoneAction.run();
+                TextEffect.typeWriter("🏃 You retreat swiftly back to the safe zone.", 60);
             }
-        } catch (Exception e) {
-            TextEffect.typeWriter("Something went wrong while retreating.", 40);
-            System.err.println("Backward error -> " + e.getMessage());
+            enterSafeZone(state, safeZoneAction);
+            return;
+        }
+
+        // step-based retreat before gate discovery
+        if (state.forwardSteps > 0) {
+            state.forwardSteps--;
+            TextEffect.typeWriter("🔙 You retrace your steps cautiously...", 50);
+            if (state.forwardSteps == 0) {
+                TextEffect.typeWriter("🏠 You have returned safely to the safe zone.", 60);
+                enterSafeZone(state, safeZoneAction);
+            } else if (rand.nextInt(100) < 40) {
+                Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
+                TextEffect.typeWriter("⚔️ A " + mob.getName() + " lurks in the shadows!", 60);
+                CombatSystem combat = new CombatSystem(state);
+                if (combat.startCombat(player, mob))
+                    LootSystem.dropLoot(state);
+            } else {
+                TextEffect.typeWriter("The path is eerily quiet...", 50);
+            }
+        } else {
+            enterSafeZone(state, safeZoneAction);
         }
     }
 
@@ -186,51 +167,39 @@ public class ExplorationSystem {
 
     // --- Boss command ---
 
-    private static void handleBoss(Player player, Scanner scanner, GameState state,
+    private static void handleBoss(Player player, String choice, GameState state,
             ZoneConfig zone, Runnable safeZoneAction, Random rand) {
-
         if (state.forwardSteps < 5) {
-            TextEffect.typeWriter("🚪 You haven’t reached the boss gate yet. Keep moving forward.", 60);
+            TextEffect.typeWriter("🚪 You haven’t reached the boss gate yet.", 60);
             return;
         }
 
         try {
             if (!state.bossGateDiscovered) {
-                // First time at the gate
+                // First time at the gate → prompt here
                 TextEffect.typeWriter("🔥 You stand before the boss gate.\n1) Challenge Boss\n2) Farm", 60);
-                String choice = scanner.nextLine();
-                if (choice.equals("1")) {
+                String firstChoice = new Scanner(System.in).nextLine();
+                if (firstChoice.equals("1"))
                     startBossFight(player, state, zone, safeZoneAction);
-                } else if (choice.equals("2")) {
+                else if (firstChoice.equals("2")) {
                     state.bossGateDiscovered = true;
                     spawnMob(state, zone, player, rand);
-                } else {
+                } else
                     TextEffect.typeWriter("Invalid choice. Enter 1 or 2.", 40);
-                }
             } else {
-                // Gate already discovered → single menu
-                TextEffect.typeWriter("Choose your action:\n1) Run to Safe Zone\n2) Farm\n3) Challenge Boss", 40);
-                String choice = scanner.nextLine();
+                // Gate already discovered → use choice passed in
                 switch (choice) {
                     case "1":
-                        if (state.inSafeZone) {
-                            TextEffect.typeWriter("You are already in the safe zone.", 50);
-                            return;
-                        }
-                        state.inSafeZone = true;
-                        safeZoneAction.run();
+                        enterSafeZone(state, safeZoneAction);
                         break;
                     case "2":
                         spawnMob(state, zone, player, rand);
                         break;
                     case "3":
-                        if (!BossGateSystem.canFightBoss(state, player, safeZoneAction)) {
-                            TextEffect.typeWriter(
-                                    "⛔ The boss gate remains sealed. You must meet the requirements before you can fight.",
-                                    60);
-                        } else {
+                        if (!BossGateSystem.canFightBoss(state, player, safeZoneAction))
+                            TextEffect.typeWriter("⛔ The boss gate remains sealed.", 60);
+                        else
                             startBossFight(player, state, zone, safeZoneAction);
-                        }
                         break;
                     default:
                         TextEffect.typeWriter("Invalid choice. Enter 1, 2, or 3.", 40);
@@ -239,8 +208,7 @@ public class ExplorationSystem {
         } catch (Exception e) {
             TextEffect.typeWriter("Something went wrong during the boss encounter.", 40);
             System.err.println("Boss error -> " + e.getMessage());
-            state.inSafeZone = true;
-            safeZoneAction.run();
+            enterSafeZone(state, safeZoneAction);
         }
     }
 
@@ -360,6 +328,16 @@ public class ExplorationSystem {
                         "⚠️ But destiny demands a guide... The potion glows and revives Sir Khai regardless.", 50);
             }
         }
+    }
+
+    // --- Safe Zone Helper ---
+    private static void enterSafeZone(GameState state, Runnable safeZoneAction) {
+        if (state.inSafeZone) {
+            TextEffect.typeWriter("You are already in the safe zone.", 50);
+            return;
+        }
+        state.inSafeZone = true;
+        safeZoneAction.run();
     }
 
 }
