@@ -9,7 +9,7 @@ import rpg.utils.TextEffect;
 import rpg.game.GameState;
 import rpg.world.ZoneConfig;
 import rpg.world.WorldData;
-import rpg.world.SupporterPool; // 🆕 import the supporter pool
+import rpg.world.SupporterPool;
 
 public class ExplorationSystem {
 
@@ -21,109 +21,323 @@ public class ExplorationSystem {
             Runnable safeZoneAction) {
 
         try {
-            TextEffect.typeWriter("Do you move forward or backward?", 40);
-            System.out.print("> ");
-            String dir = scanner.nextLine();
-
             ZoneConfig zone = WorldData.getZone(state.zone);
             state.currentZoneBoss = zone.boss;
 
-            if (dir.equalsIgnoreCase("backward")) {
-                try {
-                    state.inSafeZone = true;
-                    safeZoneAction.run();
-                } catch (Exception e) {
-                    TextEffect.typeWriter("Something went wrong entering the safe zone.", 40);
-                    System.err.println("Safe zone error -> " + e.getMessage());
+            showPrompt(state);
+            System.out.print("> ");
+            String dir = scanner.nextLine();
+
+            // 🆕 If boss gate discovered, interpret numeric input
+            if (state.forwardSteps >= 5 && state.bossGateDiscovered) {
+                switch (dir) {
+                    case "1": // Safe Zone
+                        handleBackward(state, safeZoneAction, zone, player, rand);
+                        break;
+                    case "2": // Farm
+                        handleForward(player, scanner, rand, state, zone);
+                        break;
+                    case "3": // Boss
+                        handleBoss(player, dir, state, zone, safeZoneAction, rand);
+                        break;
+                    default:
+                        TextEffect.typeWriter("Invalid choice. Please enter 1, 2, or 3.", 40);
                 }
-
-            } else if (dir.equalsIgnoreCase("forward")) {
-                state.inSafeZone = false;
-                state.forwardSteps++;
-
-                // Unlock skills when leaving SafeZone2 for the first time
-                if (state.zone == 2 && !state.skillsUnlocked) {
-                    TextEffect.typeWriter(
-                            "\nAs you step out of the rooftop safe zone, a surge of power awakens within you...", 50);
-                    TextEffect.typeWriter(
-                            "Your class skills are now available! Use them in combat with the 'skill' command.", 50);
-                    state.skillsUnlocked = true;
-                }
-
-                // 🆕 Random statue encounter after Stage 1
-                if (state.zone > 1) { // only after Stage 1
-                    int chance = rand.nextInt(100);
-                    if (chance < 10) { // 10% chance per forward step
-                        Supporter statue = SupporterPool.getRandomSupporter(state.zone, rand);
-                        if (statue != null) {
-                            TextEffect.typeWriter("🗿 A mysterious statue appears in the "
-                                    + zone.name + "...", 60);
-                            ReviveSystem.randomRevive(state, statue);
-                            return;
-                        }
-                    }
-                }
-
-                if (state.forwardSteps >= 5) {
-                    try {
-                        if (!BossGateSystem.canFightBoss(state, player, safeZoneAction)) {
-                            return; // stop here if requirement not met
-                        }
-
-                        CombatSystem combat = new CombatSystem(state);
-                        boolean win = combat.startCombat(player, zone.boss);
-                        if (win) {
-                            TextEffect.typeWriter(
-                                    "🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
-
-                            // Tutorial: miniboss drops Revival Potion
-                            TextEffect.typeWriter("✨ As the boss falls, you discover a glowing Revival Potion!", 60);
-                            state.revivalPotions++;
-
-                            // Scripted Sir Khai statue event
-                            if (state.zone == 1 && !state.metSirKhai) {
-                                Supporter sirKhai = new Supporter("Sir Khai", "Teacher", "Guidance");
-                                ReviveSystem.scriptedRevive(state, sirKhai, scanner);
-                            }
-
-                            state.zone++;
-                            state.forwardSteps = 0;
-                            state.inSafeZone = true;
-                            safeZoneAction.run();
-                        } else {
-                            TextEffect.typeWriter("You awaken back at the safe zone...", 60);
-                            state.inSafeZone = true;
-                            safeZoneAction.run();
-                        }
-                    } catch (Exception e) {
-                        TextEffect.typeWriter("Something went wrong during the boss encounter.", 40);
-                        System.err.println("Boss fight error -> " + e.getMessage());
-                        state.inSafeZone = true;
-                        safeZoneAction.run();
-                    }
-                } else {
-                    try {
-                        Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
-                        CombatSystem combat = new CombatSystem(state);
-                        if (combat.startCombat(player, mob)) {
-                            LootSystem.dropLoot(state);
-                        }
-                    } catch (Exception e) {
-                        TextEffect.typeWriter("Something went wrong during the encounter.", 40);
-                        System.err.println("Mob encounter error -> " + e.getMessage());
-                    }
-                }
-
             } else {
-                TextEffect.typeWriter("Invalid direction.", 40);
+                // Before discovery → text commands
+                switch (dir.toLowerCase()) {
+                    case "backward":
+                        handleBackward(state, safeZoneAction, zone, player, rand);
+                        break;
+                    case "forward":
+                        handleForward(player, scanner, rand, state, zone);
+                        break;
+                    default:
+                        TextEffect.typeWriter("Invalid direction.", 40);
+                }
             }
 
         } catch (Exception e) {
             TextEffect.typeWriter("An unexpected error occurred while exploring.", 40);
             System.err.println("Exploration error -> " + e.getMessage());
-        } finally {
-            // Always runs after exploration attempt
-            // Could be used for logging or ensuring state consistency
         }
     }
+
+    // --- Prompt ---
+
+    private static void showPrompt(GameState state) {
+        if (state.forwardSteps >= 5 && state.bossGateDiscovered) {
+            TextEffect.typeWriter("Choose your action:\n1) Safe Zone\n2) Farm\n3) Boss", 40);
+        } else {
+            TextEffect.typeWriter("Do you move forward or backward? (forward/backward)", 40);
+        }
+    }
+
+    // --- Backward / Safe zone ---
+    private static void handleBackward(GameState state, Runnable safeZoneAction,
+            ZoneConfig zone, Player player, Random rand) {
+
+        if (state.inSafeZone) {
+            TextEffect.typeWriter("You are already in the safe zone.", 50);
+            return;
+        }
+
+        if (state.bossGateDiscovered) {
+            if (rand.nextInt(100) < 10) {
+                Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
+                TextEffect.typeWriter("⚠️ An enemy blocks your retreat!", 60);
+                CombatSystem combat = new CombatSystem(state);
+                if (combat.startCombat(player, mob))
+                    LootSystem.dropLoot(state);
+            } else {
+                TextEffect.typeWriter("🏃 You retreat swiftly back to the safe zone.", 60);
+            }
+            enterSafeZone(state, safeZoneAction);
+            return;
+        }
+
+        // step-based retreat before gate discovery
+        if (state.forwardSteps > 0) {
+            state.forwardSteps--;
+            TextEffect.typeWriter("🔙 You retrace your steps cautiously...", 50);
+            if (state.forwardSteps == 0) {
+                TextEffect.typeWriter("🏠 You have returned safely to the safe zone.", 60);
+                enterSafeZone(state, safeZoneAction);
+            } else if (rand.nextInt(100) < 40) {
+                Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
+                TextEffect.typeWriter("⚔️ A " + mob.getName() + " lurks in the shadows!", 60);
+                CombatSystem combat = new CombatSystem(state);
+                if (combat.startCombat(player, mob))
+                    LootSystem.dropLoot(state);
+            } else {
+                TextEffect.typeWriter("The path is eerily quiet...", 50);
+            }
+        } else {
+            enterSafeZone(state, safeZoneAction);
+        }
+    }
+
+    // --- Forward / Exploration ---
+
+    private static void handleForward(Player player, Scanner scanner, Random rand,
+            GameState state, ZoneConfig zone) {
+        state.inSafeZone = false;
+
+        // 🆕 If boss gate already discovered, forward becomes farm
+        if (state.bossGateDiscovered) {
+            spawnMob(state, zone, player, rand);
+            return;
+        }
+
+        // Normal exploration before gate discovery
+        state.forwardSteps++;
+        narrateZoneExit(state);
+
+        if (state.zone == 2 && !state.skillsUnlocked) {
+            TextEffect.typeWriter("\nAs you step out of the Ruined Lab, a surge of power awakens within you...", 50);
+            TextEffect.typeWriter("Your class skills are now available! Use them in combat with the 'skill' command.\n",
+                    50);
+            state.skillsUnlocked = true;
+        }
+
+        if (checkStatueEncounter(state, zone, rand))
+            return;
+
+        try {
+            if (state.forwardSteps >= 5 && !state.bossGateDiscovered) {
+                if (!BossGateSystem.canFightBoss(state, player, () -> {
+                })) {
+                    TextEffect.typeWriter(
+                            "⛔ The boss gate remains sealed. You must grow stronger or craft the required weapon before you can face it.",
+                            60);
+                } else {
+                    TextEffect.typeWriter(
+                            "🔥 You arrive at the boss gate. New move options are available: farm, retreat, or challenge the boss.",
+                            60);
+
+                }
+                state.bossGateDiscovered = true;
+            }
+            spawnMob(state, zone, player, rand);
+        } catch (Exception e) {
+            TextEffect.typeWriter("Something went wrong during exploration.", 40);
+            System.err.println("Forward error -> " + e.getMessage());
+        }
+    }
+
+    // --- Boss command ---
+
+    private static void handleBoss(Player player, String choice, GameState state,
+            ZoneConfig zone, Runnable safeZoneAction, Random rand) {
+        if (state.forwardSteps < 5) {
+            TextEffect.typeWriter("🚪 You haven’t reached the boss gate yet.", 60);
+            return;
+        }
+
+        try {
+            if (!state.bossGateDiscovered) {
+                // First time at the gate → prompt here
+                TextEffect.typeWriter("🔥 You stand before the boss gate.\n1) Challenge Boss\n2) Farm", 60);
+                String firstChoice = new Scanner(System.in).nextLine();
+                if (firstChoice.equals("1"))
+                    startBossFight(player, state, zone, safeZoneAction);
+                else if (firstChoice.equals("2")) {
+                    state.bossGateDiscovered = true;
+                    spawnMob(state, zone, player, rand);
+                } else
+                    TextEffect.typeWriter("Invalid choice. Enter 1 or 2.", 40);
+            } else {
+                // Gate already discovered → use choice passed in
+                switch (choice) {
+                    case "1":
+                        enterSafeZone(state, safeZoneAction);
+                        break;
+                    case "2":
+                        spawnMob(state, zone, player, rand);
+                        break;
+                    case "3":
+                        if (!BossGateSystem.canFightBoss(state, player, safeZoneAction))
+                            TextEffect.typeWriter("⛔ The boss gate remains sealed.", 60);
+                        else
+                            startBossFight(player, state, zone, safeZoneAction);
+                        break;
+                    default:
+                        TextEffect.typeWriter("Invalid choice. Enter 1, 2, or 3.", 40);
+                }
+            }
+        } catch (Exception e) {
+            TextEffect.typeWriter("Something went wrong during the boss encounter.", 40);
+            System.err.println("Boss error -> " + e.getMessage());
+            enterSafeZone(state, safeZoneAction);
+        }
+    }
+
+    // --- Helper for boss fight outcome ---
+    private static void startBossFight(Player player, GameState state, ZoneConfig zone, Runnable safeZoneAction) {
+        CombatSystem combat = new CombatSystem(state);
+        boolean win = combat.startCombat(player, zone.boss);
+
+        if (win) {
+            TextEffect.typeWriter("🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
+
+            // 🆕 Trigger Sir Khai revival event after Zone 1 miniboss
+            if (state.zone == 1) {
+                handleMinibossDefeat(player, new Scanner(System.in), state);
+            }
+
+            state.zone++;
+            state.forwardSteps = 0;
+            state.bossGateDiscovered = false; // reset for next zone
+            state.inSafeZone = true;
+            safeZoneAction.run();
+        } else {
+            TextEffect.typeWriter("You awaken back at the safe zone...", 60);
+            state.inSafeZone = true;
+            safeZoneAction.run();
+        }
+    }
+
+    // --- Narration ---
+
+    private static void narrateZoneExit(GameState state) {
+        if (state.forwardSteps != 1)
+            return;
+
+        switch (state.zone) {
+            case 1:
+                TextEffect.typeWriter("\n🌌 You leave the safety of the School Rooftop behind...", 60);
+                TextEffect.typeWriter("The path ahead winds through shattered classrooms and broken halls.", 60);
+                TextEffect.typeWriter("Your goal: reach the next safe haven — the Ruined Lab.", 60);
+                break;
+            case 2:
+                TextEffect.typeWriter(
+                        "\n⚙️ You depart from the Ruined Lab, its broken machines fading into the distance...", 60);
+                TextEffect.typeWriter("The road ahead twists through collapsed streets and burning wreckage.", 60);
+                TextEffect.typeWriter("Your destination: the City Ruins, the next hub of survival.", 60);
+                break;
+            case 3:
+                TextEffect.typeWriter(
+                        "\n🏙️ You step out of the City Ruins, leaving behind its fragile refuge...", 60);
+                TextEffect.typeWriter("The wasteland stretches before you, scarred by silence and danger.", 60);
+                TextEffect.typeWriter("Your journey continues toward the next unknown landmark...", 60);
+                break;
+            default:
+                TextEffect.typeWriter("\n🚶 You set out from the safe zone, heading toward your next destination.", 60);
+                break;
+        }
+    }
+
+    // --- Statue encounter ---
+
+    private static boolean checkStatueEncounter(GameState state, ZoneConfig zone, Random rand) {
+        if (state.zone <= 1)
+            return false; // only after Stage 1
+        int chance = rand.nextInt(100);
+        if (chance < 10) { // 10% chance per forward step
+            Supporter statue = SupporterPool.getRandomSupporter(state.zone, rand);
+            if (statue != null) {
+                TextEffect.typeWriter("🗿 A mysterious statue appears in the " + zone.name + "...", 60);
+                ReviveSystem.randomRevive(state, statue);
+                return true; // event consumed the turn
+            }
+        }
+        return false;
+    }
+
+    // --- Mob spawning / farming ---
+
+    private static void spawnMob(GameState state, ZoneConfig zone, Player player, Random rand) {
+        Enemy mob = zone.mobs[rand.nextInt(zone.mobs.length)];
+        TextEffect.typeWriter("⚔️ A " + mob.getName() + " prowls nearby!", 60);
+        CombatSystem combat = new CombatSystem(state);
+        if (combat.startCombat(player, mob)) {
+            LootSystem.dropLoot(state);
+        }
+    }
+
+    private static void handleMinibossDefeat(Player player, Scanner scanner, GameState state) {
+        // Award revival potion
+        state.revivalPotions++;
+        TextEffect.typeWriter("🏆 as you beat the fractured CITU logo! You obtained a Revival Potion.", 50);
+
+        // Narrative: Hallway encounter with Sir Khai
+        if (state.revivalPotions > 0) {
+            TextEffect.typeWriter(
+                    "You see a petrified statue of your teacher — Sir Khai, frozen mid-stance.", 50);
+            System.out.print("Do you want to use a Revival Potion to awaken him? (yes/no): ");
+            String choice = scanner.nextLine();
+
+            // Create Sir Khai supporter object
+            Supporter sirKhai = new Supporter("Sir Khai", "Mentor", "Guidance Heal");
+
+            if (choice.equalsIgnoreCase("yes")) {
+                state.revivalPotions--;
+                sirKhai.setRevived(true);
+                state.supporters.add(sirKhai);
+                TextEffect.typeWriter("✨ The stone shell crumbles away... Sir Khai opens his eyes.", 50);
+                TextEffect.typeWriter(
+                        "\"You’ve done well to come this far,\" he says. \"Allow me to guide you onward.\"", 50);
+            } else {
+                TextEffect.typeWriter(
+                        "You clutch the potion tightly and walk past the statue, leaving Sir Khai in silence...", 50);
+                // Force revival anyway
+                state.revivalPotions--;
+                sirKhai.setRevived(true);
+                state.supporters.add(sirKhai);
+                TextEffect.typeWriter(
+                        "⚠️ But destiny demands a guide... The potion glows and revives Sir Khai regardless.", 50);
+            }
+        }
+    }
+
+    // --- Safe Zone Helper ---
+    private static void enterSafeZone(GameState state, Runnable safeZoneAction) {
+        if (state.inSafeZone) {
+            TextEffect.typeWriter("You are already in the safe zone.", 50);
+            return;
+        }
+        state.inSafeZone = true;
+        safeZoneAction.run();
+    }
+
 }
