@@ -3,11 +3,13 @@ package rpg.systems;
 import java.util.Scanner;
 import java.util.Random;
 import rpg.characters.Player;
+import rpg.characters.Supporter;
 import rpg.characters.Enemy;
 import rpg.utils.TextEffect;
 import rpg.game.GameState;
 import rpg.world.ZoneConfig;
 import rpg.world.WorldData;
+import rpg.world.SupporterPool; // 🆕 import the supporter pool
 
 public class ExplorationSystem {
 
@@ -48,6 +50,20 @@ public class ExplorationSystem {
                     state.skillsUnlocked = true;
                 }
 
+                // 🆕 Random statue encounter after Stage 1
+                if (state.zone > 1) { // only after Stage 1
+                    int chance = rand.nextInt(100);
+                    if (chance < 10) { // 10% chance per forward step
+                        Supporter statue = SupporterPool.getRandomSupporter(state.zone, rand);
+                        if (statue != null) {
+                            TextEffect.typeWriter("🗿 A mysterious statue appears in the "
+                                    + zone.name + "...", 60);
+                            ReviveSystem.randomRevive(state, statue);
+                            return;
+                        }
+                    }
+                }
+
                 if (state.forwardSteps >= 5) {
                     try {
                         if (!BossGateSystem.canFightBoss(state, player, safeZoneAction)) {
@@ -57,7 +73,19 @@ public class ExplorationSystem {
                         CombatSystem combat = new CombatSystem(state);
                         boolean win = combat.startCombat(player, zone.boss);
                         if (win) {
-                            TextEffect.typeWriter("🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
+                            TextEffect.typeWriter(
+                                    "🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
+
+                            // Tutorial: miniboss drops Revival Potion
+                            TextEffect.typeWriter("✨ As the boss falls, you discover a glowing Revival Potion!", 60);
+                            state.revivalPotions++;
+
+                            // Scripted Sir Khai statue event
+                            if (state.zone == 1 && !state.metSirKhai) {
+                                Supporter sirKhai = new Supporter("Sir Khai", "Teacher", "Guidance");
+                                ReviveSystem.scriptedRevive(state, sirKhai, scanner);
+                            }
+
                             state.zone++;
                             state.forwardSteps = 0;
                             state.inSafeZone = true;

@@ -1,10 +1,13 @@
 package rpg.game;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Map;
 import rpg.characters.Enemy;
+import rpg.characters.Supporter;
 
 public class GameState {
     public int zone = 1;
@@ -34,5 +37,8 @@ public class GameState {
     public boolean skillsUnlocked = false;
 
     public boolean lootDisplayed = false;   // ✅ already added, prevents duplicate loot text
+    public boolean metSirKhai = false;
+    public List<Supporter> supporters = new ArrayList<>();
+
 
 }

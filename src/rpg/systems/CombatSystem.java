@@ -5,7 +5,7 @@ import java.util.Random;
 import rpg.utils.TextEffect;
 import rpg.characters.Player;
 import rpg.characters.Enemy;
-import rpg.skills.Skill; 
+import rpg.skills.Skill;
 import rpg.items.Consumable;
 import rpg.items.Weapon;
 import rpg.game.GameState;
@@ -109,7 +109,8 @@ public class CombatSystem {
 
                         case "kill":
                             enemy.takeDamage(enemy.getHp());
-                            TextEffect.typeWriter("💀 [DEV] You unleash a hidden power... the enemy is instantly slain!", 40);
+                            TextEffect.typeWriter(
+                                    "💀 [DEV] You unleash a hidden power... the enemy is instantly slain!", 40);
                             break;
 
                         default:
@@ -120,10 +121,12 @@ public class CombatSystem {
                     if (enemy.isAlive()) {
                         try {
                             int dmgTaken = enemy.enemyAction();
-                            if (defended) dmgTaken /= 2;
+                            if (defended)
+                                dmgTaken /= 2;
 
                             int actualDamage = player.takeDamage(dmgTaken);
-                            TextEffect.typeWriter("The " + enemy.getName() + " attacks! You take " + actualDamage + " damage.", 40);
+                            TextEffect.typeWriter(
+                                    "The " + enemy.getName() + " attacks! You take " + actualDamage + " damage.", 40);
                         } catch (Exception e) {
                             TextEffect.typeWriter("The enemy falters in its attack.", 40);
                             System.err.println("Enemy action error -> " + e.getMessage());
@@ -143,13 +146,9 @@ public class CombatSystem {
         }
 
         // --- Outcome ---
+        // --- Outcome ---
         if (player.isAlive()) {
             TextEffect.typeWriter("🎉 You defeated the " + enemy.getName() + "!", 50);
-
-            if (enemy == state.currentZoneBoss) {
-                state.revivalPotions++;
-                TextEffect.typeWriter("✨ As the boss falls, you discover a glowing Revival Potion!", 50);
-            }
 
             LootSystem.dropLoot(state);
 
@@ -163,5 +162,6 @@ public class CombatSystem {
             player.healFull();
             return false;
         }
+
     }
 }
