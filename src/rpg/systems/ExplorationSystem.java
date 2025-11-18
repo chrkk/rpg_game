@@ -133,13 +133,13 @@ public class ExplorationSystem {
         state.forwardSteps++;
         narrateZoneExit(state);
 
-        if (state.zone == 2 && !state.skillsUnlocked) {
-            TextEffect.typeWriter("\nAs you step out of the Ruined Lab, a surge of power awakens within you...", 50);
+        if (player.getLevel() >= 2 && !state.skillsUnlocked) {
+            TextEffect.typeWriter("\nA surge of power awakens within you...", 50);
             TextEffect.typeWriter("Your class skills are now available! Use them in combat with the 'skill' command.\n",
                     50);
             state.skillsUnlocked = true;
         }
-
+        
         if (checkStatueEncounter(state, zone, rand))
             return;
 
