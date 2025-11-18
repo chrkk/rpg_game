@@ -134,12 +134,12 @@ public class ExplorationSystem {
         narrateZoneExit(state);
 
         if (player.getLevel() >= 2 && !state.skillsUnlocked) {
-            TextEffect.typeWriter("\nA surge of power awakens within you...", 50);
+            TextEffect.typeWriter("\n⚡ A surge of power awakens within you...", 50);
             TextEffect.typeWriter("Your class skills are now available! Use them in combat with the 'skill' command.\n",
                     50);
-            state.skillsUnlocked = true;
+            state.skillsUnlocked = true; // purely for tracking narration
         }
-        
+
         if (checkStatueEncounter(state, zone, rand))
             return;
 
