@@ -31,7 +31,8 @@ public class CombatSystem {
                             " | Mana: " + player.getMana() + "/" + player.getMaxMana() +
                             " | Enemy HP: " + enemy.getHp(), 40);
 
-                    if (state.skillsUnlocked) {
+                    // ✅ Show skill option only if player has unlocked skills (Level >= 2 and skills assigned)
+                    if (player.getLevel() >= 2 && player.getSkills().length > 0) {
                         TextEffect.typeWriter("Choose action: attack / defend / skill / item / run", 30);
                     } else {
                         TextEffect.typeWriter("Choose action: attack / defend / item / run", 30);
@@ -68,7 +69,8 @@ public class CombatSystem {
 
                         case "skill":
                             try {
-                                if (!state.skillsUnlocked) {
+                                // ✅ Check level and skills array instead of state.skillsUnlocked
+                                if (player.getLevel() < 2 || player.getSkills().length == 0) {
                                     TextEffect.typeWriter("You haven’t unlocked your skills yet!", 40);
                                     break;
                                 }
@@ -146,7 +148,6 @@ public class CombatSystem {
         }
 
         // --- Outcome ---
-        // --- Outcome ---
         if (player.isAlive()) {
             TextEffect.typeWriter("🎉 You defeated the " + enemy.getName() + "!", 50);
 
@@ -162,6 +163,5 @@ public class CombatSystem {
             player.healFull();
             return false;
         }
-
     }
 }

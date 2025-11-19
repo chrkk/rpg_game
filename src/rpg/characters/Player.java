@@ -52,53 +52,59 @@ public class Player {
         // weapon
         this.weapon = null;
 
-        // Apply trait bonuses
+        // Apply trait bonuses (but DO NOT assign skills yet)
         switch (trait.toLowerCase()) {
             case "scientist":
                 this.intelligence += 5;
                 this.defense += 3;
+                break;
+            case "fighter":
+                this.maxHp += 30;
+                this.hp = maxHp;
+                this.defense += 5;
+                break;
+            case "archmage":
+                this.intelligence += 7;
+                this.maxMana += 30;
+                this.mana = maxMana;
+                break;
+        }
 
-                // 🆕 Newly added - Skills
+        // Skills locked until Level 2
+        this.skills = new Skill[0];
+
+        this.baseDefense = this.defense;
+    }
+
+    // 🆕 Unlock skills when reaching Level 2
+    private void unlockSkills() {
+        switch (trait.toLowerCase()) {
+            case "scientist":
                 this.skills = new Skill[] {
                         ScientistSkills.chemicalStrike,
                         ScientistSkills.plasmaField,
                         ScientistSkills.nuclearBlast
                 };
                 break;
-
             case "fighter":
-                this.maxHp += 30;
-                this.hp = maxHp;
-                this.defense += 5;
-
-                // 🆕 Newly added - Skills
                 this.skills = new Skill[] {
                         FighterSkills.powerPunch,
                         FighterSkills.warCry,
                         FighterSkills.earthBreaker
                 };
                 break;
-
             case "archmage":
-                this.intelligence += 7;
-                this.maxMana += 30;
-                this.mana = maxMana;
-
-                // 🆕 Newly added - Skills
                 this.skills = new Skill[] {
                         ArchmageSkills.fireBolt,
                         ArchmageSkills.arcaneShield,
                         ArchmageSkills.meteorStorm
                 };
                 break;
-
             default:
-                // 🆕 Newly added - Skills
-                this.skills = new Skill[0]; // fallback if no trait found
+                this.skills = new Skill[0];
                 break;
         }
-
-        this.baseDefense = this.defense;
+        System.out.println("⚡ A surge of power awakens... Your class skills are now available!");
     }
 
     // weapon
@@ -243,6 +249,11 @@ public class Player {
             baseDefense = defense;
             healFull();
             System.out.println("✨ Level Up! " + name + " is now Level " + level + "!");
+
+            // 🆕 Unlock skills at Level 2
+            if (level == 2 && (skills == null || skills.length == 0)) {
+                unlockSkills();
+            }
         }
     }
 
