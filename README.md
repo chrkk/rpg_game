@@ -34,11 +34,11 @@ It is **not ready to run or play yet** — core systems and features are still b
 Once the game reaches a runnable state, you will be able to compile and run it from the project root:
 ```bash
 # Compile
-javac -d out $(find src -name "*.java")
+javac -d out $(find src -name "*.java") or
+javac -d out (Get-ChildItem -Recurse -Path src -Filter *.java).FullName
 
 # Run
 java -cp out rpg.Main or
-javac -d out (Get-ChildItem -Recurse -Filter *.java src | ForEach-Object { $_.FullName })
 
 # Or
 We will just make it an executable
