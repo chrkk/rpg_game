@@ -45,7 +45,40 @@ public class GameLoop {
                     case "craft":
                         if (state.inSafeZone) {
                             try {
-                                state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state);
+                                // 🆕 Crafting menu
+                                if (state.unlockedRecipes.isEmpty()) {
+                                    TextEffect.typeWriter("You don’t know any recipes yet.", 50);
+                                    break;
+                                }
+
+                                TextEffect.typeWriter("⚒️ Available recipes:", 50);
+                                int i = 1;
+                                for (String recipe : state.unlockedRecipes) {
+                                    boolean discovered = state.recipeItems.getOrDefault(recipe, false);
+                                    TextEffect.typeWriter(i + ". " + recipe + (discovered ? " (discovered)" : " (not found)"), 40);
+                                    i++;
+                                }
+                                TextEffect.typeWriter("0. Cancel", 40);
+
+                                System.out.print("> Choose a recipe number: ");
+                                String choice = scanner.nextLine();
+
+                                try {
+                                    int option = Integer.parseInt(choice);
+                                    if (option == 0) {
+                                        TextEffect.typeWriter("Crafting cancelled.", 40);
+                                        break;
+                                    }
+                                    if (option > 0 && option <= state.unlockedRecipes.size()) {
+                                        String target = state.unlockedRecipes.get(option - 1);
+                                        state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state, target);
+                                    } else {
+                                        TextEffect.typeWriter("Invalid choice.", 40);
+                                    }
+                                } catch (NumberFormatException e) {
+                                    TextEffect.typeWriter("Invalid input. Please enter a number.", 40);
+                                }
+
                             } catch (Exception e) {
                                 TextEffect.typeWriter("Crafting failed. Try again.", 40);
                                 System.err.println("Crafting error -> " + e.getMessage());
