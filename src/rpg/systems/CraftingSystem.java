@@ -6,21 +6,46 @@ import rpg.utils.TextEffect;
 import rpg.game.GameState;
 
 public class CraftingSystem {
-    public static int craftWeapon(Player player, int crystals, GameState state) {
-        // Example: Pencil Blade → Crystal Sword
-        String target = "Crystal Sword";
+    public static int craftWeapon(Player player, int crystals, GameState state, String target) {
+        // Check if recipe is unlocked and discovered
+        if (state.unlockedRecipes.contains(target) && state.recipeItems.getOrDefault(target, false)) {
+            // Example requirements per weapon
+            switch (target) {
+                case "Crystal Sword":
+                    if (player.getWeapon() != null && player.getWeapon().getName().equals("Pencil Blade")
+                            && crystals >= 5) {
+                        crystals -= 5;
+                        player.equipWeapon(new Weapon("Crystal Sword", 20, 35, 0.10, 2.0));
+                        state.stage2WeaponCrafted = true;
+                        TextEffect.typeWriter("You forged a Crystal Sword! Its edge gleams with power.", 60);
+                    } else {
+                        TextEffect.typeWriter("You don’t have the base weapon or enough crystals.", 60);
+                    }
+                    break;
 
-        if (player.getWeapon() != null 
-            && player.getWeapon().getName().equals("Pencil Blade") 
-            && crystals >= 5 
-            && state.unlockedRecipes.contains(target) 
-            && state.recipeItems.getOrDefault(target, false)) {
+                case "Flame Axe":
+                    if (crystals >= 8) {
+                        crystals -= 8;
+                        player.equipWeapon(new Weapon("Flame Axe", 25, 40, 0.15, 1.8));
+                        TextEffect.typeWriter("🔥 You forged a Flame Axe! It radiates heat.", 60);
+                    } else {
+                        TextEffect.typeWriter("You don’t have enough crystals to forge the Flame Axe.", 60);
+                    }
+                    break;
 
-            crystals -= 5;
-            player.equipWeapon(new Weapon("Crystal Sword", 20, 35, 0.10, 2.0));
-            state.stage2WeaponCrafted = true;
-            TextEffect.typeWriter("You forged a Crystal Sword! Its edge gleams with power.", 60);
+                case "Shadow Bow":
+                    if (crystals >= 10) {
+                        crystals -= 10;
+                        player.equipWeapon(new Weapon("Shadow Bow", 15, 30, 0.20, 2.5));
+                        TextEffect.typeWriter("🌑 You forged a Shadow Bow! Shadows bend to your will.", 60);
+                    } else {
+                        TextEffect.typeWriter("You don’t have enough crystals to forge the Shadow Bow.", 60);
+                    }
+                    break;
 
+                default:
+                    TextEffect.typeWriter("This recipe isn’t implemented yet.", 60);
+            }
         } else if (state.unlockedRecipes.contains(target) && !state.recipeItems.getOrDefault(target, false)) {
             TextEffect.typeWriter("You know the blueprint, but you haven’t found the recipe item yet.", 60);
         } else {
@@ -28,4 +53,5 @@ public class CraftingSystem {
         }
         return crystals;
     }
+
 }
