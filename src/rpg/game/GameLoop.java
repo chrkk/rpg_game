@@ -52,11 +52,13 @@ public class GameLoop {
                                 }
 
                                 TextEffect.typeWriter("⚒️ Available recipes:", 50);
-                                int i = 1;
-                                for (String recipe : state.unlockedRecipes) {
+                                List<String> recipes = new ArrayList<>(state.unlockedRecipes); // convert Set to List
+                                for (int i = 0; i < recipes.size(); i++) {
+                                    String recipe = recipes.get(i);
                                     boolean discovered = state.recipeItems.getOrDefault(recipe, false);
-                                    TextEffect.typeWriter(i + ". " + recipe + (discovered ? " (discovered)" : " (not found)"), 40);
-                                    i++;
+                                    TextEffect.typeWriter(
+                                            (i + 1) + ". " + recipe + (discovered ? " (discovered)" : " (not found)"),
+                                            40);
                                 }
                                 TextEffect.typeWriter("0. Cancel", 40);
 
@@ -67,11 +69,10 @@ public class GameLoop {
                                     int option = Integer.parseInt(choice);
                                     if (option == 0) {
                                         TextEffect.typeWriter("Crafting cancelled.", 40);
-                                        break;
-                                    }
-                                    if (option > 0 && option <= state.unlockedRecipes.size()) {
-                                        String target = state.unlockedRecipes.get(option - 1);
-                                        state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state, target);
+                                    } else if (option > 0 && option <= recipes.size()) {
+                                        String target = recipes.get(option - 1); // ✅ now works
+                                        state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state,
+                                                target);
                                     } else {
                                         TextEffect.typeWriter("Invalid choice.", 40);
                                     }
