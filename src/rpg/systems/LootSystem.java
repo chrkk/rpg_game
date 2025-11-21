@@ -13,7 +13,7 @@ public class LootSystem {
         }
         state.lootDisplayed = true;
 
-        int crystalDrop = (rand.nextInt(100) < 10) ? 1 : 0;
+        int crystalDrop = (rand.nextInt(100) < 50) ? 1 : 0;
         int meatDrop = rand.nextInt(2);
         int shardDrop = 1 + rand.nextInt(3);
 
