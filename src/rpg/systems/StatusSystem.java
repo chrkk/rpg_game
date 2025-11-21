@@ -6,7 +6,7 @@ import rpg.utils.TextEffect;
 
 public class StatusSystem {
 
-    // REMOVED: "int shards" from the parameters here
+    // Main status display
     public static void showStatus(Player player, GameState state) {
         
         // 1. PREPARE DATA
@@ -25,9 +25,10 @@ public class StatusSystem {
             formatTwoColumns("HP: " + player.getHp() + "/" + player.getMaxHp(),      "Mana: " + player.getMana() + "/" + player.getMaxMana()) +
             formatTwoColumns("Lvl: " + player.getLevel(),                            "Exp: " + player.getExp() + "/" + player.getExpToNextLevel()) +
             formatTwoColumns("Def: " + player.getDefense(),                          "Int: " + player.getIntelligence()) +
+            formatOneColumn("Weapon: " + weaponName) +
             
-            // CHANGED: Removed Shards. Passed "" (empty string) to the right column.
-            formatTwoColumns("Weapon: " + weaponName,                                "") +
+            // 🆕 BAG HINT
+            formatOneColumn("💼 Bag: Type 'bag' to view items") +
 
             // FOOTER
             "|------------------------------------------------------|\n" +
@@ -38,10 +39,57 @@ public class StatusSystem {
         TextEffect.typeWriter(output, 10);
     }
 
+    // NEW: Bag display method
+    public static void showBag(GameState state) {
+        String border = "+======================================================+";
+        
+        String output = "\n" + border + "\n" +
+            "| 💼 BAG                                               |\n" +
+            "|------------------------------------------------------|\n" +
+            
+            // MATERIALS SECTION
+            "| MATERIALS                                            |\n" +
+            formatBagItem("Crystals", state.crystals) +
+            formatBagItem("Shards", state.shards) +
+            "|------------------------------------------------------|\n" +
+            
+            // CONSUMABLES SECTION
+            "| CONSUMABLES                                          |\n" +
+            formatBagItem("Meat", state.meat) +
+            formatBagItem("Revival Potions", state.revivalPotions) +
+            "|------------------------------------------------------|\n" +
+            
+            // KEY ITEMS SECTION (showing crafted weapons as achievements)
+            "| CRAFTED WEAPONS                                      |\n" +
+            formatBagCheck("Stage 1: Pencil Blade", state.stage1WeaponCrafted) +
+            formatBagCheck("Stage 2: Crystal Sword", state.stage2WeaponCrafted) +
+            formatBagCheck("Stage 3: ???", state.stage3WeaponCrafted) +
+            
+            border;
+
+        TextEffect.typeWriter(output, 10);
+    }
+
     // --- HELPER METHODS ---
 
     private static String formatTwoColumns(String leftText, String rightText) {
         return String.format("| %-25s | %-24s |\n", leftText, rightText);
+    }
+
+    private static String formatOneColumn(String text) {
+    return String.format("| %-52s |\n", text);
+    }
+
+
+    // 🆕 Helper for bag items (shows item name and quantity)
+    private static String formatBagItem(String itemName, int quantity) {
+        return String.format("|   %-25s x%-23d |\n", itemName, quantity);
+    }
+
+    // 🆕 Helper for boolean items (shows checkmark or X)
+    private static String formatBagCheck(String itemName, boolean acquired) {
+        String status = acquired ? "✓" : "✗";
+        return String.format("|   %s %-48s |\n", status, itemName);
     }
 
     private static String createProgressBar(GameState state) {
