@@ -128,7 +128,7 @@ public class Tutorial {
 
                     case "status":
                         try {
-                            StatusSystem.showStatus(player, state.shards, state);
+                            StatusSystem.showStatus(player, state);
                         } catch (Exception e) {
                             TextEffect.typeWriter("Unable to display status right now.", 40);
                             System.err.println("Status error -> " + e.getMessage());

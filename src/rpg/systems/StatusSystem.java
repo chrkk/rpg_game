@@ -5,41 +5,57 @@ import rpg.game.GameState;
 import rpg.utils.TextEffect;
 
 public class StatusSystem {
-    public static void showStatus(Player player, int shards, GameState state) {
-        TextEffect.typeWriter(
-            "\n------ " + player.getName() + ": The " + player.getTrait() + " ------" +
-            "\n| HP: " + player.getHp() + "/" + player.getMaxHp() +
-            " | Level: " + player.getLevel() +
-            " | EXP: " + player.getExp() + "/" + player.getExpToNextLevel() +
-            " | Mana: " + player.getMana() + "/" + player.getMaxMana() +
-            " | Defense: " + player.getDefense() +
-            " | Intelligence: " + player.getIntelligence() +
-            " | Weapon: " + (player.getWeapon() == null ? "None" : player.getWeapon().toString()) +
-            " | Shards: " + shards,
-            40
-        );
 
-        // 🆕 ASCII Progress Bar
-        int steps = state.forwardSteps;
-        int maxSteps = 5; // threshold for boss gate
-        StringBuilder bar = new StringBuilder("\nProgress: [S");
+    // REMOVED: "int shards" from the parameters here
+    public static void showStatus(Player player, GameState state) {
+        
+        // 1. PREPARE DATA
+        String weaponName = (player.getWeapon() == null ? "None" : player.getWeapon().toString());
+        String progressBar = createProgressBar(state); 
 
+        // 2. BUILD THE DESIGN
+        String border = "+======================================================+";
+        
+        String output = "\n" + border + "\n" +
+            // NAME HEADER
+            String.format("| %-52s |\n", player.getName() + " [" + player.getTrait() + "]") +
+            "|------------------------------------------------------|\n" +
+            
+            // STATS COLUMNS
+            formatTwoColumns("HP: " + player.getHp() + "/" + player.getMaxHp(),      "Mana: " + player.getMana() + "/" + player.getMaxMana()) +
+            formatTwoColumns("Lvl: " + player.getLevel(),                            "Exp: " + player.getExp() + "/" + player.getExpToNextLevel()) +
+            formatTwoColumns("Def: " + player.getDefense(),                          "Int: " + player.getIntelligence()) +
+            
+            // CHANGED: Removed Shards. Passed "" (empty string) to the right column.
+            formatTwoColumns("Weapon: " + weaponName,                                "") +
+
+            // FOOTER
+            "|------------------------------------------------------|\n" +
+            String.format("| Progress: %-42s |\n", progressBar) +
+            border;
+
+        // 3. DISPLAY
+        TextEffect.typeWriter(output, 10);
+    }
+
+    // --- HELPER METHODS ---
+
+    private static String formatTwoColumns(String leftText, String rightText) {
+        return String.format("| %-25s | %-24s |\n", leftText, rightText);
+    }
+
+    private static String createProgressBar(GameState state) {
+        int maxSteps = 5;
+        String bar = "[S";
+        
         if (state.bossGateDiscovered) {
-            // Always show full bar once gate is found
-            for (int i = 0; i < maxSteps; i++) bar.append("#");
-            bar.append("B] Step ").append(maxSteps).append("/").append(maxSteps)
-               .append(" (Boss Gate Reached)");
-        } else {
-            for (int i = 0; i < maxSteps; i++) {
-                if (i < steps) bar.append("#");
-                else bar.append("-");
-            }
-            bar.append("B] Step ").append(steps).append("/").append(maxSteps);
-            if (steps == 0) {
-                bar.append(" (Safe Zone)");
-            }
+            return "[S#####B] (BOSS GATE)";
         }
 
-        TextEffect.typeWriter(bar.toString(), 40);
+        for (int i = 0; i < maxSteps; i++) {
+            if (i < state.forwardSteps) bar += "#";
+            else bar += "-";
+        }
+        return bar + "B] Step " + state.forwardSteps;
     }
 }
