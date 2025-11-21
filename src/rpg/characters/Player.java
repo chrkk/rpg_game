@@ -4,6 +4,7 @@ import rpg.items.Weapon;
 
 // 🆕 Newly added - Skills
 import rpg.skills.Skill;
+import rpg.utils.TextEffect;
 import rpg.skills.ScientistSkills;
 import rpg.skills.FighterSkills;
 import rpg.skills.ArchmageSkills;
@@ -238,19 +239,36 @@ public class Player {
         exp += amount;
 
         while (exp >= expToNextLevel) {
+            // Level increases
             exp -= expToNextLevel;
             level++;
-            expToNextLevel += 25;
-            maxHp += 10;
-            maxMana += 5;
-            defense += 1;
-            intelligence += 1;
 
-            baseDefense = defense;
-            healFull();
-            System.out.println("✨ Level Up! " + name + " is now Level " + level + "!");
+            // Increase EXP requirement slowly
+            expToNextLevel += 50;
 
-            // 🆕 Unlock skills at Level 2
+            // Stats level up   
+            maxHp += 20;
+            maxMana += 10;
+            defense += 1;         // 🆕 Defense +1
+            intelligence += 2;    // 🆕 Intelligence +2
+
+            // Restore HP and Mana to new max
+            hp = maxHp;
+            mana = maxMana;
+
+            TextEffect.typeWriter(
+                "==============================================\n" +
+                "               ✨ LEVEL UP! ✨\n" +
+                "==============================================\n" +
+                "❤️  Max HP +10\n" +
+                "🔮  Max Mana +5\n" +
+                "🛡️  Defense +1\n" +
+                "🧠  Intelligence +1\n" +
+                "==============================================",
+    20
+            );
+
+            // Unlock skills at Level 2
             if (level == 2 && (skills == null || skills.length == 0)) {
                 unlockSkills();
             }
