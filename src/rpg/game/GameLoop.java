@@ -8,6 +8,8 @@ import rpg.systems.ExplorationSystem;
 import rpg.systems.StatusSystem;
 import rpg.systems.ShopSystem; // ✅ import shop
 import rpg.utils.TextEffect;
+import java.util.List;
+import java.util.ArrayList;
 
 public class GameLoop {
     private final Player player;
@@ -45,7 +47,41 @@ public class GameLoop {
                     case "craft":
                         if (state.inSafeZone) {
                             try {
-                                state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state);
+                                // 🆕 Crafting menu
+                                if (state.unlockedRecipes.isEmpty()) {
+                                    TextEffect.typeWriter("You don’t know any recipes yet.", 50);
+                                    break;
+                                }
+
+                                TextEffect.typeWriter("⚒️ Available recipes:", 50);
+                                List<String> recipes = new ArrayList<>(state.unlockedRecipes); // convert Set to List
+                                for (int i = 0; i < recipes.size(); i++) {
+                                    String recipe = recipes.get(i);
+                                    boolean discovered = state.recipeItems.getOrDefault(recipe, false);
+                                    TextEffect.typeWriter(
+                                            (i + 1) + ". " + recipe + (discovered ? " (discovered)" : " (not found)"),
+                                            40);
+                                }
+                                TextEffect.typeWriter("0. Cancel", 40);
+
+                                System.out.print("> Choose a recipe number: ");
+                                String choice = scanner.nextLine();
+
+                                try {
+                                    int option = Integer.parseInt(choice);
+                                    if (option == 0) {
+                                        TextEffect.typeWriter("Crafting cancelled.", 40);
+                                    } else if (option > 0 && option <= recipes.size()) {
+                                        String target = recipes.get(option - 1); // ✅ now works
+                                        state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state,
+                                                target);
+                                    } else {
+                                        TextEffect.typeWriter("Invalid choice.", 40);
+                                    }
+                                } catch (NumberFormatException e) {
+                                    TextEffect.typeWriter("Invalid input. Please enter a number.", 40);
+                                }
+
                             } catch (Exception e) {
                                 TextEffect.typeWriter("Crafting failed. Try again.", 40);
                                 System.err.println("Crafting error -> " + e.getMessage());
