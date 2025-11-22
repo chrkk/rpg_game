@@ -125,6 +125,8 @@ public class ExplorationSystem {
 
         // 🆕 If boss gate already discovered, forward becomes farm
         if (state.bossGateDiscovered) {
+            // Allow statue encounters while farming (reuse same statue logic)
+            if (checkStatueEncounter(state, zone, rand, scanner)) return;
             spawnMob(state, zone, player, rand);
             return;
         }
@@ -133,7 +135,7 @@ public class ExplorationSystem {
         state.forwardSteps++;
         narrateZoneExit(state);
 
-        if (checkStatueEncounter(state, zone, rand))
+        if (checkStatueEncounter(state, zone, rand, scanner))
             return;
 
         try {
@@ -262,15 +264,15 @@ public class ExplorationSystem {
 
     // --- Statue encounter ---
 
-    private static boolean checkStatueEncounter(GameState state, ZoneConfig zone, Random rand) {
+    private static boolean checkStatueEncounter(GameState state, ZoneConfig zone, Random rand, java.util.Scanner scanner) {
         if (state.zone <= 1)
             return false; // only after Stage 1
         int chance = rand.nextInt(100);
-        if (chance < 10) { // 10% chance per forward step
-            Supporter statue = SupporterPool.getRandomSupporter(state.zone, rand);
+        if (chance < 15) { // 15% chance per forward step (increased)
+            Supporter statue = SupporterPool.getRandomUnrevivedSupporter(state.zone, rand, state);
             if (statue != null) {
                 TextEffect.typeWriter("🗿 A mysterious statue appears in the " + zone.name + "...", 60);
-                ReviveSystem.randomRevive(state, statue);
+                ReviveSystem.randomRevive(state, statue, scanner);
                 return true; // event consumed the turn
             }
         }
