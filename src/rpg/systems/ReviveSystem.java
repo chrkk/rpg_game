@@ -47,24 +47,39 @@ public class ReviveSystem {
     }
 
     // Random statue revival outside safe zones
-    public static void randomRevive(GameState state, Supporter supporter) {
+    public static void randomRevive(GameState state, Supporter supporter, java.util.Scanner scanner) {
         try {
-            // If this supporter object is already revived or already in state, skip
             if (supporter == null) return;
             if (supporter.isRevived() || state.supporters.contains(supporter)) {
                 TextEffect.typeWriter("🗿 This statue has already been awakened.", 60);
                 return;
             }
 
-            if (state.revivalPotions > 0) {
-                state.revivalPotions--;
-                supporter.setRevived(true);
-                TextEffect.typeWriter("✨ You used a Revival Potion to awaken " + supporter.getName() + "!", 60);
-                if (!state.supporters.contains(supporter)) {
-                    state.supporters.add(supporter); // track revived allies
+            // Prompt the player whether to use a Revival Potion
+            TextEffect.typeWriter("A statue of " + supporter.getName() + " stands before you. Use a Revival Potion to awaken them? (yes/no)", 60);
+            System.out.print("> ");
+            String choice = "";
+            try {
+                choice = scanner.nextLine().trim().toLowerCase();
+            } catch (Exception e) {
+                // fallback: do not auto-revive
+                TextEffect.typeWriter("You decide not to disturb the statue.", 40);
+                return;
+            }
+
+            if (choice.equals("yes") || choice.equals("y")) {
+                if (state.revivalPotions > 0) {
+                    state.revivalPotions--;
+                    supporter.setRevived(true);
+                    TextEffect.typeWriter("✨ You used a Revival Potion to awaken " + supporter.getName() + "!", 60);
+                    if (!state.supporters.contains(supporter)) {
+                        state.supporters.add(supporter);
+                    }
+                } else {
+                    TextEffect.typeWriter("❌ You lack a Revival Potion. The statue remains silent.", 60);
                 }
             } else {
-                TextEffect.typeWriter("🗿 The statue remains silent... you lack a Revival Potion.", 60);
+                TextEffect.typeWriter("You leave the statue undisturbed.", 40);
             }
         } catch (Exception e) {
             TextEffect.typeWriter("An error occurred during statue revival.", 60);

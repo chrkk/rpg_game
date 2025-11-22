@@ -35,6 +35,8 @@ public class GameState {
     public boolean shopUnlocked = false;
 
     public boolean zone2IntroShown = false;
+    // Track whether the player has seen the stage-2 supporter menu intro
+    public boolean supporterMenuIntroStage2Shown = false;
     public boolean skillsUnlocked = false;
 
     public boolean lootDisplayed = false; // ✅ already added, prevents duplicate loot text

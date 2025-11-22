@@ -39,7 +39,8 @@ public class SearchSystem {
                 rpg.characters.Supporter statue = SupporterPool.getRandomUnrevivedSupporter(state.zone, rand, state);
                 if (statue != null) {
                     TextEffect.typeWriter("🗿 While searching, you notice a strange statue nearby...", 60);
-                    ReviveSystem.randomRevive(state, statue);
+                    java.util.Scanner scanner = new java.util.Scanner(System.in);
+                    ReviveSystem.randomRevive(state, statue, scanner);
                 }
             }
         } catch (Exception e) {
