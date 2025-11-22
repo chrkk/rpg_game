@@ -49,11 +49,20 @@ public class ReviveSystem {
     // Random statue revival outside safe zones
     public static void randomRevive(GameState state, Supporter supporter) {
         try {
+            // If this supporter object is already revived or already in state, skip
+            if (supporter == null) return;
+            if (supporter.isRevived() || state.supporters.contains(supporter)) {
+                TextEffect.typeWriter("🗿 This statue has already been awakened.", 60);
+                return;
+            }
+
             if (state.revivalPotions > 0) {
                 state.revivalPotions--;
                 supporter.setRevived(true);
                 TextEffect.typeWriter("✨ You used a Revival Potion to awaken " + supporter.getName() + "!", 60);
-                state.supporters.add(supporter); // track revived allies
+                if (!state.supporters.contains(supporter)) {
+                    state.supporters.add(supporter); // track revived allies
+                }
             } else {
                 TextEffect.typeWriter("🗿 The statue remains silent... you lack a Revival Potion.", 60);
             }

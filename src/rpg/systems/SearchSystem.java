@@ -3,6 +3,7 @@ package rpg.systems;
 import java.util.Random;
 import rpg.utils.TextEffect;
 import rpg.game.GameState;
+import rpg.world.SupporterPool;
 
 public class SearchSystem {
     private static Random rand = new Random();
@@ -30,6 +31,19 @@ public class SearchSystem {
                     TextEffect.typeWriter("✨ While searching, you uncover the " + recipe + " Recipe!", 60);
                 }
             }
+        }
+
+        // Small chance to stumble on a statue while searching (only meaningful outside zone 1)
+        try {
+            if (state.zone > 1 && rand.nextInt(100) < 12) { // 12% chance (increased)
+                rpg.characters.Supporter statue = SupporterPool.getRandomUnrevivedSupporter(state.zone, rand, state);
+                if (statue != null) {
+                    TextEffect.typeWriter("🗿 While searching, you notice a strange statue nearby...", 60);
+                    ReviveSystem.randomRevive(state, statue);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("SearchSystem.statueCheck error -> " + e.getMessage());
         }
     }
 }

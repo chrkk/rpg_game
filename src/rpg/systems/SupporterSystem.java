@@ -30,6 +30,18 @@ public class SupporterSystem {
     public void applyStartOfCombat(GameState state, Player player) {
         try {
             if (state.supporters == null) return;
+            // Ensure only one supporter is equipped — defensive guard in case other code set multiple
+            boolean seenEquipped = false;
+            for (Supporter sCheck : state.supporters) {
+                if (sCheck == null) continue;
+                if (sCheck.isEquipped()) {
+                    if (!seenEquipped) {
+                        seenEquipped = true;
+                    } else {
+                        sCheck.setEquipped(false);
+                    }
+                }
+            }
             for (Supporter s : state.supporters) {
                 if (s == null || !s.isRevived() || !s.isEquipped()) continue;
 

@@ -66,7 +66,14 @@ public class SafeZoneSystem {
                                 TextEffect.typeWriter("That supporter is not revived yet.", 40);
                                 break;
                             }
-                            s.setEquipped(!s.isEquipped());
+                            boolean newState = !s.isEquipped();
+                            if (newState) {
+                                // Unequip all others when equipping this one (single-equipped behavior)
+                                for (rpg.characters.Supporter other : state.supporters) {
+                                    if (other != null && other != s) other.setEquipped(false);
+                                }
+                            }
+                            s.setEquipped(newState);
                             TextEffect.typeWriter((s.isEquipped() ? "Equipped " : "Unequipped ") + s.getName(), 40);
                         } catch (NumberFormatException nfe) {
                             TextEffect.typeWriter("Invalid input.", 40);
