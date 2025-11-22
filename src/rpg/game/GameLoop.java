@@ -29,13 +29,13 @@ public class GameLoop {
 
         while (running) {
             try {
-                // 🆕 Dynamic prompt - now includes "bag"
+                // 🆕 Dynamic prompt - now includes "bag" and "supporter"
                 if (state.inSafeZone) {
                     // ✅ Add shop option if zone > 1 (after defeating Zone 1 boss)
                     if (state.zone > 1) {
-                        System.out.print("> (craft / search / status / bag / shop / move): ");
+                        System.out.print("> (craft / search / status / bag / supporter / shop / move): ");
                     } else {
-                        System.out.print("> (craft / search / status / bag / move): ");
+                        System.out.print("> (craft / search / status / bag / supporter / move): ");
                     }
                 } else {
                     System.out.print("> (search / status / bag / move): ");
@@ -136,8 +136,31 @@ public class GameLoop {
                         }
                         break;
 
+                    case "supporter":
+                        try {
+                            rpg.systems.SafeZoneSystem.openSupporterMenu(player, state, scanner);
+                        } catch (Exception e) {
+                            TextEffect.typeWriter("Unable to open the supporter menu right now.", 40);
+                            System.err.println("Supporter menu error -> " + e.getMessage());
+                        }
+                        break;
+
                     case "move":
                         try {
+                            // Enforce at-least-one-equipped supporter only if the player has supporters
+                            if (state.inSafeZone && !state.supporters.isEmpty()) {
+                                boolean anyEquipped = false;
+                                for (rpg.characters.Supporter s : state.supporters) {
+                                    if (s.isEquipped()) { anyEquipped = true; break; }
+                                }
+                                if (!anyEquipped) {
+                                    TextEffect.typeWriter("You must equip at least one supporter before venturing out.", 50);
+                                    // Open supporter menu to let player equip
+                                    rpg.systems.SafeZoneSystem.openSupporterMenu(player, state, scanner);
+                                    break;
+                                }
+                            }
+
                             ExplorationSystem.handleMove(
                                     player, scanner, rand, state,
                                     () -> rpg.systems.SafeZoneSystem.enterSafeZone(player, state, scanner));

@@ -31,5 +31,6 @@ public class RuinedLabSafeZone implements SafeZone {
                 ShopSystem.openShop(state, scanner);
             }
         }
+        // RuinedLabSafeZone does not present the supporter menu here; use the global `supporter` command instead.
     }
 }
