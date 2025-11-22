@@ -6,7 +6,7 @@ import rpg.characters.Player;
 import rpg.systems.CraftingSystem;
 import rpg.systems.ExplorationSystem;
 import rpg.systems.StatusSystem;
-import rpg.systems.ShopSystem; // ✅ import shop
+import rpg.systems.ShopSystem;
 import rpg.utils.TextEffect;
 import java.util.List;
 import java.util.ArrayList;
@@ -29,16 +29,16 @@ public class GameLoop {
 
         while (running) {
             try {
-                // 🆕 Dynamic prompt
+                // 🆕 Dynamic prompt - now includes "bag"
                 if (state.inSafeZone) {
                     // ✅ Add shop option if zone > 1 (after defeating Zone 1 boss)
                     if (state.zone > 1) {
-                        System.out.print("> (craft / search / status / shop / move): ");
+                        System.out.print("> (craft / search / status / bag / shop / move): ");
                     } else {
-                        System.out.print("> (craft / search / status / move): ");
+                        System.out.print("> (craft / search / status / bag / move): ");
                     }
                 } else {
-                    System.out.print("> (search / status / move): ");
+                    System.out.print("> (search / status / bag / move): ");
                 }
 
                 String command = scanner.nextLine();
@@ -47,9 +47,9 @@ public class GameLoop {
                     case "craft":
                         if (state.inSafeZone) {
                             try {
-                                // 🆕 Crafting menu
+                                // Crafting menu
                                 if (state.unlockedRecipes.isEmpty()) {
-                                    TextEffect.typeWriter("You don’t know any recipes yet.", 50);
+                                    TextEffect.typeWriter("You don't know any recipes yet.", 50);
                                     break;
                                 }
 
@@ -72,7 +72,7 @@ public class GameLoop {
                                     if (option == 0) {
                                         TextEffect.typeWriter("Crafting cancelled.", 40);
                                     } else if (option > 0 && option <= recipes.size()) {
-                                        String target = recipes.get(option - 1); // ✅ now works
+                                        String target = recipes.get(option - 1);
                                         state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state,
                                                 target);
                                     } else {
@@ -110,6 +110,16 @@ public class GameLoop {
                         } catch (Exception e) {
                             TextEffect.typeWriter("Unable to display status right now.", 40);
                             System.err.println("Status error -> " + e.getMessage());
+                        }
+                        break;
+
+                    // 🆕 NEW: Bag command
+                    case "bag":
+                        try {
+                            StatusSystem.showBag(state);
+                        } catch (Exception e) {
+                            TextEffect.typeWriter("Unable to open your bag right now.", 40);
+                            System.err.println("Bag error -> " + e.getMessage());
                         }
                         break;
 
