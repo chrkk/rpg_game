@@ -9,23 +9,22 @@ public class SupporterPool {
     private static final Map<Integer, List<Supporter>> pool = new HashMap<>();
 
     static {
-        // Stage 1 – School Rooftop
+        // Stage 1 – School Rooftop (only Sir Khai; others introduced later)
         pool.put(1, Arrays.asList(
-            new Supporter("Sir Khai", "Teacher", "Guidance"), // scripted, but kept here for consistency
-            new Supporter("Aya", "Strategist", "Encouragement")
+            new Supporter("Sir Khai", "Teacher", "Guidance") // scripted, kept
         ));
 
         // Stage 2 – Ruined Lab
         pool.put(2, Arrays.asList(
-            new Supporter("Lira", "Scientist", "Chemical Aid"),
-            new Supporter("Ryo", "Inventor", "Repair")
+            new Supporter("School Security Guard", "Guardian", "Protect"),
+            new Supporter("Canteen Staff", "Merchant", "Snack Aid"),
+            new Supporter("Ma'am Dean", "Discipline", "Command")
         ));
 
         // Stage 3 – City Ruins
         pool.put(3, Arrays.asList(
-            new Supporter("Hana", "Medic", "First Aid"),
-            new Supporter("Daisuke", "Guardian", "Shield Wall"),
-            new Supporter("Kael", "Merchant", "Resourceful")
+            new Supporter("Jeepney Philosopher", "Philosopher", "Musing"),
+            new Supporter("Mr. CodeChum", "Coder", "Debug")
         ));
     }
 
