@@ -23,7 +23,8 @@ public class GameState {
     // ✅ Track crafted stage weapons (consistent naming)
     public boolean stage1WeaponCrafted = false;
     public boolean stage2WeaponCrafted = false;
-    public boolean stage3WeaponCrafted = false; // future-proofing
+    public boolean stage3WeaponCrafted = false;
+    public boolean stage4WeaponCrafted = false;
 
     // ✅ Track unlocked blueprints
     public Set<String> unlockedRecipes = new HashSet<>();
