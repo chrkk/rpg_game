@@ -208,30 +208,35 @@ public class ExplorationSystem {
     }
 
     // --- Helper for boss fight outcome ---
-    private static void startBossFight(Player player, GameState state, ZoneConfig zone, Runnable safeZoneAction) {
-        CombatSystem combat = new CombatSystem(state);
-        boolean win = combat.startCombat(player, zone.boss);
+private static void startBossFight(Player player, GameState state, ZoneConfig zone, Runnable safeZoneAction) {
+    // 🆕 ADD THIS LINE: Show boss intro dialogue
+    addBossIntroDialogue(zone.boss, state.zone);
+    
+    CombatSystem combat = new CombatSystem(state);
+    boolean win = combat.startCombat(player, zone.boss);
 
-        if (win) {
-            TextEffect.typeWriter("🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
+    if (win) {
+        // 🆕 ADD THIS LINE: Show victory dialogue
+        addBossVictoryDialogue(zone.boss, state.zone);
+        
+        TextEffect.typeWriter("🏆 You defeated " + zone.boss.getName() + "! A new safe zone awaits...", 80);
 
-            // 🆕 Trigger Sir Khai revival event after Zone 1 miniboss
-            if (state.zone == 1) {
-                handleMinibossDefeat(player, new Scanner(System.in), state);
-            }
-
-            state.zone++;
-            state.forwardSteps = 0;
-            state.bossGateDiscovered = false; // reset for next zone
-            state.inSafeZone = true;
-            safeZoneAction.run();
-        } else {
-            TextEffect.typeWriter("You awaken back at the safe zone...", 60);
-            state.inSafeZone = true;
-            safeZoneAction.run();
+        // 🆕 Trigger Sir Khai revival event after Zone 1 miniboss
+        if (state.zone == 1) {
+            handleMinibossDefeat(player, new Scanner(System.in), state);
         }
-    }
 
+        state.zone++;
+        state.forwardSteps = 0;
+        state.bossGateDiscovered = false; // reset for next zone
+        state.inSafeZone = true;
+        safeZoneAction.run();
+    } else {
+        TextEffect.typeWriter("You awaken back at the safe zone...", 60);
+        state.inSafeZone = true;
+        safeZoneAction.run();
+    }
+}
     // --- Narration ---
 
     private static void narrateZoneExit(GameState state) {
@@ -340,5 +345,195 @@ public class ExplorationSystem {
         state.inSafeZone = true;
         safeZoneAction.run();
     }
+
+    private static void addBossIntroDialogue(Enemy boss, int zone) {
+    TextEffect.typeWriter("\n⚠️ The air grows heavy...", 70);
+    
+    try {
+        Thread.sleep(800);
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+    
+    switch(zone) {
+        case 1: // CITU Logo (Fractured)
+            TextEffect.typeWriter("\n🏛️ Before you looms a massive crystalline structure—", 70);
+            TextEffect.typeWriter("the CITU logo, fractured and pulsating with unnatural light.", 70);
+            TextEffect.typeWriter("Cracks spider across its surface, leaking pale radiance.", 70);
+            
+            try { Thread.sleep(600); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\n[???] \"Student... why do you resist?\"", 90);
+            TextEffect.typeWriter("The voice echoes directly in your mind, cold and hollow.", 80);
+            TextEffect.typeWriter("\"Accept eternity. Accept stillness. Accept peace.\"", 90);
+            
+            try { Thread.sleep(600); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nYou grip your weapon tighter.", 70);
+            TextEffect.typeWriter("Peace isn't worth this price.", 80);
+            break;
+            
+        case 2: // The Thesis Defense Panel (Fused)
+            TextEffect.typeWriter("\n📋 Three professors sit behind a desk fused into one horrific entity.", 70);
+            TextEffect.typeWriter("Their bodies merged by failed experiments, but their critique remains razor-sharp.", 70);
+            TextEffect.typeWriter("You recognize them. They graded your papers. They failed your projects.", 70);
+            
+            try { Thread.sleep(800); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\n[Panel - Dr. Cruz] \"Where. Are. Your. CITATIONS?!\"", 90);
+            TextEffect.typeWriter("[Panel - Prof. Santos] \"This methodology is COMPLETELY UNACCEPTABLE!\"", 90);
+            TextEffect.typeWriter("[Panel - Dean Reyes] \"Did you even ATTEND my lectures?! DID YOU?!\"", 90);
+            
+            try { Thread.sleep(800); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nRed pens float around them like weapons.", 70);
+            TextEffect.typeWriter("Each one has failed a thousand students.", 80);
+            
+            try { Thread.sleep(600); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nYou grip your weapon.", 70);
+            TextEffect.typeWriter("\"I'm done defending. Time for YOU to answer questions.\"", 90);
+            break;
+            
+        case 3: // Screaming Billboard
+            TextEffect.typeWriter("\n📺 A massive digital billboard flickers violently to life.", 70);
+            TextEffect.typeWriter("Thousands of faces appear on screen—all screaming silently.", 70);
+            TextEffect.typeWriter("Their mouths move in perfect, horrifying synchronization.", 70);
+            
+            try { Thread.sleep(600); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\n[Billboard - Static Burst] \"CONSUME. OBEY. FORGET.\"", 90);
+            TextEffect.typeWriter("The words flash in blinding red letters.", 80);
+            TextEffect.typeWriter("\"YOU WILL BE CONTENT. YOU WILL BE STILL.\"", 90);
+            
+            try { Thread.sleep(800); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nYou shield your eyes from the glare.", 70);
+            TextEffect.typeWriter("\"The old world's dead. And I'm burying what's left.\"", 90);
+            break;
+            
+        case 4: // Nimbus Tyrant
+            TextEffect.typeWriter("\n⚡ Lightning splits the sky in jagged, violent arcs.", 70);
+            TextEffect.typeWriter("Thunder shakes the broken skyscraper to its foundations.", 70);
+            TextEffect.typeWriter("A colossal figure materializes from the storm clouds—", 70);
+            TextEffect.typeWriter("part lightning, part shadow, all rage.", 70);
+            
+            try { Thread.sleep(800); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\n[Nimbus Tyrant] \"MORTAL. YOU DARE ASCEND?\"", 100);
+            TextEffect.typeWriter("The voice is thunder itself, rattling your bones.", 80);
+            TextEffect.typeWriter("\"I AM THE STORM. I AM THE SKY'S WRATH.\"", 100);
+            TextEffect.typeWriter("\"THE SOURCE LIES BEYOND... BUT YOU WILL GO NO FURTHER.\"", 100);
+            
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nYou plant your feet on the trembling observation deck.", 70);
+            TextEffect.typeWriter("Lightning dances along your Thunder Spear.", 80);
+            TextEffect.typeWriter("\"I've come too far to stop now.\"", 90);
+            break;
+            
+        default:
+            TextEffect.typeWriter("A powerful enemy stands before you.", 70);
+            break;
+    }
+    
+    try {
+        Thread.sleep(1000);
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+    
+    TextEffect.typeWriter("\n⚔️ The battle begins!\n", 70);
+}
+
+private static void addBossVictoryDialogue(Enemy boss, int zone) {
+    TextEffect.typeWriter("\n", 50);
+    
+    try {
+        Thread.sleep(600);
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+    
+    switch(zone) {
+        case 1: // CITU Logo Destroyed
+            TextEffect.typeWriter("💥 The crystalline logo cracks, then shatters.", 70);
+            TextEffect.typeWriter("Fragments of light dissolve into nothing.", 70);
+            
+            try { Thread.sleep(600); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nFor a moment, you hear whispers—", 80);
+            TextEffect.typeWriter("the voices of your classmates, faint and distant.", 80);
+            TextEffect.typeWriter("\"...thank you...\"", 100);
+            
+            try { Thread.sleep(800); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nBut they fade. They're still stone.", 80);
+            TextEffect.typeWriter("This was just the first step.", 90);
+            break;
+            
+        case 2: // The Thesis Defense Panel Falls
+            TextEffect.typeWriter("💼 The panel collapses, their endless questions finally silenced.", 70);
+            TextEffect.typeWriter("Papers scatter across the lab floor—all marked with brutal red ink.", 80);
+            TextEffect.typeWriter("Comments like 'REVISE', 'UNCLEAR', 'REDO' flutter away into dust.", 80);
+            
+            try { Thread.sleep(800); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nFrom the rubble, a single paper drifts down.", 70);
+            TextEffect.typeWriter("At the top, in clean black ink, it reads:", 80);
+            TextEffect.typeWriter("'PASSED - With Highest Honors'", 100);
+            
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nYou pick it up and whisper:", 70);
+            TextEffect.typeWriter("\"Never. Again.\"", 100);
+            
+            try { Thread.sleep(600); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nFrom somewhere in the shadows, you hear Professor Ashiro chuckle softly.", 70);
+            break;
+            
+        case 3: // Screaming Billboard Goes Dark
+            TextEffect.typeWriter("📴 The billboard flickers violently, then goes dark.", 70);
+            TextEffect.typeWriter("The screaming faces vanish, one by one.", 70);
+            TextEffect.typeWriter("Silence falls over the City Ruins.", 80);
+            
+            try { Thread.sleep(800); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nFor the first time since arriving here...", 70);
+            TextEffect.typeWriter("you hear the wind. Just the wind.", 90);
+            
+            try { Thread.sleep(600); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\n[Raze's voice echoes from somewhere] \"Well done. The path is open.\"", 80);
+            break;
+            
+        case 4: // Nimbus Tyrant Defeated
+            TextEffect.typeWriter("⚡ The Nimbus Tyrant roars as lightning consumes it from within.", 70);
+            TextEffect.typeWriter("Thunder crashes one final time, then... silence.", 80);
+            TextEffect.typeWriter("The storm clouds part, revealing clear sky beyond.", 80);
+            
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\nAbove you, The Source blazes brighter than ever.", 70);
+            TextEffect.typeWriter("You can feel its pull. Its hunger.", 80);
+            
+            try { Thread.sleep(800); } catch (InterruptedException e) {}
+            
+            TextEffect.typeWriter("\n[Narrator] The final path is clear.", 90);
+            TextEffect.typeWriter("Beyond this point, there is no return.", 100);
+            break;
+            
+        default:
+            TextEffect.typeWriter("Victory is yours.", 70);
+            break;
+    }
+    
+    try {
+        Thread.sleep(800);
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+}
 
 }
