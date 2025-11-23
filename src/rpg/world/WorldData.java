@@ -28,7 +28,7 @@ public class WorldData {
                                 new Enemy("Shattered Automaton", 80, 14, 20, 30),
                                 new Enemy("Toxic Slime Residue", 65, 12, 18, 25)
                         },
-                        new Enemy("Aberrant Chimera", 180, 20, 30, 60), // boss
+                        new Enemy("The Thesis Defense Panel (Fused)", 180, 20, 30, 60), // boss
                         new Weapon("Prototype Blade", 12, 18, 0.08, 1.5));
 
             case 3:
