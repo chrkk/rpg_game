@@ -252,9 +252,15 @@ public class ExplorationSystem {
                 break;
             case 3:
                 TextEffect.typeWriter(
-                        "\n🏙️ You step out of the City Ruins, leaving behind its fragile refuge...", 60);
-                TextEffect.typeWriter("The wasteland stretches before you, scarred by silence and danger.", 60);
-                TextEffect.typeWriter("Your journey continues toward the next unknown landmark...", 60);
+                        "\n🏙️ You leave the City Ruins and climb toward the collapsed skyline...", 60);
+                TextEffect.typeWriter("Broken sky bridges sway overhead, guiding you to the Fractured Sky.", 60);
+                TextEffect.typeWriter("Somewhere above, the Observation Deck clings to the skyscraper's bones.", 60);
+                break;
+            case 4:
+                TextEffect.typeWriter(
+                        "\n🌠 You step off the Observation Deck and onto the final sky bridge...", 60);
+                TextEffect.typeWriter("The Source blazes ahead — blinding white and void black entwined.", 60);
+                TextEffect.typeWriter("Every step now is a vow: confrontation is inevitable.", 60);
                 break;
             default:
                 TextEffect.typeWriter("\n🚶 You set out from the safe zone, heading toward your next destination.", 60);

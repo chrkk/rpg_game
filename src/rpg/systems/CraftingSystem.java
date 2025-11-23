@@ -37,16 +37,18 @@ public class CraftingSystem {
                     }
                     break;
 
-                case "Shadow Bow":
+                case "Thunder Spear":
                     if (state.stage4WeaponCrafted) {
-                        TextEffect.typeWriter("You've already crafted the Shadow Bow!", 60);
-                    } else if (crystals >= 10) {
-                        crystals -= 10;
-                        player.equipWeapon(new Weapon("Shadow Bow", 15, 30, 0.20, 2.5));
+                        TextEffect.typeWriter("You've already crafted the Thunder Spear!", 60);
+                    } else if (!state.stage3WeaponCrafted) {
+                        TextEffect.typeWriter("The forge rejects your attempt — the Thunder Spear needs the Flame Axe as its base.", 60);
+                    } else if (crystals >= 12) {
+                        crystals -= 12;
+                        player.equipWeapon(new Weapon("Thunder Spear", 30, 50, 0.25, 2.2));
                         state.stage4WeaponCrafted = true;
-                        TextEffect.typeWriter("🌑 You forged a Shadow Bow! Shadows bend to your will.", 60);
+                        TextEffect.typeWriter("⚡ You forged the Thunder Spear! Lightning dances along its edge, ready to pierce even light itself.", 60);
                     } else {
-                        TextEffect.typeWriter("You don't have enough crystals. (Need: 10, Have: " + crystals + ")", 60);
+                        TextEffect.typeWriter("You don't have enough crystals. (Need: 12, Have: " + crystals + ")", 60);
                     }
                     break;
 

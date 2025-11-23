@@ -25,10 +25,10 @@ public class BossGateSystem {
             return false;
         }
         
-        // Zone 4 requirement: Shadow Bow (if you add this)
+        // Zone 4 requirement: Thunder Spear
         if (state.zone == 4 && !state.stage4WeaponCrafted) {
-            TextEffect.typeWriter("⛔ Dark shadows coil around the gate. Only the Shadow Bow can dispel them.", 70);
-            TextEffect.typeWriter("💡 Hint: Check the shop for new blueprints.", 60);
+            TextEffect.typeWriter("⛔ Stormlight lashes across the gate. Only the Thunder Spear can tether the lightning and pierce it.", 70);
+            TextEffect.typeWriter("💡 Hint: Buy the Thunder Spear blueprint from Kuro (25 shards) and forge it with 12 crystals.", 60);
             state.inSafeZone = true;
             safeZoneAction.run();
             return false;

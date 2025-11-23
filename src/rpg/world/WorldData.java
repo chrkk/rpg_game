@@ -43,15 +43,27 @@ public class WorldData {
                         new Enemy("Screaming Billboard", 220, 25, 35, 70), // boss
                         new Weapon("Rebar Blade", 16, 24, 0.10, 1.6));
 
+            case 4:
+                return new ZoneConfig(
+                        "Fractured Sky", // Safe Zone 4
+                        "Shattered sky bridges spiral around a broken skyscraper exposed to fierce winds.",
+                        new Enemy[] {
+                                new Enemy("Skyglass Stalker", 115, 24, 32, 45),
+                                new Enemy("Cable-Wraith Diver", 130, 27, 35, 50),
+                                new Enemy("Storm-Tethered Sentinel", 145, 30, 38, 55)
+                        },
+                        new Enemy("Nimbus Tyrant", 320, 35, 45, 95), // boss
+                        new Weapon("Skybridge Saber", 20, 32, 0.15, 1.9));
+
             default:
                 return new ZoneConfig(
-                        "Unknown Wasteland", // Zone 4 placeholder
-                        "A desolate expanse scarred by silence and danger.",
+                        "The Source", // Zone 5 placeholder
+                        "Blinding light and void-black shadows pulse in rhythm at the heart of the storm.",
                         new Enemy[] {
-                                new Enemy("Shadow Spawn", 70, 15, 20, 30),
-                                new Enemy("Ash Phantom", 95, 20, 28, 40)
+                                new Enemy("Light-Eaten Echo", 160, 36, 42, 70),
+                                new Enemy("Void Resonant", 180, 40, 48, 80)
                         },
-                        new Enemy("Ancient Horror", 250, 25, 35, 70),
+                        new Enemy("The Source's Warden", 380, 45, 60, 120),
                         null);
         }
     }

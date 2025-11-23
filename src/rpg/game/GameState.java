@@ -46,6 +46,7 @@ public class GameState {
 
     public boolean bossGateDiscovered = false;
     public boolean zone3IntroShown = false;
+    public boolean zone4IntroShown = false;
 
 
 }

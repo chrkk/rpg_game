@@ -111,9 +111,9 @@ public class ShopSystem {
             available.add(new Blueprint("Flame Axe Blueprint", "Flame Axe", 15));
         }
         
-        // Zone 4: Add Shadow Bow (unlock when reaching Zone 4)
+        // Zone 4: Add Thunder Spear (unlock when reaching Zone 4)
         if (state.zone >= 4) {
-            available.add(new Blueprint("Shadow Bow Blueprint", "Shadow Bow", 20));
+            available.add(new Blueprint("Thunder Spear Blueprint", "Thunder Spear", 25));
         }
         
         return available;
