@@ -86,5 +86,10 @@ public class CityRuinsSafeZone implements SafeZone {
         TextEffect.typeWriter("\n✨ You found supplies in the shelter: +2 Crystals, +1 Revival Potion", 60);
         state.crystals += 2;
         state.revivalPotions += 1;
+
+        TextEffect.typeWriter("\n[Scrapwright Kuro's Voice] \"Psst! Over here!\"", 60);
+        TextEffect.typeWriter("You turn to see Kuro has set up shop in a corner of the shelter.", 60);
+        TextEffect.typeWriter("[Kuro] \"Followed you from the lab. Business is business, yeah?\"", 60);
+        TextEffect.typeWriter("\"Got some new blueprints... if you've got the shards.\"", 60);
     }
 }
