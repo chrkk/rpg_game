@@ -1,99 +1,111 @@
-package rpg.systems;
+public static void openShop(GameState state, Scanner scanner) {
+    try {
+        TextEffect.typeWriter("🛒 Welcome to my shop! What would you like to buy?", 50);
 
-import java.util.*;
-import rpg.utils.TextEffect;
-import rpg.game.GameState;
-import rpg.items.Blueprint;
+        // Get available blueprints based on current zone
+        List<Blueprint> availableBlueprints = getAvailableBlueprints(state);
 
-public class ShopSystem {
+        final int REVIVAL_PRICE = 6;
+        final int CRYSTAL_PRICE = 10;
 
-    // ✅ Shop inventory (easy to expand later)
-    private static final List<Blueprint> inventory = Arrays.asList(
-        new Blueprint("Crystal Sword Blueprint", "Crystal Sword", 10),
-        new Blueprint("Flame Axe Blueprint", "Flame Axe", 15),
-        new Blueprint("Shadow Bow Blueprint", "Shadow Bow", 20)
-    );
+        int menuIndex = 1;
+        TextEffect.typeWriter((menuIndex++) + ". Revival Potion (" + REVIVAL_PRICE + " Shards)", 40);
+        TextEffect.typeWriter((menuIndex++) + ". Crystal (" + CRYSTAL_PRICE + " Shards)", 40);
 
-    public static void openShop(GameState state, Scanner scanner) {
+        // Show only zone-appropriate blueprints
+        for (int i = 0; i < availableBlueprints.size(); i++) {
+            Blueprint bp = availableBlueprints.get(i);
+            
+            // Show if already unlocked OR if it's available in current zone
+            boolean alreadyUnlocked = state.unlockedRecipes.contains(bp.getUnlocksRecipe());
+            String status = alreadyUnlocked ? " [OWNED]" : "";
+            
+            TextEffect.typeWriter((menuIndex++) + ". " + bp.getName() + " (" + bp.getPrice() + " Shards)" + status, 40);
+        }
+
+        TextEffect.typeWriter("0. Leave shop", 40);
+
+        System.out.print("> ");
+        String choice = scanner.nextLine();
+
         try {
-            TextEffect.typeWriter("🛒 Welcome to my shop! What would you like to buy?", 50);
-
-            // Show basic items
-            final int REVIVAL_PRICE = 6;
-            final int CRYSTAL_PRICE = 10;
-
-            int menuIndex = 1;
-            TextEffect.typeWriter((menuIndex++) + ". Revival Potion (" + REVIVAL_PRICE + " Shards)", 40);
-            TextEffect.typeWriter((menuIndex++) + ". Crystal (" + CRYSTAL_PRICE + " Shards)", 40);
-
-            // Show blueprints after basic items
-            for (int i = 0; i < inventory.size(); i++) {
-                Blueprint bp = inventory.get(i);
-                TextEffect.typeWriter((menuIndex++) + ". " + bp.getName() + " (" + bp.getPrice() + " Shards)", 40);
+            int option = Integer.parseInt(choice);
+            if (option == 0) {
+                TextEffect.typeWriter("You leave the shop.", 40);
+                return;
             }
+            
+            int base = 1;
+            int revivalOption = base; base++;
+            int crystalOption = base; base++;
+            int firstBlueprintOption = base;
 
-            TextEffect.typeWriter("0. Leave shop", 40);
+            if (option == revivalOption) {
+                if (state.shards >= REVIVAL_PRICE) {
+                    state.shards -= REVIVAL_PRICE;
+                    state.revivalPotions += 1;
+                    TextEffect.typeWriter("You bought a Revival Potion. You now have " + state.revivalPotions + ".", 60);
+                } else {
+                    TextEffect.typeWriter("You don't have enough shards.", 60);
+                }
+            } else if (option == crystalOption) {
+                if (state.shards >= CRYSTAL_PRICE) {
+                    state.shards -= CRYSTAL_PRICE;
+                    state.crystals += 1;
+                    TextEffect.typeWriter("You bought a Crystal. You now have " + state.crystals + " crystals.", 60);
+                } else {
+                    TextEffect.typeWriter("You don't have enough shards.", 60);
+                }
+            } else if (option >= firstBlueprintOption && option < firstBlueprintOption + availableBlueprints.size()) {
+                int idx = option - firstBlueprintOption;
+                Blueprint selected = availableBlueprints.get(idx);
 
-            System.out.print("> ");
-            String choice = scanner.nextLine();
-
-            try {
-                int option = Integer.parseInt(choice);
-                if (option == 0) {
-                    TextEffect.typeWriter("You leave the shop.", 40);
+                // Check if already owned
+                if (state.unlockedRecipes.contains(selected.getUnlocksRecipe())) {
+                    TextEffect.typeWriter("You already own this blueprint!", 60);
                     return;
                 }
-                // Map menu number to action
-                int base = 1;
-                int revivalOption = base; base++;
-                int crystalOption = base; base++;
-                int firstBlueprintOption = base; // maps to inventory.get(0)
 
-                if (option == revivalOption) {
-                    if (state.shards >= REVIVAL_PRICE) {
-                        state.shards -= REVIVAL_PRICE;
-                        state.revivalPotions += 1;
-                        TextEffect.typeWriter("You bought a Revival Potion. You now have " + state.revivalPotions + ".", 60);
-                    } else {
-                        TextEffect.typeWriter("You don’t have enough shards.", 60);
-                    }
-                } else if (option == crystalOption) {
-                    if (state.shards >= CRYSTAL_PRICE) {
-                        state.shards -= CRYSTAL_PRICE;
-                        state.crystals += 1;
-                        TextEffect.typeWriter("You bought a Crystal. You now have " + state.crystals + " crystals.", 60);
-                    } else {
-                        TextEffect.typeWriter("You don’t have enough shards.", 60);
-                    }
-                } else if (option >= firstBlueprintOption && option < firstBlueprintOption + inventory.size()) {
-                    int idx = option - firstBlueprintOption;
-                    Blueprint selected = inventory.get(idx);
-
-                    if (state.shards >= selected.getPrice()) {
-                        state.shards -= selected.getPrice();
-
-                        // ✅ Unlock blueprint
-                        state.unlockedRecipes.add(selected.getUnlocksRecipe());
-
-                        TextEffect.typeWriter("You bought the " + selected.getName() +
-                            "! You can now discover the " + selected.getUnlocksRecipe() + " recipe in the world.", 60);
-                    } else {
-                        TextEffect.typeWriter("You don’t have enough shards.", 60);
-                    }
+                if (state.shards >= selected.getPrice()) {
+                    state.shards -= selected.getPrice();
+                    state.unlockedRecipes.add(selected.getUnlocksRecipe());
+                    TextEffect.typeWriter("You bought the " + selected.getName() +
+                        "! You can now discover the " + selected.getUnlocksRecipe() + " recipe in the world.", 60);
                 } else {
-                    TextEffect.typeWriter("Invalid choice.", 40);
+                    TextEffect.typeWriter("You don't have enough shards.", 60);
                 }
-            } catch (NumberFormatException e) {
-                TextEffect.typeWriter("Invalid input. Please enter a number.", 40);
-                System.err.println("Shop input error -> " + e.getMessage());
+            } else {
+                TextEffect.typeWriter("Invalid choice.", 40);
             }
-
-        } catch (Exception e) {
-            TextEffect.typeWriter("Something went wrong while using the shop.", 40);
-            System.err.println("Shop system error -> " + e.getMessage());
-        } finally {
-            // Always runs after shop interaction
-            // Could be used for logging or cleanup
+        } catch (NumberFormatException e) {
+            TextEffect.typeWriter("Invalid input. Please enter a number.", 40);
+            System.err.println("Shop input error -> " + e.getMessage());
         }
+
+    } catch (Exception e) {
+        TextEffect.typeWriter("Something went wrong while using the shop.", 40);
+        System.err.println("Shop system error -> " + e.getMessage());
     }
+}
+
+// NEW METHOD: Get blueprints available for current zone
+private static List<Blueprint> getAvailableBlueprints(GameState state) {
+    List<Blueprint> available = new ArrayList<>();
+    
+    // Zone 2: Crystal Sword only
+    if (state.zone >= 2) {
+        available.add(new Blueprint("Crystal Sword Blueprint", "Crystal Sword", 10));
+    }
+    
+    // Zone 3: Add Flame Axe (unlock when reaching Zone 3)
+    if (state.zone >= 3) {
+        available.add(new Blueprint("Flame Axe Blueprint", "Flame Axe", 15));
+    }
+    
+    // Zone 4: Add Shadow Bow (unlock when reaching Zone 4)
+    if (state.zone >= 4) {
+        available.add(new Blueprint("Shadow Bow Blueprint", "Shadow Bow", 20));
+    }
+    
+    return available;
 }
