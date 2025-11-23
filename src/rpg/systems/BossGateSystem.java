@@ -23,6 +23,7 @@ public class BossGateSystem {
             state.inSafeZone = true;
             safeZoneAction.run();
             return false;
+        }
         
         // Zone 4 requirement: Shadow Bow (if you add this)
         if (state.zone == 4 && !state.stage4WeaponCrafted) {
