@@ -44,6 +44,7 @@ public class GameState {
     public List<Supporter> supporters = new ArrayList<>();
 
     public boolean bossGateDiscovered = false;
+    public boolean zone3IntroShown = false;
 
 
 }
