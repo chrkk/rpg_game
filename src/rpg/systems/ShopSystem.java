@@ -7,18 +7,13 @@ import rpg.items.Blueprint;
 
 public class ShopSystem {
 
-    // ✅ Shop inventory (easy to expand later)
-    private static final List<Blueprint> inventory = Arrays.asList(
-        new Blueprint("Crystal Sword Blueprint", "Crystal Sword", 10),
-        new Blueprint("Flame Axe Blueprint", "Flame Axe", 15),
-        new Blueprint("Shadow Bow Blueprint", "Shadow Bow", 20)
-    );
-
     public static void openShop(GameState state, Scanner scanner) {
         try {
             TextEffect.typeWriter("🛒 Welcome to my shop! What would you like to buy?", 50);
 
-            // Show basic items
+            // Get available blueprints based on current zone
+            List<Blueprint> availableBlueprints = getAvailableBlueprints(state);
+
             final int REVIVAL_PRICE = 6;
             final int CRYSTAL_PRICE = 10;
 
@@ -26,10 +21,15 @@ public class ShopSystem {
             TextEffect.typeWriter((menuIndex++) + ". Revival Potion (" + REVIVAL_PRICE + " Shards)", 40);
             TextEffect.typeWriter((menuIndex++) + ". Crystal (" + CRYSTAL_PRICE + " Shards)", 40);
 
-            // Show blueprints after basic items
-            for (int i = 0; i < inventory.size(); i++) {
-                Blueprint bp = inventory.get(i);
-                TextEffect.typeWriter((menuIndex++) + ". " + bp.getName() + " (" + bp.getPrice() + " Shards)", 40);
+            // Show only zone-appropriate blueprints
+            for (int i = 0; i < availableBlueprints.size(); i++) {
+                Blueprint bp = availableBlueprints.get(i);
+                
+                // Show if already unlocked OR if it's available in current zone
+                boolean alreadyUnlocked = state.unlockedRecipes.contains(bp.getUnlocksRecipe());
+                String status = alreadyUnlocked ? " [OWNED]" : "";
+                
+                TextEffect.typeWriter((menuIndex++) + ". " + bp.getName() + " (" + bp.getPrice() + " Shards)" + status, 40);
             }
 
             TextEffect.typeWriter("0. Leave shop", 40);
@@ -43,11 +43,11 @@ public class ShopSystem {
                     TextEffect.typeWriter("You leave the shop.", 40);
                     return;
                 }
-                // Map menu number to action
+                
                 int base = 1;
                 int revivalOption = base; base++;
                 int crystalOption = base; base++;
-                int firstBlueprintOption = base; // maps to inventory.get(0)
+                int firstBlueprintOption = base;
 
                 if (option == revivalOption) {
                     if (state.shards >= REVIVAL_PRICE) {
@@ -55,7 +55,7 @@ public class ShopSystem {
                         state.revivalPotions += 1;
                         TextEffect.typeWriter("You bought a Revival Potion. You now have " + state.revivalPotions + ".", 60);
                     } else {
-                        TextEffect.typeWriter("You don’t have enough shards.", 60);
+                        TextEffect.typeWriter("You don't have enough shards.", 60);
                     }
                 } else if (option == crystalOption) {
                     if (state.shards >= CRYSTAL_PRICE) {
@@ -63,22 +63,25 @@ public class ShopSystem {
                         state.crystals += 1;
                         TextEffect.typeWriter("You bought a Crystal. You now have " + state.crystals + " crystals.", 60);
                     } else {
-                        TextEffect.typeWriter("You don’t have enough shards.", 60);
+                        TextEffect.typeWriter("You don't have enough shards.", 60);
                     }
-                } else if (option >= firstBlueprintOption && option < firstBlueprintOption + inventory.size()) {
+                } else if (option >= firstBlueprintOption && option < firstBlueprintOption + availableBlueprints.size()) {
                     int idx = option - firstBlueprintOption;
-                    Blueprint selected = inventory.get(idx);
+                    Blueprint selected = availableBlueprints.get(idx);
+
+                    // Check if already owned
+                    if (state.unlockedRecipes.contains(selected.getUnlocksRecipe())) {
+                        TextEffect.typeWriter("You already own this blueprint!", 60);
+                        return;
+                    }
 
                     if (state.shards >= selected.getPrice()) {
                         state.shards -= selected.getPrice();
-
-                        // ✅ Unlock blueprint
                         state.unlockedRecipes.add(selected.getUnlocksRecipe());
-
                         TextEffect.typeWriter("You bought the " + selected.getName() +
                             "! You can now discover the " + selected.getUnlocksRecipe() + " recipe in the world.", 60);
                     } else {
-                        TextEffect.typeWriter("You don’t have enough shards.", 60);
+                        TextEffect.typeWriter("You don't have enough shards.", 60);
                     }
                 } else {
                     TextEffect.typeWriter("Invalid choice.", 40);
@@ -91,9 +94,28 @@ public class ShopSystem {
         } catch (Exception e) {
             TextEffect.typeWriter("Something went wrong while using the shop.", 40);
             System.err.println("Shop system error -> " + e.getMessage());
-        } finally {
-            // Always runs after shop interaction
-            // Could be used for logging or cleanup
         }
+    }
+
+    // NEW METHOD: Get blueprints available for current zone
+    private static List<Blueprint> getAvailableBlueprints(GameState state) {
+        List<Blueprint> available = new ArrayList<>();
+        
+        // Zone 2: Crystal Sword only
+        if (state.zone >= 2) {
+            available.add(new Blueprint("Crystal Sword Blueprint", "Crystal Sword", 10));
+        }
+        
+        // Zone 3: Add Flame Axe (unlock when reaching Zone 3)
+        if (state.zone >= 3) {
+            available.add(new Blueprint("Flame Axe Blueprint", "Flame Axe", 15));
+        }
+        
+        // Zone 4: Add Shadow Bow (unlock when reaching Zone 4)
+        if (state.zone >= 4) {
+            available.add(new Blueprint("Shadow Bow Blueprint", "Shadow Bow", 20));
+        }
+        
+        return available;
     }
 }
