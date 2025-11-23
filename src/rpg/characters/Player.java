@@ -24,6 +24,8 @@ public class Player {
 
     // store base defense for resetting
     private int baseDefense;
+    // store base intelligence for temporary buffs
+    private int baseIntelligence;
 
     // Exp stats
     private int level;
@@ -75,6 +77,7 @@ public class Player {
         this.skills = new Skill[0];
 
         this.baseDefense = this.defense;
+        this.baseIntelligence = this.intelligence;
     }
 
     // 🆕 Unlock skills when reaching Level 2
@@ -225,6 +228,26 @@ public class Player {
         hp = maxHp;
         mana = maxMana;
         defense = baseDefense;
+    }
+
+    // Add temporary defense for the duration of a combat or event
+    public void addTemporaryDefense(int amount) {
+        this.defense += amount;
+    }
+
+    // Restore defense back to base value (use after combat)
+    public void resetDefense() {
+        this.defense = this.baseDefense;
+    }
+
+    // Add temporary intelligence for the duration of a combat or event
+    public void addTemporaryIntelligence(int amount) {
+        this.intelligence += amount;
+    }
+
+    // Restore intelligence back to base value
+    public void resetIntelligence() {
+        this.intelligence = this.baseIntelligence;
     }
 
     public boolean isAlive() {

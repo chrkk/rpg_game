@@ -5,6 +5,7 @@ import java.util.Random;
 import rpg.utils.TextEffect;
 import rpg.characters.Player;
 import rpg.characters.Enemy;
+import rpg.characters.Supporter;
 import rpg.skills.Skill;
 import rpg.items.Consumable;
 import rpg.items.Weapon;
@@ -14,6 +15,9 @@ public class CombatSystem {
     private Scanner scanner = new Scanner(System.in);
     private Random rand = new Random();
     private GameState state;
+    // Track combat turns (supporter state moved to SupporterSystem)
+    private int turnCount = 0;
+    private SupporterSystem supporterSystem = new SupporterSystem();
 
     public CombatSystem(GameState state) {
         this.state = state;
@@ -23,8 +27,13 @@ public class CombatSystem {
         state.lootDisplayed = false;
         TextEffect.typeWriter("⚔️ Combat Start! " + enemy.getName() + " appears!", 50);
 
+        // Apply per-combat supporter start effects via SupporterSystem
+        supporterSystem.applyStartOfCombat(state, player);
+
         try {
             while (player.isAlive() && enemy.isAlive()) {
+                // increment turn counter at the start of the player's turn
+                turnCount++;
                 try {
                     // --- Player Turn ---
                     TextEffect.typeWriter("\nYour HP: " + player.getHp() + "/" + player.getMaxHp() +
@@ -116,6 +125,9 @@ public class CombatSystem {
                             TextEffect.typeWriter("Invalid action. You hesitate...", 40);
                     }
 
+                    // Let SupporterSystem handle per-turn supporter actions
+                    supporterSystem.performSupporterTurns(state, player, enemy, turnCount, rand);
+
                     // --- Enemy Turn ---
                     if (enemy.isAlive()) {
                         try {
@@ -132,6 +144,8 @@ public class CombatSystem {
                         }
                     }
 
+                    // SupporterSystem decrements its own timers; nothing to do here
+
                 } catch (Exception e) {
                     TextEffect.typeWriter("Something went wrong during your turn.", 40);
                     System.err.println("Combat loop error -> " + e.getMessage());
@@ -145,6 +159,12 @@ public class CombatSystem {
         }
 
         // --- Outcome ---
+        // Reset any temporary supporter buffs after combat
+        try {
+            supporterSystem.resetAfterCombat(player);
+        } catch (Exception e) {
+            System.err.println("Error resetting supporter state after combat -> " + e.getMessage());
+        }
         if (player.isAlive()) {
             TextEffect.typeWriter("🎉 You defeated the " + enemy.getName() + "!", 50);
 
