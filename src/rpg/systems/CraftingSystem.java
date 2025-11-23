@@ -12,7 +12,9 @@ public class CraftingSystem {
             // Example requirements per weapon
             switch (target) {
                 case "Crystal Sword":
-                    if (crystals >= 5) {
+                    if (state.stage2WeaponCrafted) {
+                        TextEffect.typeWriter("You've already crafted the Crystal Sword!", 60);
+                    } else if (crystals >= 5) {
                         crystals -= 5;
                         player.equipWeapon(new Weapon("Crystal Sword", 20, 35, 0.10, 2.0));
                         state.stage2WeaponCrafted = true;
@@ -23,7 +25,9 @@ public class CraftingSystem {
                     break;
 
                 case "Flame Axe":
-                    if (crystals >= 8) {
+                    if (state.stage3WeaponCrafted) {
+                        TextEffect.typeWriter("You've already crafted the Flame Axe!", 60);
+                    } else if (crystals >= 8) {
                         crystals -= 8;
                         player.equipWeapon(new Weapon("Flame Axe", 25, 40, 0.15, 1.8));
                         state.stage3WeaponCrafted = true;
@@ -34,7 +38,9 @@ public class CraftingSystem {
                     break;
 
                 case "Shadow Bow":
-                    if (crystals >= 10) {
+                    if (state.stage4WeaponCrafted) {
+                        TextEffect.typeWriter("You've already crafted the Shadow Bow!", 60);
+                    } else if (crystals >= 10) {
                         crystals -= 10;
                         player.equipWeapon(new Weapon("Shadow Bow", 15, 30, 0.20, 2.5));
                         state.stage4WeaponCrafted = true;
