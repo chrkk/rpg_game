@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.Random;
 import rpg.utils.TextEffect;
 import rpg.characters.Player;
+import rpg.items.Weapon;
 
 public class Game {
     private Scanner scanner = new Scanner(System.in);
@@ -11,6 +12,10 @@ public class Game {
     private GameState state = new GameState();
 
     private Player player;
+    private boolean devFastModeEnabled = false;
+    private boolean devSkipIntro = false;
+    private Integer devPlayerLevelOverride = null;
+    private boolean devSkipTutorial = false;
 
     public void launch() {
         boolean running = true;
@@ -27,9 +32,14 @@ public class Game {
 
                     switch (choice) {
                         case "1":
-                            playIntroStory();
+                            if (!devSkipIntro) {
+                                playIntroStory();
+                            } else {
+                                System.out.println(">> Intro skipped via developer menu.");
+                            }
                             createPlayer();
-                            new Tutorial(player, state, scanner, rand).start();
+                            applyDeveloperOverridesAfterCreation();
+                            beginAdventure();
                             break;
                         case "2":
                             TextEffect.typeWriter("Thanks for playing!", 40);
@@ -37,9 +47,15 @@ public class Game {
                             break;
                         case "devskip":
                             System.out.println(">> Developer shortcut: skipping intro...");
+                            devFastModeEnabled = true;
                             TextEffect.fastMode = true; // 🆕 enable fast mode globally
+                            state.fastMode = true;
                             createPlayer();
-                            new Tutorial(player, state, scanner, rand).start();
+                            applyDeveloperOverridesAfterCreation();
+                            beginAdventure();
+                            break;
+                        case "devmenu":
+                            openDeveloperMenu();
                             break;
 
                         default:
@@ -153,5 +169,173 @@ public class Game {
 
         TextEffect.typeWriter("[Narrator] You stand amidst silence. The world is broken, but you are alive.", 80);
         TextEffect.typeWriter("Your journey begins here...", 80);
+    }
+
+    private void applyDeveloperOverridesAfterCreation() {
+        if (devPlayerLevelOverride != null && player != null) {
+            player.developerSetLevel(devPlayerLevelOverride);
+            System.out.println(">> Developer override applied: Player level set to " + devPlayerLevelOverride + ".");
+        }
+    }
+
+    private void openDeveloperMenu() {
+        boolean menuOpen = true;
+
+        while (menuOpen) {
+            System.out.println("\n===== Developer Menu =====");
+            System.out.println("1. Toggle Fast Mode: " + (devFastModeEnabled ? "ON ⚡" : "OFF 🐌"));
+            System.out.println("2. Toggle Skip Intro: " + (devSkipIntro ? "ON ⏭️" : "OFF 📖"));
+            System.out.println("3. Set Zone (Current: " + state.zone + ")");
+            System.out.println("4. Give Items (Crystals, Shards, Potions)");
+            String levelLabel = devPlayerLevelOverride != null
+                    ? devPlayerLevelOverride.toString()
+                    : (player != null ? String.valueOf(player.getLevel()) : "N/A");
+            System.out.println("5. Set Player Level (Current: " + levelLabel + ")");
+            System.out.println("6. Unlock All Blueprints");
+            System.out.println("7. Toggle Skip Tutorial: " + (devSkipTutorial ? "ON 🎯" : "OFF 🎒"));
+            System.out.println("0. Exit Dev Menu");
+            System.out.print("> ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    devFastModeEnabled = !devFastModeEnabled;
+                    TextEffect.fastMode = devFastModeEnabled;
+                    state.fastMode = devFastModeEnabled;
+                    System.out.println("Fast Mode is now " + (devFastModeEnabled ? "ON" : "OFF"));
+                    break;
+                case "2":
+                    devSkipIntro = !devSkipIntro;
+                    System.out.println("Skip Intro is now " + (devSkipIntro ? "ON" : "OFF"));
+                    break;
+                case "3":
+                    configureZoneOverride();
+                    break;
+                case "4":
+                    grantDeveloperItems();
+                    break;
+                case "5":
+                    configurePlayerLevelOverride();
+                    break;
+                case "6":
+                    unlockAllBlueprints();
+                    break;
+                case "7":
+                    devSkipTutorial = !devSkipTutorial;
+                    System.out.println("Skip Tutorial is now " + (devSkipTutorial ? "ON" : "OFF"));
+                    break;
+                case "0":
+                    menuOpen = false;
+                    break;
+                default:
+                    System.out.println("Invalid dev menu choice.");
+            }
+        }
+    }
+
+    private void configureZoneOverride() {
+        System.out.print("Enter desired zone (1-4): ");
+        String input = scanner.nextLine();
+        try {
+            int zone = Integer.parseInt(input);
+            if (zone < 1 || zone > 4) {
+                System.out.println("Zone must be between 1 and 4.");
+                return;
+            }
+            state.zone = zone;
+            state.forwardSteps = 0;
+            state.bossGateDiscovered = false;
+            state.currentZoneBoss = null;
+            state.inSafeZone = true;
+            state.zone2IntroShown = zone > 1;
+            state.zone3IntroShown = zone > 2;
+            state.zone4IntroShown = zone > 3;
+            if (zone >= 2)
+                state.shopUnlocked = true;
+            System.out.println(">> Zone set to " + zone + ". Progress counters reset.");
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number for zone.");
+        }
+    }
+
+    private void grantDeveloperItems() {
+        state.crystals = Math.max(0, state.crystals + readDelta("Crystals", state.crystals));
+        state.shards = Math.max(0, state.shards + readDelta("Shards", state.shards));
+        state.revivalPotions = Math.max(0, state.revivalPotions + readDelta("Revival Potions", state.revivalPotions));
+        System.out.println(">> Inventory updated: " + state.crystals + " crystals, " + state.shards + " shards, "
+                + state.revivalPotions + " potions.");
+    }
+
+    private int readDelta(String label, int current) {
+        System.out.print("Add how many " + label + "? (Current: " + current + "): ");
+        String input = scanner.nextLine();
+        if (input.trim().isEmpty())
+            return 0;
+        try {
+            return Integer.parseInt(input.trim());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number. No changes applied to " + label + ".");
+            return 0;
+        }
+    }
+
+    private void configurePlayerLevelOverride() {
+        System.out.print("Enter desired player level (1-99, 0 to clear): ");
+        String input = scanner.nextLine();
+        try {
+            int level = Integer.parseInt(input);
+            if (level == 0) {
+                devPlayerLevelOverride = null;
+                System.out.println("Player level override cleared.");
+                return;
+            }
+            if (level < 1) {
+                System.out.println("Level must be 1 or higher.");
+                return;
+            }
+            devPlayerLevelOverride = level;
+            if (player != null) {
+                player.developerSetLevel(level);
+            }
+            System.out.println(">> Player level override set to " + level + ".");
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number for level.");
+        }
+    }
+
+    private void unlockAllBlueprints() {
+        String[] recipes = { "Crystal Sword", "Flame Axe", "Thunder Spear" };
+        for (String recipe : recipes) {
+            state.unlockedRecipes.add(recipe);
+            state.recipeItems.put(recipe, true);
+        }
+        state.shopUnlocked = true;
+        System.out.println(">> All weapon blueprints unlocked and marked as discovered.");
+    }
+
+    private void beginAdventure() {
+        if (devSkipTutorial) {
+            System.out.println(">> Tutorial skipped via developer menu.");
+            ensurePostTutorialState();
+            new GameLoop(player, state, scanner, rand).start();
+        } else {
+            new Tutorial(player, state, scanner, rand).start();
+        }
+    }
+
+    private void ensurePostTutorialState() {
+        if (player.getWeapon() == null) {
+            player.equipWeapon(new Weapon("Pencil Blade", 8, 12, 0.05, 1.5));
+            state.stage1WeaponCrafted = true;
+        }
+
+        if (state.zone == 1 && state.forwardSteps < 1) {
+            state.forwardSteps = 1;
+        }
+
+        if (state.shards < 1) {
+            state.shards = 1;
+        }
     }
 }

@@ -307,4 +307,57 @@ public class Player {
         System.out.println("❤️ " + name + " healed for " + (hp - beforeHp) + " HP!");
     }
 
+    // Developer helper to recalculate stats for a desired level
+    public void developerSetLevel(int targetLevel) {
+        if (targetLevel < 1)
+            targetLevel = 1;
+
+        int baseHp = 100;
+        int baseMana = 50;
+        int baseDefenseStat = 5;
+        int baseIntStat = 5;
+
+        switch (trait.toLowerCase()) {
+            case "scientist":
+                baseIntStat += 5;
+                baseDefenseStat += 3;
+                break;
+            case "fighter":
+                baseHp += 30;
+                baseDefenseStat += 5;
+                break;
+            case "archmage":
+                baseIntStat += 7;
+                baseMana += 30;
+                break;
+        }
+
+        int extraLevels = targetLevel - 1;
+        if (extraLevels > 0) {
+            baseHp += extraLevels * 20;
+            baseMana += extraLevels * 10;
+            baseDefenseStat += extraLevels;
+            baseIntStat += extraLevels * 2;
+        }
+
+        this.maxHp = baseHp;
+        this.hp = maxHp;
+        this.maxMana = baseMana;
+        this.mana = maxMana;
+        this.defense = baseDefenseStat;
+        this.intelligence = baseIntStat;
+        this.baseDefense = baseDefenseStat;
+        this.baseIntelligence = baseIntStat;
+
+        this.level = targetLevel;
+        this.exp = 0;
+        this.expToNextLevel = 100 + extraLevels * 50;
+
+        if (targetLevel >= 2) {
+            unlockSkills();
+        } else {
+            this.skills = new Skill[0];
+        }
+    }
+
 }
