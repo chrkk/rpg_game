@@ -9,7 +9,7 @@ public class SafeZoneFactory {
         switch (zone) {
             case 1: return new RooftopSafeZone();
             case 2: return new RuinedLabSafeZone();
-            // future zones: case 3 -> new CitySafeZone();
+            case 3: return new CityRuinsSafeZone();
             default: return (player, state, scanner) -> {
                 player.healFull();
                 state.inSafeZone = true;
