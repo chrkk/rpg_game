@@ -26,6 +26,12 @@ public class SupporterPool {
             new Supporter("Jeepney Philosopher", "Philosopher", "Musing"),
             new Supporter("Mr. CodeChum", "Coder", "Debug")
         ));
+
+        // Stage 4 – Fractured Sky
+        pool.put(4, Arrays.asList(
+            new Supporter("Skybridge Surveyor", "Scout", "Updraft"),
+            new Supporter("Glass Elevator Operator", "Engineer", "Stabilize")
+        ));
     }
 
     public static Supporter getRandomSupporter(int zone, Random rand) {

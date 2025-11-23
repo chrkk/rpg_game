@@ -63,7 +63,8 @@ public class StatusSystem {
             "| CRAFTED WEAPONS                                      |\n" +
             formatBagCheck("Stage 1: Pencil Blade", state.stage1WeaponCrafted) +
             formatBagCheck("Stage 2: Crystal Sword", state.stage2WeaponCrafted) +
-            formatBagCheck("Stage 3: ???", state.stage3WeaponCrafted) +
+            formatBagCheck("Stage 3: Flame Axe", state.stage3WeaponCrafted) +
+            formatBagCheck("Stage 4: Thunder Spear", state.stage4WeaponCrafted) +
             
             border;
 
