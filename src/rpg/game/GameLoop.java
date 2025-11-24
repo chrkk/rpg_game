@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.ArrayList;
 import rpg.systems.BagSystem;
 
+import rpg.systems.SafeZoneSystem;
+import rpg.ui.UIDesign; //new
+
 public class GameLoop {
     private final Player player;
     private final GameState state;
@@ -30,14 +33,8 @@ public class GameLoop {
 
         while (running) {
             try {
-                // 🆕 Dynamic prompt - now includes "bag" and "supporter"
                 if (state.inSafeZone) {
-                    // ✅ Add shop option if zone > 1 (after defeating Zone 1 boss)
-                    if (state.zone > 1) {
-                        System.out.print("> (craft / search / status / bag / supporter / shop / move): ");
-                    } else {
-                        System.out.print("> (craft / search / status / bag / supporter / move): ");
-                    }
+                    SafeZoneSystem.displaySafeZoneMenu(state);
                 } else {
                     System.out.print("> (search / status / bag / move): ");
                 }
@@ -117,7 +114,8 @@ public class GameLoop {
                     // 🆕 NEW: Bag command
                     case "bag":
                         try {
-                            BagSystem.showBag(state); //test
+                            // BagSystem.showBag(state); //test
+                            StatusSystem.showBag(state); // new ui
                             // StatusSystem.showBag(state);
                         } catch (Exception e) {
                             TextEffect.typeWriter("Unable to open your bag right now.", 40);

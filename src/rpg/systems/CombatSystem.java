@@ -12,6 +12,8 @@ import rpg.items.Weapon;
 import rpg.game.GameState;
 import rpg.systems.BagSystem;
 
+import rpg.ui.UIDesign; //new
+
 public class CombatSystem {
     private Scanner scanner = new Scanner(System.in);
     private Random rand = new Random();
@@ -30,23 +32,28 @@ public class CombatSystem {
 
         // Apply per-combat supporter start effects via SupporterSystem
         supporterSystem.applyStartOfCombat(state, player);
-
+        int enemyMaxHp = enemy.getHp();
         try {
             while (player.isAlive() && enemy.isAlive()) {
                 // increment turn counter at the start of the player's turn
                 turnCount++;
                 try {
                     // --- Player Turn ---
-                    TextEffect.typeWriter("\nYour HP: " + player.getHp() + "/" + player.getMaxHp() +
-                            " | Mana: " + player.getMana() + "/" + player.getMaxMana() +
-                            " | Enemy HP: " + enemy.getHp(), 40);
+                    // TextEffect.typeWriter("\nYour HP: " + player.getHp() + "/" + player.getMaxHp() +
+                    //         " | Mana: " + player.getMana() + "/" + player.getMaxMana() +
+                    //         " | Enemy HP: " + enemy.getHp(), 40);
                     
+                    //new ui display
+                    UIDesign.displayCombatStatus(player, enemy, enemyMaxHp);
+                    boolean hasSkills = player.getLevel() >= 2 && player.getSkills().length > 0;
+                    UIDesign.displayCombatActions(hasSkills);
+
                     // ✅ Show skill option only if player has unlocked skills (Level >= 2 and skills assigned)
-                    if (player.getLevel() >= 2 && player.getSkills().length > 0) {
-                        TextEffect.typeWriter("Choose action: attack / defend / skill / item / run", 30);
-                    } else {
-                        TextEffect.typeWriter("Choose action: attack / defend / item / run", 30);
-                    }
+                    // if (player.getLevel() >= 2 && player.getSkills().length > 0) {
+                    //     TextEffect.typeWriter("Choose action: attack / defend / skill / item / run", 30);
+                    // } else {
+                    //     TextEffect.typeWriter("Choose action: attack / defend / item / run", 30);
+                    // }
 
                     System.out.print("> ");
                     String action = scanner.nextLine();
@@ -92,16 +99,35 @@ public class CombatSystem {
                             break;
 
                         case "item":
+                        try {
+                            // 🆕 NEW: Show fancy item menu
+                            StatusSystem.showItemMenu(state);
+                            System.out.print("> Choose item: ");
+                            String itemChoice = scanner.nextLine();
+
                             try {
-                                // NEW: Show dynamic item menu
-                                BagSystem.showItemMenu(player, state);
-                                // showItemMenu(player);
-                                defended = true; //on defense para di masayang ag gi heal
-                            } catch (Exception e) {
-                                TextEffect.typeWriter("Item use failed.", 40);
-                                System.err.println("Item error -> " + e.getMessage());
+                                int itemOption = Integer.parseInt(itemChoice);
+                                if (itemOption == 1 && state.meat > 0) {
+                                    if (player.getHp() == player.getMaxHp()) {
+                                        TextEffect.typeWriter("Your HP is already full!", 40);
+                                    } else {
+                                        Consumable meat = new Consumable("Meat", 10);
+                                        meat.consume(player, state);
+                                    }
+                                } else if (itemOption == 0) {
+                                    TextEffect.typeWriter("You close your bag.", 40);
+                                } else {
+                                    TextEffect.typeWriter("Invalid choice or item unavailable!", 40);
+                                }
+                            } catch (NumberFormatException e) {
+                                TextEffect.typeWriter("Invalid choice!", 40);
                             }
-                            break;
+                        } catch (Exception e) {
+                            // Fallback: handle unexpected errors gracefully
+                            TextEffect.typeWriter("Something went wrong while using items!", 40);
+                            e.printStackTrace(); // optional: log error for debugging
+                        }
+                        break;
 
                         case "run":
                             try {

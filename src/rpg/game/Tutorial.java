@@ -9,12 +9,17 @@ import rpg.items.Weapon;
 import rpg.characters.Enemy;
 import rpg.systems.TutorialCombatSystem;
 
+import rpg.ui.UIDesign; //new
+
 // new imports for meat consumable
 import rpg.items.Consumable;
 import rpg.game.GameState;
 
 //new BagSystem import for cleaner code
 import rpg.systems.BagSystem;
+
+import rpg.ui_design.Intro;
+import rpg.systems.StatusSystem;
 
 public class Tutorial {
     private final Scanner scanner;
@@ -34,7 +39,8 @@ public class Tutorial {
         TextEffect.typeWriter("🏫 [System] > You awaken on the School Rooftop — your first Safe Zone.", 80);
         TextEffect.typeWriter("The world below is silent, statues of your classmates frozen in time.", 80);
         TextEffect.typeWriter("You feel weak. You need food and a weapon.", 80);
-        TextEffect.typeWriter("Objective: Find food + find a weapon.", 80);
+        // TextEffect.typeWriter("Objective: Find food + find a weapon.", 80);
+        Intro.displayTutorialSafeZone();
 
         // Only changed [Narrator] to [System] >
         TextEffect.typeWriter("[System] > Remember: crafting can only be done while inside a Safe Zone.", 80);
@@ -146,7 +152,8 @@ public class Tutorial {
 
                     case "bag":
                         try {
-                            BagSystem.showBag(state);
+                            // BagSystem.showBag(state);
+                            StatusSystem.showBag(state); // new ui
                         } catch (Exception e) {
                             TextEffect.typeWriter("Unable to display bag right now.", 40);
                             System.err.println("Status error -> " + e.getMessage());
@@ -154,7 +161,7 @@ public class Tutorial {
                         break;
 
                     default:
-                        TextEffect.typeWriter("Unknown command. Try craft / search / status / move.", 40);
+                        TextEffect.typeWriter("Unknown command. Try craft / search / status / move.", 50);
                 }
 
             } catch (Exception e) {

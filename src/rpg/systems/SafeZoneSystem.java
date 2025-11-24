@@ -7,6 +7,8 @@ import rpg.safezones.SafeZone;
 import rpg.safezones.SafeZoneFactory;
 import rpg.utils.TextEffect;
 
+import rpg.ui.UIDesign;
+
 public class SafeZoneSystem {
     public static void enterSafeZone(Player player, GameState state, Scanner scanner) {
 
@@ -14,6 +16,15 @@ public class SafeZoneSystem {
         SafeZone zone = SafeZoneFactory.getZone(state.zone);
         state.inSafeZone = true; // mark as inside
         zone.enter(player, state, scanner);
+
+        displaySafeZoneMenu(state); //new
+    }
+
+     
+    // 🆕 NEW: Display the safe zone hub menu with fancy UI
+    public static void displaySafeZoneMenu(GameState state) {
+        boolean shopUnlocked = state.zone > 1; // Shop unlocks in Zone 2+
+        UIDesign.displaySafeZoneHub(state.zone, shopUnlocked);
     }
 
     public static void searchSafeZone(Player player, GameState state) {
