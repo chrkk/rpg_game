@@ -13,6 +13,9 @@ import rpg.systems.TutorialCombatSystem;
 import rpg.items.Consumable;
 import rpg.game.GameState;
 
+//new BagSystem import for cleaner code
+import rpg.systems.BagSystem;
+
 public class Tutorial {
     private final Scanner scanner;
     private final Random rand;
@@ -134,8 +137,18 @@ public class Tutorial {
                     case "status":
                         try {
                             StatusSystem.showStatus(player, state);
+                            
                         } catch (Exception e) {
                             TextEffect.typeWriter("Unable to display status right now.", 40);
+                            System.err.println("Status error -> " + e.getMessage());
+                        }
+                        break;
+
+                    case "bag":
+                        try {
+                            BagSystem.showBag(state);
+                        } catch (Exception e) {
+                            TextEffect.typeWriter("Unable to display bag right now.", 40);
                             System.err.println("Status error -> " + e.getMessage());
                         }
                         break;

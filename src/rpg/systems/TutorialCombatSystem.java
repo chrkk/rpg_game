@@ -8,6 +8,7 @@ import rpg.characters.Enemy;
 import rpg.items.Consumable;
 import rpg.game.GameState;
 import rpg.items.Weapon;
+import rpg.systems.BagSystem;
 
 public class TutorialCombatSystem {
     private Scanner scanner = new Scanner(System.in);
@@ -62,15 +63,13 @@ public class TutorialCombatSystem {
 
                         case "item":
                             try {
-                                if (state.meat > 0) {
-                                    Consumable meat = new Consumable("Meat", 10);
-                                    meat.consume(player, state);
-                                } else {
-                                    TextEffect.typeWriter("You check your bag... but there's no item to consume!", 40);
-                                }
+                                //new
+                                BagSystem.showItemMenu(player, state);
+                                // showItemMenu(player); --> old
+                                defended = true; //on defense para di masayang ag gi heal
                             } catch (Exception e) {
-                                TextEffect.typeWriter("You fumble with your items.", 40);
-                                System.err.println("Tutorial item error -> " + e.getMessage());
+                                TextEffect.typeWriter("Item use failed.", 40);
+                                System.err.println("Item error -> " + e.getMessage());
                             }
                             break;
 

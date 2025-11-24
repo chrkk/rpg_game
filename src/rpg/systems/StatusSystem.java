@@ -35,41 +35,9 @@ public class StatusSystem {
             String.format("| Progress: %-42s |\n", progressBar) +
             border;
 
-        // 3. DISPLAY (Changed to println for instant display)
-        System.out.println(output);
-    }
-
-    // NEW: Bag display method
-    public static void showBag(GameState state) {
-        String border = "+======================================================+";
-        
-        String output = "\n" + border + "\n" +
-            "| 💼 BAG                                               |\n" +
-            "|------------------------------------------------------|\n" +
-            
-            // MATERIALS SECTION
-            "| MATERIALS                                            |\n" +
-            formatBagItem("Crystals", state.crystals) +
-            formatBagItem("Shards", state.shards) +
-            "|------------------------------------------------------|\n" +
-            
-            // CONSUMABLES SECTION
-            "| CONSUMABLES                                          |\n" +
-            formatBagItem("Meat", state.meat) +
-            formatBagItem("Revival Potions", state.revivalPotions) +
-            "|------------------------------------------------------|\n" +
-            
-            // KEY ITEMS SECTION (showing crafted weapons as achievements)
-            "| CRAFTED WEAPONS                                      |\n" +
-            formatBagCheck("Stage 1: Pencil Blade", state.stage1WeaponCrafted) +
-            formatBagCheck("Stage 2: Crystal Sword", state.stage2WeaponCrafted) +
-            formatBagCheck("Stage 3: Flame Axe", state.stage3WeaponCrafted) +
-            formatBagCheck("Stage 4: Thunder Spear", state.stage4WeaponCrafted) +
-            
-            border;
-
-        // Changed to println for instant display
-        System.out.println(output);
+        // 3. DISPLAY
+        // TextEffect.typeWriter(output, 10);
+        System.out.println(output); //test
     }
 
     // --- HELPER METHODS ---
@@ -80,18 +48,6 @@ public class StatusSystem {
 
     private static String formatOneColumn(String text) {
     return String.format("| %-52s |\n", text);
-    }
-
-
-    // 🆕 Helper for bag items (shows item name and quantity)
-    private static String formatBagItem(String itemName, int quantity) {
-        return String.format("|   %-25s x%-23d |\n", itemName, quantity);
-    }
-
-    // 🆕 Helper for boolean items (shows checkmark or X)
-    private static String formatBagCheck(String itemName, boolean acquired) {
-        String status = acquired ? "✓" : "✗";
-        return String.format("|   %s %-48s |\n", status, itemName);
     }
 
     private static String createProgressBar(GameState state) {
