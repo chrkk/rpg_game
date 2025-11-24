@@ -10,6 +10,7 @@ import rpg.skills.Skill;
 import rpg.items.Consumable;
 import rpg.items.Weapon;
 import rpg.game.GameState;
+import rpg.systems.BagSystem;
 
 public class CombatSystem {
     private Scanner scanner = new Scanner(System.in);
@@ -93,7 +94,8 @@ public class CombatSystem {
                         case "item":
                             try {
                                 // NEW: Show dynamic item menu
-                                showItemMenu(player);
+                                BagSystem.showItemMenu(player, state);
+                                // showItemMenu(player);
                                 defended = true; //on defense para di masayang ag gi heal
                             } catch (Exception e) {
                                 TextEffect.typeWriter("Item use failed.", 40);
@@ -182,82 +184,5 @@ public class CombatSystem {
         }
     }
 
-    // 🆕 NEW: Show available items in combat
-    private void showItemMenu(Player player) {
-        TextEffect.typeWriter("\n📦 Available Items:", 30);
-        
-        int optionNumber = 1;
-        boolean hasItems = false;
-        
-        // Show meat if available
-        if (state.meat > 0) {
-            TextEffect.typeWriter(optionNumber + ". Meat (Heal 10 HP) x" + state.meat, 30);
-            hasItems = true;
-            optionNumber++;
-        }
-        
-        // Show revival potions (but can't use in combat)
-        if (state.revivalPotions > 0) {
-            TextEffect.typeWriter(optionNumber + ". Revival Potion x" + state.revivalPotions + " (Can't use in combat)", 30);
-            hasItems = true;
-            optionNumber++;
-        }
-        
-        if (!hasItems) {
-            TextEffect.typeWriter("Your bag is empty! No consumables available.", 40);
-            return;
-        }
-        
-        TextEffect.typeWriter("0. Cancel", 30);
-        
-        System.out.print("> Choose item: ");
-        String choice = scanner.nextLine();
-        
-        try {
-            int option = Integer.parseInt(choice);
-            
-            if (option == 0) {
-                TextEffect.typeWriter("You close your bag.", 40);
-                return;
-            }
-            
-            // Use the selected item
-            useItemByOption(option, player);
-            
-        } catch (NumberFormatException e) {
-            TextEffect.typeWriter("Invalid choice!", 40);
-        }
-    }
-
-    // 🆕 NEW: Handle item usage based on selection
-    private void useItemByOption(int option, Player player) {
-        int currentOption = 1;
-        
-        // Option 1: Meat (if available)
-        if (state.meat > 0) {
-            if (option == currentOption) {
-                // Check if player is at max HP
-                if (player.getHp() == player.getMaxHp()) {
-                    TextEffect.typeWriter("Your HP is already full! No need to use Meat.", 40);
-                    return;
-                }
-                
-                Consumable meat = new Consumable("Meat", 10);
-                meat.consume(player, state);
-                return;
-            }
-            currentOption++;
-        }
-        
-        // Option 2: Revival Potion (if available)
-        if (state.revivalPotions > 0) {
-            if (option == currentOption) {
-                TextEffect.typeWriter("Revival Potions can only be used outside combat!", 40);
-                return;
-            }
-            currentOption++;
-        }
-        
-        TextEffect.typeWriter("Invalid choice!", 40);
-    }
+    
 }

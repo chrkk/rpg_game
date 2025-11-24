@@ -10,6 +10,7 @@ import rpg.systems.ShopSystem;
 import rpg.utils.TextEffect;
 import java.util.List;
 import java.util.ArrayList;
+import rpg.systems.BagSystem;
 
 public class GameLoop {
     private final Player player;
@@ -116,7 +117,8 @@ public class GameLoop {
                     // 🆕 NEW: Bag command
                     case "bag":
                         try {
-                            StatusSystem.showBag(state);
+                            BagSystem.showBag(state); //test
+                            // StatusSystem.showBag(state);
                         } catch (Exception e) {
                             TextEffect.typeWriter("Unable to open your bag right now.", 40);
                             System.err.println("Bag error -> " + e.getMessage());
