@@ -36,12 +36,12 @@ public class StatusSystem {
             border;
 
         // 3. DISPLAY
-        // TextEffect.typeWriter(output, 10);
-        System.out.println(output); //test
+        TextEffect.typeWriter(output, 10);
     }
 
-    // --- HELPER METHODS ---
+   
 
+    // --- HELPER METHODS ---
     private static String formatTwoColumns(String leftText, String rightText) {
         return String.format("| %-25s | %-24s |\n", leftText, rightText);
     }

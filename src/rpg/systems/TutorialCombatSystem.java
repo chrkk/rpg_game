@@ -20,7 +20,8 @@ public class TutorialCombatSystem {
     }
 
     public boolean startTutorialCombat(Player player, Enemy enemy) {
-        TextEffect.typeWriter("⚔️ Combat! " + enemy.getName() + " blocks your path!", 50);
+        // Updated to [System] style
+        TextEffect.typeWriter("⚔️ [System] > Combat Initiated! " + enemy.getName() + " blocks your path!", 50);
 
         try {
             while (player.isAlive() && enemy.isAlive()) {
@@ -111,7 +112,9 @@ public class TutorialCombatSystem {
             TextEffect.typeWriter("🎉 You defeated the " + enemy.getName() + "!", 50);
 
             TextEffect.typeWriter("You feel a strange warmth flow through your body...", 70);
-            TextEffect.typeWriter("[Narrator] This is experience. With enough battles, you will grow stronger and unlock new powers.", 70);
+            
+            // ✅ CHANGED HERE: Narrator -> System
+            TextEffect.typeWriter("[System] > This is experience. With enough battles, you will grow stronger and unlock new powers.", 70);
 
             int expGained = enemy.getExpReward();
             player.gainExp(expGained);
@@ -119,7 +122,7 @@ public class TutorialCombatSystem {
 
             return true;
         } else {
-            TextEffect.typeWriter("💀 You were defeated... but this is only training. You awaken again, determined.", 50);
+            TextEffect.typeWriter("[System] > 💀 You were defeated... but this is only training. You awaken again, determined.", 50);
             player.healFull();
             return false;
         }

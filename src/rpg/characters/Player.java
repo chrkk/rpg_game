@@ -108,7 +108,7 @@ public class Player {
                 this.skills = new Skill[0];
                 break;
         }
-        System.out.println("⚡ A surge of power awakens... Your class skills are now available!");
+        System.out.println("[System] > ⚡ A surge of power awakens... Your class skills are now available!");
     }
 
     // weapon
@@ -174,12 +174,12 @@ public class Player {
     // 🆕 Newly added - Skills
     public void useSkillOnEnemy(Enemy enemy, int skillIndex) {
         if (skills == null || skills.length == 0) {
-            System.out.println("You have no skills assigned!");
+            System.out.println("[System] > You have no skills assigned!");
             return;
         }
 
         if (skillIndex < 0 || skillIndex >= skills.length) {
-            System.out.println("Invalid skill choice!");
+            System.out.println("[System] > Invalid skill choice!");
             return;
         }
 
@@ -187,7 +187,7 @@ public class Player {
 
         // Check if player has enough mana
         if (mana < chosenSkill.getManaCost()) {
-            System.out.println("Not enough mana to use " + chosenSkill.getName() + "!");
+            System.out.println("[System] > Not enough mana to use " + chosenSkill.getName() + "!");
             return;
         }
 
@@ -199,8 +199,8 @@ public class Player {
         enemy.takeDamage(damage);
 
         // Display skill use text and result
-        System.out.println(chosenSkill.useSkill());
-        System.out.println("It dealt " + damage + " damage!");
+        System.out.println("[System] > " + chosenSkill.useSkill());
+        System.out.println("[System] > It dealt " + damage + " damage!");
     }
 
     // Combat methods
@@ -209,7 +209,7 @@ public class Player {
 
         if (defense > 0) {
             effectiveDamage = Math.max(0, dmg - defense);
-            System.out.println("🛡️ Your defense absorbed " + (dmg - effectiveDamage) + " damage, but broke!");
+            System.out.println("[System] > 🛡️ Your defense absorbed " + (dmg - effectiveDamage) + " damage, but broke!");
             defense = 0;
         } else {
             effectiveDamage = dmg;
@@ -304,7 +304,7 @@ public class Player {
             return; // ignore invalid heals
         int beforeHp = hp;
         hp = Math.min(maxHp, hp + amount);
-        System.out.println("❤️ " + name + " healed for " + (hp - beforeHp) + " HP!");
+        System.out.println("[System] > ❤️ " + name + " healed for " + (hp - beforeHp) + " HP!");
     }
 
     // Developer helper to recalculate stats for a desired level
