@@ -23,9 +23,9 @@ public class UIDesign {
      * @param flavorText Optional description of the enemy's state
      */
     public static void displayCombatFrame(Player player, Enemy enemy, int enemyMaxHp, String flavorText) {
-        System.out.println("╔══════════════════════════════════════════════════════════╗");
+        System.out.println("╔══════════════════════════════════════════════════════════════╗");
         System.out.println("║                    🗡️  COMBAT ARENA  ⚔️                    ║");
-        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        System.out.println("╠══════════════════════════════════════════════════════════════╣");
         System.out.println("║                                                          ║");
         System.out.printf("║   [ENEMY] %-46s ║%n", truncate(enemy.getName(), 46));
         System.out.printf("║   HP: %-50s ║%n", createHealthBar(enemy.getHp(), enemyMaxHp, 20));
@@ -59,21 +59,21 @@ public class UIDesign {
      * @param hasSkills Whether the player has unlocked skills
      */
     public static void displayCombatActions(boolean hasSkills) {
-        System.out.println("╔══════════════════════════════════════════════════════════╗");
-        System.out.println("║                    ⚔️  YOUR TURN  ⚔️                      ║");
-        System.out.println("╠══════════════════════════════════════════════════════════╣");
-        System.out.println("║                                                          ║");
-        System.out.println("║   Type 'attack'  → ⚔️  Strike with your weapon           ║");
-        System.out.println("║   Type 'defend'  → 🛡️  Brace for incoming damage         ║");
+        System.out.println("╔═════════════════════════════════════════════════════════════╗");
+        System.out.println("║                    ⚔️  YOUR TURN  ⚔️                          ║");
+        System.out.println("╠═════════════════════════════════════════════════════════════╣");
+        System.out.println("║                                                             ║");
+        System.out.println("║   Type 'attack'  → ⚔️  Strike with your weapon               ║");
+        System.out.println("║   Type 'defend'  → 🛡️  Brace for incoming damage             ║");
         
         if (hasSkills) {
-            System.out.println("║   Type 'skill'   → 🔮 Cast a powerful ability           ║");
+            System.out.println("║   Type 'skill'   → 🔮 Cast a powerful ability               ║");
         }
         
-        System.out.println("║   Type 'item'    → 🎒 Use consumable from bag            ║");
-        System.out.println("║   Type 'run'     → 🏃 Attempt to flee combat             ║");
-        System.out.println("║                                                          ║");
-        System.out.println("╚══════════════════════════════════════════════════════════╝");
+        System.out.println("║   Type 'item'    → 🎒 Use consumable from bag               ║");
+        System.out.println("║   Type 'run'     → 🏃 Attempt to flee combat                ║");
+        System.out.println("║                                                             ║");
+        System.out.println("╚═════════════════════════════════════════════════════════════╝");
     }
 
     /**
@@ -83,14 +83,14 @@ public class UIDesign {
      * @param enemyMaxHp The enemy's maximum HP (tracked from combat start)
      */
     public static void displayCombatStatus(Player player, Enemy enemy, int enemyMaxHp) {
-        System.out.println("\n╔══════════════════════════════════════════════════════════╗");
+        System.out.println("\n╔═════════════════════════════════════════════════════════════╗");
         System.out.printf("║   [ENEMY] %-24s HP: %-20s ║%n", 
             truncate(enemy.getName(), 24),
             createHealthBar(enemy.getHp(), enemyMaxHp, 10));
         System.out.printf("║   [YOU]   %-24s HP: %-20s ║%n",
             truncate(player.getName(), 24),
             createHealthBar(player.getHp(), player.getMaxHp(), 10));
-        System.out.println("╚══════════════════════════════════════════════════════════╝");
+        System.out.println("╚═════════════════════════════════════════════════════════════╝");
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -122,7 +122,7 @@ public class UIDesign {
         System.out.println("║                                                          ║");
         
         // CRAFTED WEAPONS (Key Items)
-        System.out.println("║  ⚔️  CRAFTED WEAPONS                                     ║");
+        System.out.println("║  ⚔️  CRAFTED WEAPONS                                      ║");
         System.out.println("║  ────────────────────────────────────────────────────    ║");
         displayBagCheck("Stage 1: Pencil Blade", state.stage1WeaponCrafted);
         displayBagCheck("Stage 2: Crystal Sword", state.stage2WeaponCrafted);
@@ -138,7 +138,7 @@ public class UIDesign {
      */
     private static void displayBagCheck(String itemName, boolean acquired) {
         String status = acquired ? "✓" : "✗";
-        System.out.printf("║     %s %-48s ║%n", status, itemName);
+        System.out.printf("║     %s %-48s   ║%n", status, itemName);
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -160,13 +160,13 @@ public class UIDesign {
         System.out.println("║                                                          ║");
         
         // STATS - Two Column Layout
-        System.out.printf("║  %-26s %-27s ║%n", 
+        System.out.printf("║  %-26s %-27s   ║%n", 
             "❤️  HP: " + player.getHp() + "/" + player.getMaxHp(),
             "🔮 Mana: " + player.getMana() + "/" + player.getMaxMana());
-        System.out.printf("║  %-26s %-27s ║%n",
+        System.out.printf("║  %-25s %-27s  ║%n",
             "📊 Lvl: " + player.getLevel(),
             "✨ Exp: " + player.getExp() + "/" + player.getExpToNextLevel());
-        System.out.printf("║  %-26s %-27s ║%n",
+        System.out.printf("║  %-27s %-27s   ║%n",
             "🛡️  Def: " + player.getDefense(),
             "🧠 Int: " + player.getIntelligence());
         
@@ -230,7 +230,7 @@ public class UIDesign {
         String zoneDescription = getZoneDescription(zone);
         
         System.out.println("\n╔══════════════════════════════════════════════════════════╗");
-        System.out.printf("║                  🏠 %-35s ║%n", zoneName.toUpperCase());
+        System.out.printf("║                  🏠 %-35s  ║%n", zoneName.toUpperCase());
         System.out.printf("║              (Zone %d Safe Haven)                         ║%n", zone);
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         System.out.println("║                                                          ║");
@@ -243,7 +243,7 @@ public class UIDesign {
         System.out.println("║  Available Actions:                                      ║");
         System.out.println("║                                                          ║");
         System.out.println("║  [craft]     ⚒️  Crafting Bench                          ║");
-        System.out.println("║  [search]    🔍 Search Area                              ║");
+        System.out.println("║  [search]    🔍 Search Area                               ║");
         System.out.println("║  [supporter] 👥 Supporter Hub                            ║");
         
         if (shopUnlocked) {
@@ -412,7 +412,7 @@ public class UIDesign {
         }
         
         if (!hasItems) {
-            System.out.println("║  Your bag is empty! No consumables available.           ║");
+            System.out.println("║  Your bag is empty! No consumables available.            ║");
         }
         
         System.out.println("║                                                          ║");

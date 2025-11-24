@@ -23,7 +23,7 @@ public class Main {
         System.out.print("Loading");
         for (int i = 0; i < 3; i++) {
             try {
-                Thread.sleep(500);
+                Thread.sleep(700);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // restore interrupt flag
                 System.err.println("Loading interrupted -> " + e.getMessage());

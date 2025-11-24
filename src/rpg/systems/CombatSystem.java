@@ -44,6 +44,7 @@ public class CombatSystem {
                     //         " | Enemy HP: " + enemy.getHp(), 40);
                     
                     //new ui display
+                    // UIDesign.displayCombatFrame(player, enemy, enemyMaxHp, flavorText); --> will implement soon
                     UIDesign.displayCombatStatus(player, enemy, enemyMaxHp);
                     boolean hasSkills = player.getLevel() >= 2 && player.getSkills().length > 0;
                     UIDesign.displayCombatActions(hasSkills);
