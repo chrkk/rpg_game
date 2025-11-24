@@ -16,9 +16,8 @@ public class BossGateSystem {
             return false;
         }
         
-        // Zone 3 requirement: Flame Axe (Updated for Earthquake Theme)
+        // Zone 3 requirement: Flame Axe (Updated for Yanig / Earthquake Theme)
         if (state.zone == 3 && !state.stage3WeaponCrafted) {
-            // Changed "Wall of Flames" to "Debris/Rebar"
             TextEffect.typeWriter("⛔ [System] > Obstacle Detected: Massive Debris Field.", 70);
             TextEffect.typeWriter("The path is blocked by concrete fused with rebar.", 70);
             TextEffect.typeWriter("💡 Hint: Extreme heat required to melt the structure. Craft the Flame Axe.", 60);
@@ -27,15 +26,21 @@ public class BossGateSystem {
             return false;
         }
         
-        // Zone 4 requirement: Thunder Spear (Updated for Typhoon Theme)
+        // Zone 4 requirement: Thunder Spear (Updated for Bagyong Tino / Typhoon Theme)
         if (state.zone == 4 && !state.stage4WeaponCrafted) {
-            // Changed "Stormlight" to "Cyclonic Winds"
             TextEffect.typeWriter("⛔ [System] > Warning: Cyclonic Barrier Detected.", 70);
             TextEffect.typeWriter("Wind speeds exceed 200 kph. Standard entry impossible.", 70);
             TextEffect.typeWriter("💡 Hint: You need a weapon to pierce the eye of the storm. Craft the Thunder Spear.", 60);
             state.inSafeZone = true;
             safeZoneAction.run();
             return false;
+        }
+
+        // Zone 5: The Choice (Final Dilemma)
+        if (state.zone == 5) {
+            // The barrier here is mental, not physical. The System grants access to the Core Logic.
+            // No weapon requirement needed.
+            return true;
         }
 
         return true;

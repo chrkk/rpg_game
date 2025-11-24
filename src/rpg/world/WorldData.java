@@ -40,7 +40,6 @@ public class WorldData {
                                 new Enemy("Concrete Husk", 100, 20, 28, 40),
                                 new Enemy("Burnt Effigy", 85, 17, 24, 34)
                         },
-                        // ✅ UPDATED: Yanig replaces Screaming Billboard
                         new Enemy("Yanig, the Earth-Shaker", 220, 25, 35, 70), 
                         new Weapon("Rebar Blade", 16, 24, 0.10, 1.6));
 
@@ -53,20 +52,24 @@ public class WorldData {
                                 new Enemy("Cable-Wraith Diver", 130, 27, 35, 50),
                                 new Enemy("Storm-Tethered Sentinel", 145, 30, 38, 55)
                         },
-                        // ✅ UPDATED: Bagyong Tino replaces Nimbus Tyrant
                         new Enemy("Bagyong Tino", 320, 35, 45, 95), 
                         new Weapon("Skybridge Saber", 20, 32, 0.15, 1.9));
 
-            default:
+            // ✅ UPDATED: Now specifically Case 5 instead of Default
+            case 5:
                 return new ZoneConfig(
-                        "The Source",
-                        "Blinding light and void-black shadows pulse in rhythm at the heart of the storm.",
+                        "The Source Root",
+                        "The physical world dissolves into streams of raw white code. The server hum is deafening.",
                         new Enemy[] {
-                                new Enemy("Light-Eaten Echo", 160, 36, 42, 70),
-                                new Enemy("Void Resonant", 180, 40, 48, 80)
+                                // Updated mobs to fit the CS/IT theme
+                                new Enemy("Compile Error", 160, 36, 42, 70),
+                                new Enemy("Corrupted Memory", 180, 40, 48, 80)
                         },
-                        new Enemy("The Source's Warden", 380, 45, 60, 120),
+                        new Enemy("The Choice", 380, 45, 60, 120),
                         null);
+
+            default:
+                return null;
         }
     }
 }
