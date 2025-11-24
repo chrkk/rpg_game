@@ -77,34 +77,44 @@ public class Game {
     }
 
     private void playIntroStory() {
-        TextEffect.typeWriter("[Narrator] A sudden white light freezes humanity into stone...", 50);
-        TextEffect.typeWriter("[POV] You glance out the classroom window.", 50);
-        TextEffect.typeWriter("The light intensifies... until everything turns to stone.", 70);
-        TextEffect.typeWriter("Darkness engulfs your vision.", 80);
+        // 1. Confusion Phase
+        TextEffect.typeWriter("...", 120);
+        TextEffect.typeWriter("Darkness. Infinite darkness.", 60);
+        TextEffect.typeWriter("You try to move, but your body feels... absent.", 60);
+        TextEffect.typeWriter("Where am I? What happened to the exam? The paper?", 60);
+
+        // 2. System Initialization
+        TextEffect.typeWriter("\n[System] > Consciousness Detected.", 30);
+        TextEffect.typeWriter("[System] > Initializing 'Stress Response' Protocol...", 30);
+        
+        TextEffect.typeWriter("\n'Who said that?' you think. The voice isn't coming from your ears. It's inside your mind.", 60);
+
+        TextEffect.typeWriter("\n[System] > Loading Asset: SCHOOL_ROOFTOP.obj", 30);
+        TextEffect.typeWriter("[System] > Materializing Player Avatar...", 30);
+
+        // 3. The Awakening
+        TextEffect.typeWriter("\n[POV] GASP.", 20);
+        TextEffect.typeWriter("Your eyes snap open. The blinding white light fades into gray.", 60);
+        TextEffect.typeWriter("You are standing on the School Rooftop. But it's... wrong.", 60);
+        TextEffect.typeWriter("Statues of students stand frozen around you. The sky is shattered like glass.", 60);
+
+        // 4. Objective Given
+        TextEffect.typeWriter("\n[System] > Welcome, Player. Objective: SURVIVE your anxieties.", 40);
+        TextEffect.typeWriter("You don't understand what's going on, but you feel a strange urge to just... go with the flow.", 60);
 
         try {
             Thread.sleep(800);
         } catch (InterruptedException e) {
-            // Hybrid handling
-            TextEffect.typeWriter("Your vision flickers strangely...", 40);
-            System.err.println("Intro sleep interrupted -> " + e.getMessage());
             Thread.currentThread().interrupt();
-        } finally {
-            TextEffect.typeWriter("...", 120);
         }
 
-        // ✅ Updated to rooftop instead of classroom
-        TextEffect.typeWriter("[POV] Crack. You awaken on the School Rooftop.", 60);
-        TextEffect.typeWriter(
-                "The city below is eerily silent. Statues of your classmates stand frozen in time, " +
-                        "while vines creep across the broken walls around you.",
-                60);
-        TextEffect.typeWriter(
-                "The rooftop feels like a fragile sanctuary amidst the chaos — your first Safe Zone.", 60);
+        // Setting the scene
+        TextEffect.typeWriter("\nThe city below is eerily silent. Statues of your classmates stand frozen in time.", 60);
+        TextEffect.typeWriter("The rooftop feels like a fragile sanctuary amidst the chaos — your first Safe Zone.", 60);
     }
 
     private void createPlayer() {
-        TextEffect.typeWriter("You focus... Who are you in this new world?", 60);
+        TextEffect.typeWriter("\n[System] > Identify yourself.", 60);
         System.out.print("Enter your name: ");
         String name = scanner.nextLine();
 
@@ -165,10 +175,8 @@ public class Game {
         }
 
         player = new Player(name, trait);
-        TextEffect.typeWriter("Identity set: " + player.getName() + " the " + player.getTrait(), 50);
-
-        TextEffect.typeWriter("[Narrator] You stand amidst silence. The world is broken, but you are alive.", 80);
-        TextEffect.typeWriter("Your journey begins here...", 80);
+        TextEffect.typeWriter("[System] > Identity confirmed: " + player.getName() + " the " + player.getTrait(), 50);
+        TextEffect.typeWriter("[System] > Beginning Simulation...", 60);
     }
 
     private void applyDeveloperOverridesAfterCreation() {

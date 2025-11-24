@@ -27,12 +27,14 @@ public class Tutorial {
     }
 
     public void start() {
-        TextEffect.typeWriter("🏫 [Narrator] You awaken on the School Rooftop — your first Safe Zone.", 80);
+        // Only changed [Narrator] to [System] >
+        TextEffect.typeWriter("🏫 [System] > You awaken on the School Rooftop — your first Safe Zone.", 80);
         TextEffect.typeWriter("The world below is silent, statues of your classmates frozen in time.", 80);
         TextEffect.typeWriter("You feel weak. You need food and a weapon.", 80);
         TextEffect.typeWriter("Objective: Find food + find a weapon.", 80);
 
-        TextEffect.typeWriter("[Narrator] Remember: crafting can only be done while inside a Safe Zone.", 80);
+        // Only changed [Narrator] to [System] >
+        TextEffect.typeWriter("[System] > Remember: crafting can only be done while inside a Safe Zone.", 80);
 
         boolean hasCrystal = false;
         boolean hasPencil = false;
@@ -50,10 +52,13 @@ public class Tutorial {
                                 TextEffect.typeWriter("You search the school rooftop...", 60);
                                 TextEffect.typeWriter("You found: 1 Crystal, 1 Crystal Shard, and a Pencil.", 60);
 
+                                // Only changed [Narrator] to [System] >
                                 TextEffect.typeWriter(
-                                        "[Narrator] Crystals are rare crafting materials used to forge weapons.", 70);
+                                        "[System] > Crystals are rare crafting materials used to forge weapons.", 70);
+                                
+                                // Only changed [Narrator] to [System] > - Original text preserved exactly
                                 TextEffect.typeWriter(
-                                        "[Narrator] Crystal Shards, on the other hand, are a form of currency. You'll be able to spend them in shops which unlocks further.",
+                                        "[System] > Crystal Shards, on the other hand, are a form of currency. You'll be able to spend them in shops which unlocks further.",
                                         70);
 
                                 hasCrystal = true;

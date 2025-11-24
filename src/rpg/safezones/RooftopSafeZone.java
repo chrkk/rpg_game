@@ -10,6 +10,7 @@ public class RooftopSafeZone implements SafeZone {
     public void enter(Player player, GameState state, Scanner scanner) {
         player.healFull();
         state.inSafeZone = true;
-        TextEffect.typeWriter("You rest on the School Rooftop. The wind is calm, and your stats are restored.", 60);
+        TextEffect.typeWriter("[System] > Checkpoint Reached: School Rooftop.", 60);
+        TextEffect.typeWriter("The wind is calm here. Simulation parameters stabilized. HP/Mana restored.", 60);
     }
 }

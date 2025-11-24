@@ -11,16 +11,17 @@ public class RuinedLabSafeZone implements SafeZone {
     public void enter(Player player, GameState state, Scanner scanner) {
         player.healFull();
         state.inSafeZone = true;
-        TextEffect.typeWriter("You step cautiously into the Ruined Lab. The air smells of rust and chemicals.", 60);
-        TextEffect.typeWriter("Your stats have been fully restored.", 60);
+        TextEffect.typeWriter("\n[System] > Entering Sector: RUINED_LAB.", 60);
+        TextEffect.typeWriter("The air smells of burnt paper and corrosive chemicals. Your stats have been restored.", 60);
 
         if (!state.zone2IntroShown) {
-            TextEffect.typeWriter("[Professor Ashiro] These halls once birthed discovery… now they breed only danger.", 60);
-            TextEffect.typeWriter("The guardian ahead is no mere beast — only forged weapons can pierce its hide.", 60);
+            TextEffect.typeWriter("\n[Memory Echo - Prof. Ashiro] \"We pushed them too hard... The pressure... it broke them.\"", 60);
+            TextEffect.typeWriter("[System] > Warning: The Guardian ahead is a manifestation of Academic Failure.", 60);
+            TextEffect.typeWriter("Only forged weapons can pierce the density of their critique.", 60);
 
             TextEffect.typeWriter("\nA scavenger emerges from the shadows of broken machinery.", 60);
-            TextEffect.typeWriter("[Scrapwright Kuro] Heh, I deal in blueprints and scraps of the old world.", 60);
-            TextEffect.typeWriter("From now on, you can visit my shop in any Safe Zone.", 60);
+            TextEffect.typeWriter("[Scrapwright Kuro] \"Heh, the System glitching out on you too?\"", 60);
+            TextEffect.typeWriter("[Kuro] \"I deal in blueprints and scraps. Even in a simulation, you gotta pay to win.\"", 60);
 
             state.shopUnlocked = true;
             state.zone2IntroShown = true;
@@ -31,6 +32,5 @@ public class RuinedLabSafeZone implements SafeZone {
                 ShopSystem.openShop(state, scanner);
             }
         }
-        // RuinedLabSafeZone does not present the supporter menu here; use the global `supporter` command instead.
     }
 }

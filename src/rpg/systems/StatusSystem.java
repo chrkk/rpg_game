@@ -35,8 +35,8 @@ public class StatusSystem {
             String.format("| Progress: %-42s |\n", progressBar) +
             border;
 
-        // 3. DISPLAY
-        TextEffect.typeWriter(output, 10);
+        // 3. DISPLAY (Changed to println for instant display)
+        System.out.println(output);
     }
 
     // NEW: Bag display method
@@ -68,7 +68,8 @@ public class StatusSystem {
             
             border;
 
-        TextEffect.typeWriter(output, 10);
+        // Changed to println for instant display
+        System.out.println(output);
     }
 
     // --- HELPER METHODS ---
