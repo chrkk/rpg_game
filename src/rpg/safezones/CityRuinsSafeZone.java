@@ -17,15 +17,15 @@ public class CityRuinsSafeZone implements SafeZone {
             state.zone3IntroShown = true;
         } else {
             // Regular entry
-            TextEffect.typeWriter("You return to the makeshift shelter in the City Ruins.", 60);
-            TextEffect.typeWriter("The fire still crackles. Your stats have been restored.", 60);
+            TextEffect.typeWriter("[System] > Checkpoint Reached: City Ruins Shelter.", 60);
+            TextEffect.typeWriter("The ground here is stable... for now. Stats restored.", 60);
         }
     }
     
     private void firstTimeEntry(Player player, GameState state, Scanner scanner) {
-        TextEffect.typeWriter("\n🏙️ You step into what remains of the city center...", 70);
-        TextEffect.typeWriter("Collapsed buildings line the streets like broken teeth.", 70);
-        TextEffect.typeWriter("Smoke rises from scattered fires that never seem to die.", 70);
+        TextEffect.typeWriter("\n[System] > Entering Sector: CITY_RUINS.", 70);
+        TextEffect.typeWriter("The streets are buckled and cracked. Buildings lean at dangerous angles.", 70);
+        TextEffect.typeWriter("It looks like a massive earthquake hit this place minutes ago.", 70);
         
         try {
             Thread.sleep(800);
@@ -33,13 +33,13 @@ public class CityRuinsSafeZone implements SafeZone {
             Thread.currentThread().interrupt();
         }
         
-        TextEffect.typeWriter("\nThen you see it—a makeshift shelter built from rubble.", 70);
-        TextEffect.typeWriter("Someone has been living here.", 70);
+        TextEffect.typeWriter("\nYou spot a makeshift shelter reinforced with rebar.", 70);
+        TextEffect.typeWriter("Someone is hiding inside.", 70);
         
         // Meet the Scavenger
-        TextEffect.typeWriter("\n[???] \"Hold it right there.\"", 60);
-        TextEffect.typeWriter("A figure emerges from the shadows, weapon drawn.", 60);
-        TextEffect.typeWriter("[Scavenger] \"Another survivor? Or another statue waiting to happen?\"", 60);
+        TextEffect.typeWriter("\n[???] \"Don't move! The ground is sensitive!\"", 60);
+        TextEffect.typeWriter("A figure emerges, testing the floor before stepping.", 60);
+        TextEffect.typeWriter("[Scavenger] \"You're not a statue? Good. Walk light.\"", 60);
         
         try {
             Thread.sleep(600);
@@ -47,16 +47,12 @@ public class CityRuinsSafeZone implements SafeZone {
             Thread.currentThread().interrupt();
         }
         
-        TextEffect.typeWriter("\nYou raise your hands slowly, showing you're human.", 60);
-        TextEffect.typeWriter("The scavenger lowers their weapon, eyes scanning you carefully.", 60);
+        TextEffect.typeWriter("\n[Scavenger] \"Name's Raze. I've been trying to map the fault lines.\"", 60);
+        TextEffect.typeWriter("\"You feel those tremors? That's not nature. That's HIM.\"", 60);
         
-        TextEffect.typeWriter("\n[Scavenger] \"...You made it through the lab. Impressive.\"", 60);
-        TextEffect.typeWriter("\"Name's Raze. I've been mapping the ruins, trying to find The Source.\"", 60);
-        TextEffect.typeWriter("\"That pillar of light in the distance—it's where everything started.\"", 70);
-        
-        TextEffect.typeWriter("\n[Raze] \"But there's something guarding it. Something big.\"", 70);
-        TextEffect.typeWriter("\"The Screaming Billboard. It corrupts minds, drives people mad.\"", 70);
-        TextEffect.typeWriter("\"You'll need to defeat it before you can reach The Source.\"", 70);
+        TextEffect.typeWriter("\n[Raze] \"Yanig, the Earth-Shaker. He's blocking the path to the Source.\"", 70);
+        TextEffect.typeWriter("\"He's made of the very concrete that crushed this city.\"", 70);
+        TextEffect.typeWriter("\"You'll need something heavy to break him. Or fire to melt him down.\"", 70);
         
         try {
             Thread.sleep(800);
@@ -65,13 +61,11 @@ public class CityRuinsSafeZone implements SafeZone {
         }
         
         // Offer info/help
-        TextEffect.typeWriter("\n[Raze] \"Listen... I've seen things. Learned things.\"", 60);
-        TextEffect.typeWriter("\"The light didn't just petrify people—it's feeding on them somehow.\"", 70);
-        TextEffect.typeWriter("\"Every statue is a battery. And you... you're the only one who can stop it.\"", 70);
+        TextEffect.typeWriter("\n[Raze] \"The System told me you were coming.\"", 60);
+        TextEffect.typeWriter("\"It said you're the only one who can stabilize the simulation.\"", 70);
         
         TextEffect.typeWriter("\nRaze tosses you a worn map.", 60);
-        TextEffect.typeWriter("[Raze] \"This shelter is yours now. I'll keep searching for survivors.\"", 60);
-        TextEffect.typeWriter("\"But I'll be watching your progress. Good luck out there.\"", 60);
+        TextEffect.typeWriter("[Raze] \"Take this shelter. If the shaking starts again... hide.\"", 60);
         
         try {
             Thread.sleep(600);
@@ -79,17 +73,15 @@ public class CityRuinsSafeZone implements SafeZone {
             Thread.currentThread().interrupt();
         }
         
-        TextEffect.typeWriter("\nRaze disappears into the ruins, leaving you alone by the fire.", 60);
-        TextEffect.typeWriter("Your stats have been fully restored.", 60);
+        TextEffect.typeWriter("\nRaze disappears into the ruins.", 60);
+        TextEffect.typeWriter("[System] > Stats Fully Restored.", 60);
         
         // Optional: Give small reward for reaching this far
-        TextEffect.typeWriter("\n✨ You found supplies in the shelter: +2 Crystals, +1 Revival Potion", 60);
+        TextEffect.typeWriter("\n✨ [System] > Supplies Recovered: +2 Crystals, +1 Revival Potion", 60);
         state.crystals += 2;
         state.revivalPotions += 1;
 
-        TextEffect.typeWriter("\n[Scrapwright Kuro's Voice] \"Psst! Over here!\"", 60);
-        TextEffect.typeWriter("You turn to see Kuro has set up shop in a corner of the shelter.", 60);
-        TextEffect.typeWriter("[Kuro] \"Followed you from the lab. Business is business, yeah?\"", 60);
-        TextEffect.typeWriter("\"Got some new blueprints... if you've got the shards.\"", 60);
+        TextEffect.typeWriter("\n[Kuro] \"Psst! Over here!\"", 60);
+        TextEffect.typeWriter("[Kuro] \"I found a spot that isn't shaking. Got new blueprints for you.\"", 60);
     }
 }
