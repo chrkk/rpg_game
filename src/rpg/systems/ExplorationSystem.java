@@ -256,14 +256,28 @@ public class ExplorationSystem {
         if (state.revivalPotions > 0) {
             TextEffect.typeWriter("[System] > Object Identified: Statue of Sir Khai (Mentor).", 50);
             System.out.print("Revive him? (yes/no): ");
-            
-            if (scanner.nextLine().equalsIgnoreCase("yes")) {
+            String choice = scanner.nextLine();
+
+            Supporter sirKhai = null;
+            for (Supporter supporter : state.supporters) {
+                if (supporter != null && supporter.getName() != null && supporter.getName().equalsIgnoreCase("Sir Khai")) {
+                    sirKhai = supporter;
+                    break;
+                }
+            }
+            if (sirKhai == null) {
+                sirKhai = new Supporter("Sir Khai", "Mentor", "Guidance Heal");
+                state.supporters.add(sirKhai);
+            }
+
+            sirKhai.setRevived(true);
+            state.metSirKhai = true;
+
+            if (choice.equalsIgnoreCase("yes")) {
                 state.revivalPotions--;
-                state.supporters.add(new Supporter("Sir Khai", "Mentor", "Guidance Heal"));
                 TextEffect.typeWriter("✨ [System] > Sir Khai joined the party.", 50);
             } else {
                 state.revivalPotions--;
-                state.supporters.add(new Supporter("Sir Khai", "Mentor", "Guidance Heal"));
                 TextEffect.typeWriter("⚠️ [System] > Destiny override... Sir Khai revived automatically.", 50);
             }
         }
