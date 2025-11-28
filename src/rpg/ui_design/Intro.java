@@ -4,6 +4,7 @@ import rpg.characters.Player;
 import rpg.characters.Enemy;
 import rpg.game.GameState;
 import rpg.utils.TextEffect;
+import rpg.ui.UIDesign;
 
 public class Intro {
 
@@ -56,32 +57,31 @@ public class Intro {
 
 //tutorial ui
 public static void displayTutorialSafeZone() {
-    String ui = 
-    "\n╔═══════════════════════════════════════════════════════════════════════╗\n" +
-    "║                                                                       ║\n" +
-    "║                    🏫  S C H O O L   R O O F T O P  🏫                ║\n" +
-    "║                          [SAFE ZONE - Tutorial]                       ║\n" +
-    "║                                                                       ║\n" +
-    "╠═══════════════════════════════════════════════════════════════════════╣\n" +
-    "║                                                                       ║\n" +
-    "║  📋 Tutorial Objectives:                                              ║\n" +
-    "║      1. Search the rooftop for supplies                               ║\n" +
-    "║      2. Craft your first weapon                                       ║\n" +
-    "║      3. Leave the safe zone to continue                               ║\n" +
-    "║                                                                       ║\n" +
-    "╠═══════════════════════════════════════════════════════════════════════╣\n" +
-    "║                                                                       ║\n" +
-    "║  Available Commands:                                                  ║\n" +
-    "║    • craft   - Combine items into weapons                             ║\n" +
-    "║    • search  - Look for materials                                     ║\n" +
-    "║    • status  - View your stats                                        ║\n" +
-    "║    • bag     - Check inventory                                        ║\n" +
-    "║    • move    - Leave safe zone                                        ║\n" +
-    "║                                                                       ║\n" +
-    "╚═══════════════════════════════════════════════════════════════════════╝\n" +
-    "\n";
-    
-    System.out.print(ui);
+    // Render a safe-zone hub that mirrors the global design but omits the supporter option
+    String zoneName = "School Rooftop";
+    String zoneDescription = "The wind is calm here. Vines creep across shattered tiles.";
+
+    System.out.println("\n╔══════════════════════════════════════════════════════════╗");
+    System.out.printf("║                  🏠 %-35s  ║%n", zoneName.toUpperCase());
+    System.out.println("║              (Zone 1 Safe Haven)                         ║");
+    System.out.println("╠══════════════════════════════════════════════════════════╣");
+    System.out.println("║                                                          ║");
+
+    // Simple wrap (short description)
+    System.out.printf("║  %-54s ║%n", zoneDescription);
+
+    System.out.println("║                                                          ║");
+    System.out.println("╠══════════════════════════════════════════════════════════╣");
+    System.out.println("║  Available Actions:                                      ║");
+    System.out.println("║                                                          ║");
+    System.out.println("║  [craft]     ⚒️  Crafting Bench                           ║");
+    System.out.println("║  [search]    🔍 Search Area                              ║");
+    // supporter option intentionally omitted for tutorial / rooftop
+    System.out.println("║  [status]    📊 View Status                              ║");
+    System.out.println("║  [bag]       🎒 Open Bag                                 ║");
+    System.out.println("║  [move]      🚪 Leave Safe Zone                          ║");
+    System.out.println("║                                                          ║");
+    System.out.println("╚══════════════════════════════════════════════════════════╝");
 }
 
 private String createBar(int current, int max, int length, char filled, char empty) {

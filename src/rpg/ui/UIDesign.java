@@ -257,6 +257,41 @@ public class UIDesign {
         System.out.println("╚══════════════════════════════════════════════════════════╝");
     }
 
+    /**
+     * Display the safe zone hub but hide the supporter option (used for tutorial / Rooftop)
+     */
+    public static void displaySafeZoneHubNoSupporter(int zone, boolean shopUnlocked) {
+        String zoneName = getZoneName(zone);
+        String zoneDescription = getZoneDescription(zone);
+        
+        System.out.println("\n╔══════════════════════════════════════════════════════════╗");
+        System.out.printf("║                  🏠 %-35s  ║%n", zoneName.toUpperCase());
+        System.out.printf("║              (Zone %d Safe Haven)                         ║%n", zone);
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        System.out.println("║                                                          ║");
+        
+        // Display zone description (wrapped)
+        wrapAndPrint(zoneDescription, 54);
+        
+        System.out.println("║                                                          ║");
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        System.out.println("║  Available Actions:                                      ║");
+        System.out.println("║                                                          ║");
+        System.out.println("║  [craft]     ⚒️  Crafting Bench                           ║");
+        System.out.println("║  [search]    🔍 Search Area                              ║");
+        // NOTE: Supporter option intentionally omitted here
+        
+        if (shopUnlocked) {
+            System.out.println("║  [shop]      🛒 Visit Shop                               ║");
+        }
+        
+        System.out.println("║  [status]    📊 View Status                              ║");
+        System.out.println("║  [bag]       🎒 Open Bag                                 ║");
+        System.out.println("║  [move]      🚪 Leave Safe Zone                          ║");
+        System.out.println("║                                                          ║");
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+    }
+
     // ═══════════════════════════════════════════════════════════
     // HELPER METHODS - Health/Mana Bars
     // ═══════════════════════════════════════════════════════════
