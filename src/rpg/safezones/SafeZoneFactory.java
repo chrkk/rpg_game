@@ -1,6 +1,6 @@
 package rpg.safezones;
 
-import java.util.Scanner;
+//----> Remove Scanner
 import rpg.characters.Player;
 import rpg.game.GameState;
 
