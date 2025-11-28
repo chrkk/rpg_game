@@ -10,7 +10,10 @@ import rpg.systems.ShopSystem;
 import rpg.utils.TextEffect;
 import java.util.List;
 import java.util.ArrayList;
-import rpg.systems.BagSystem;
+// import rpg.systems.BagSystem; --> deleted
+
+import rpg.systems.SafeZoneSystem;
+import rpg.ui.UIDesign; //new
 
 public class GameLoop {
     private final Player player;
@@ -30,14 +33,24 @@ public class GameLoop {
 
         while (running) {
             try {
-                // 🆕 Dynamic prompt - now includes "bag" and "supporter"
+                // new version if u want to display menu only once
+                /*
                 if (state.inSafeZone) {
-                    // ✅ Add shop option if zone > 1 (after defeating Zone 1 boss)
-                    if (state.zone > 1) {
-                        System.out.print("> (craft / search / status / bag / supporter / shop / move): ");
+                    if (!state.safeZoneMenuShown) {
+                        SafeZoneSystem.displaySafeZoneMenu(state);
+                        state.safeZoneMenuShown = true;
                     } else {
-                        System.out.print("> (craft / search / status / bag / supporter / move): ");
+                        System.out.print("> ");
                     }
+                } else {
+                    System.out.print("> (search / status / bag / move): ");
+                }
+                */
+
+                // old version consistent display
+                if (state.inSafeZone) {
+                    SafeZoneSystem.displaySafeZoneMenu(state);
+                    System.out.print("> ");
                 } else {
                     System.out.print("> (search / status / bag / move): ");
                 }
@@ -117,8 +130,8 @@ public class GameLoop {
                     // 🆕 NEW: Bag command
                     case "bag":
                         try {
-                            BagSystem.showBag(state); //test
-                            // StatusSystem.showBag(state);
+                            StatusSystem.showBag(state); // new ui
+                            
                         } catch (Exception e) {
                             TextEffect.typeWriter("Unable to open your bag right now.", 40);
                             System.err.println("Bag error -> " + e.getMessage());

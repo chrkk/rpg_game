@@ -8,7 +8,9 @@ import rpg.characters.Enemy;
 import rpg.items.Consumable;
 import rpg.game.GameState;
 import rpg.items.Weapon;
-import rpg.systems.BagSystem;
+// import rpg.systems.BagSystem; --> deleted
+
+import rpg.ui.UIDesign; //new
 
 public class TutorialCombatSystem {
     private Scanner scanner = new Scanner(System.in);
@@ -21,16 +23,25 @@ public class TutorialCombatSystem {
 
     public boolean startTutorialCombat(Player player, Enemy enemy) {
         // Updated to [System] style
+        int enemyMaxHp = enemy.getHp();
         TextEffect.typeWriter("⚔️ [System] > Combat Initiated! " + enemy.getName() + " blocks your path!", 50);
 
         try {
             while (player.isAlive() && enemy.isAlive()) {
                 try {
-                    TextEffect.typeWriter("\nYour HP: " + player.getHp() + "/" + player.getMaxHp() +
-                                          " | Mana: " + player.getMana() + "/" + player.getMaxMana() +
-                                          " | Enemy HP: " + enemy.getHp(), 40);
+                    // TextEffect.typeWriter("\nYour HP: " + player.getHp() + "/" + player.getMaxHp() +
+                    //                       " | Mana: " + player.getMana() + "/" + player.getMaxMana() +
+                    //                       " | Enemy HP: " + enemy.getHp(), 40);
 
-                    TextEffect.typeWriter("Choose action: attack / defend / item / run", 30);
+                    // TextEffect.typeWriter("Choose action: attack / defend / item / run", 30);
+                    
+                    // 🆕 NEW: Display compact status update each turn
+                    UIDesign.displayCombatStatus(player, enemy, enemyMaxHp);
+                    
+                    // Show available actions (no skills in tutorial)
+                    boolean hasSkills = false; // Tutorial = no skills
+                    UIDesign.displayCombatActions(hasSkills);
+
                     System.out.print("> ");
                     String action = scanner.nextLine();
 
@@ -62,16 +73,35 @@ public class TutorialCombatSystem {
                             break;
 
                         case "item":
+                        try {
+                            // 🆕 NEW: Show fancy item menu
+                            StatusSystem.showItemMenu(state);
+                            System.out.print("> Choose item: ");
+                            String itemChoice = scanner.nextLine();
+
                             try {
-                                //new
-                                BagSystem.showItemMenu(player, state);
-                                // showItemMenu(player); --> old
-                                defended = true; //on defense para di masayang ag gi heal
-                            } catch (Exception e) {
-                                TextEffect.typeWriter("Item use failed.", 40);
-                                System.err.println("Item error -> " + e.getMessage());
+                                int itemOption = Integer.parseInt(itemChoice);
+                                if (itemOption == 1 && state.meat > 0) {
+                                    if (player.getHp() == player.getMaxHp()) {
+                                        TextEffect.typeWriter("Your HP is already full!", 40);
+                                    } else {
+                                        Consumable meat = new Consumable("Meat", 10);
+                                        meat.consume(player, state);
+                                    }
+                                } else if (itemOption == 0) {
+                                    TextEffect.typeWriter("You close your bag.", 40);
+                                } else {
+                                    TextEffect.typeWriter("Invalid choice or item unavailable!", 40);
+                                }
+                            } catch (NumberFormatException e) {
+                                TextEffect.typeWriter("Invalid choice!", 40);
                             }
-                            break;
+                        } catch (Exception e) {
+                            // Fallback: handle unexpected errors gracefully
+                            TextEffect.typeWriter("Something went wrong while using items!", 40);
+                            e.printStackTrace(); // optional: log error for debugging
+                        }
+                        break;
 
                         case "run":
                             TextEffect.typeWriter("You try to run... but there’s nowhere to escape!", 40);

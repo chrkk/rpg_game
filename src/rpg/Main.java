@@ -2,25 +2,28 @@ package rpg;
 
 import rpg.game.Game;
 import java.util.Scanner;
+import rpg.ui_design.TitleBanner;
 
 public class Main {
     public static void main(String[] args) {
         // Title Banner (ASCII Art)
-        System.out.println(" ______   ______            _______  _______  _______  _______  _______  _______  __    _  _______ ");
-        System.out.println("|      | |    _ |          |       ||   _   ||       ||       ||       ||       ||  |  | ||       |");
-        System.out.println("|  _    ||   | ||          |       ||  |_|  ||    _  ||  _____||_     _||   _   ||   |_| ||    ___|");
-        System.out.println("| | |   ||   |_||_         |       ||       ||   |_| || |_____   |   |  |  | |  ||       ||   |___ ");
-        System.out.println("| |_|   ||    __  | ___    |      _||       ||    ___||_____  |  |   |  |  |_|  ||  _    ||    ___|");
-        System.out.println("|       ||   |  | ||   |   |     |_ |   _   ||   |     _____| |  |   |  |       || | |   ||   |___ ");
-        System.out.println("|______| |___|  |_||___|   |_______||__| |__||___|    |_______|  |___|  |_______||_|  |__||_______|");
-        System.out.println("                                     v1.0  |  by The Formality");
-        System.out.println();
+        // System.out.println(" ______   ______            _______  _______  _______  _______  _______  _______  __    _  _______ ");
+        // System.out.println("|      | |    _ |          |       ||   _   ||       ||       ||       ||       ||  |  | ||       |");
+        // System.out.println("|  _    ||   | ||          |       ||  |_|  ||    _  ||  _____||_     _||   _   ||   |_| ||    ___|");
+        // System.out.println("| | |   ||   |_||_         |       ||       ||   |_| || |_____   |   |  |  | |  ||       ||   |___ ");
+        // System.out.println("| |_|   ||    __  | ___    |      _||       ||    ___||_____  |  |   |  |  |_|  ||  _    ||    ___|");
+        // System.out.println("|       ||   |  | ||   |   |     |_ |   _   ||   |     _____| |  |   |  |       || | |   ||   |___ ");
+        // System.out.println("|______| |___|  |_||___|   |_______||__| |__||___|    |_______|  |___|  |_______||_|  |__||_______|");
+        // System.out.println("                                     v1.0  |  by The Formality");
+        // System.out.println();
 
+        //new title banner
+        TitleBanner.displayTitleBanner();
         // Loading Effect
         System.out.print("Loading");
         for (int i = 0; i < 3; i++) {
             try {
-                Thread.sleep(500);
+                Thread.sleep(700);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // restore interrupt flag
                 System.err.println("Loading interrupted -> " + e.getMessage());

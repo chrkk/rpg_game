@@ -48,5 +48,6 @@ public class GameState {
     public boolean zone3IntroShown = false;
     public boolean zone4IntroShown = false;
 
-
+    //new -> to only display safezoneUI once
+    public boolean safeZoneMenuShown = false;
 }
