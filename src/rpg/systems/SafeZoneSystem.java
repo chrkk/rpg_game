@@ -16,15 +16,18 @@ public class SafeZoneSystem {
         SafeZone zone = SafeZoneFactory.getZone(state.zone);
         state.inSafeZone = true; // mark as inside
         zone.enter(player, state, scanner);
-
-        displaySafeZoneMenu(state); //new
     }
 
      
     // 🆕 NEW: Display the safe zone hub menu with fancy UI
     public static void displaySafeZoneMenu(GameState state) {
         boolean shopUnlocked = state.zone > 1; // Shop unlocks in Zone 2+
-        UIDesign.displaySafeZoneHub(state.zone, shopUnlocked);
+        // Zone 1 (tutorial rooftop) uses the same UI but without supporter management
+        if (state.zone == 1) {
+            UIDesign.displaySafeZoneHubNoSupporter(state.zone, shopUnlocked);
+        } else {
+            UIDesign.displaySafeZoneHub(state.zone, shopUnlocked);
+        }
     }
 
     public static void searchSafeZone(Player player, GameState state) {
