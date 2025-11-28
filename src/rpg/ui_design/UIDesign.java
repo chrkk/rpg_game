@@ -242,8 +242,8 @@ public class UIDesign {
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         System.out.println("║  Available Actions:                                      ║");
         System.out.println("║                                                          ║");
-        System.out.println("║  [craft]     ⚒️  Crafting Bench                          ║");
-        System.out.println("║  [search]    🔍 Search Area                               ║");
+        System.out.println("║  [craft]     ⚒️  Crafting Bench                           ║");
+        System.out.println("║  [search]    🔍 Search Area                              ║");
         System.out.println("║  [supporter] 👥 Supporter Hub                            ║");
         
         if (shopUnlocked) {
@@ -353,32 +353,61 @@ public class UIDesign {
     /**
      * Wrap and print text within the UI frame
      */
-    private static void wrapAndPrint(String text, int maxWidth) {
-        if (text == null || text.isEmpty()) return;
+    // private static void wrapAndPrint(String text, int maxWidth) {
+    //     if (text == null || text.isEmpty()) return;
         
-        String[] words = text.split(" ");
-        StringBuilder line = new StringBuilder("║  ");
+    //     String[] words = text.split(" ");
+    //     StringBuilder line = new StringBuilder("║  ");
         
-        for (String word : words) {
-            if (line.length() + word.length() + 1 > maxWidth + 3) {
-                // Pad and print current line
-                while (line.length() < 60) line.append(" ");
-                line.append("║");
-                System.out.println(line);
-                line = new StringBuilder("║  " + word + " ");
-            } else {
-                line.append(word).append(" ");
-            }
-        }
+    //     for (String word : words) {
+    //         if (line.length() + word.length() + 1 > maxWidth + 3) {
+    //             // Pad and print current line
+    //             while (line.length() < 60) line.append(" ");
+    //             line.append("║");
+    //             System.out.println(line);
+    //             line = new StringBuilder("║  " + word + " ");
+    //         } else {
+    //             line.append(word).append(" ");
+    //         }
+    //     }
         
-        // Print remaining line
-        if (line.length() > 3) {
-            while (line.length() < 60) line.append(" ");
+    //     // Print remaining line
+    //     if (line.length() > 3) {
+    //         while (line.length() < 60) line.append(" ");
+    //         line.append("║");
+    //         System.out.println(line);
+    //     }
+    // }
+    /**
+ * Wrap and print text within the UI frame
+ */
+private static void wrapAndPrint(String text, int maxWidth) {
+    if (text == null || text.isEmpty()) return;
+    
+    String[] words = text.split(" ");
+    StringBuilder line = new StringBuilder("║  ");
+    
+    for (String word : words) {
+        // Check if adding this word would exceed the width
+        if (line.length() + word.length() + 1 > maxWidth + 3) {
+            // Pad current line to exactly 60 characters before the final ║
+            while (line.length() < 59) line.append(" ");
             line.append("║");
             System.out.println(line);
+            // Start new line
+            line = new StringBuilder("║  " + word + " ");
+        } else {
+            line.append(word).append(" ");
         }
     }
-
+    
+    // Print the last line if it has content
+    if (line.length() > 3) {  // More than just "║  "
+        while (line.length() < 59) line.append(" ");
+        line.append("║");
+        System.out.println(line);
+    }
+}
     // ═══════════════════════════════════════════════════════════
     // ITEM MENU UI (During Combat)
     // ═══════════════════════════════════════════════════════════
@@ -398,7 +427,7 @@ public class UIDesign {
         
         // Show meat if available
         if (state.meat > 0) {
-            System.out.printf("║  [%d] 🍖 Meat                    Heal 10 HP      x%-4d ║%n", 
+            System.out.printf("║  [%d] 🍖 Meat                    Heal 10 HP      x%-4d    ║%n", 
                 optionNum++, state.meat);
             hasItems = true;
         }

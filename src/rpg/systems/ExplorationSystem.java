@@ -21,6 +21,11 @@ public class ExplorationSystem {
             Runnable safeZoneAction) {
 
         try {
+            //new
+            if (state.inSafeZone) {
+            state.safeZoneMenuShown = false;
+            }
+
             ZoneConfig zone = WorldData.getZone(state.zone);
             state.currentZoneBoss = zone.boss;
 

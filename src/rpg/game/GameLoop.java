@@ -33,8 +33,24 @@ public class GameLoop {
 
         while (running) {
             try {
+                // new version if u want to display menu only once
+                /*
+                if (state.inSafeZone) {
+                    if (!state.safeZoneMenuShown) {
+                        SafeZoneSystem.displaySafeZoneMenu(state);
+                        state.safeZoneMenuShown = true;
+                    } else {
+                        System.out.print("> ");
+                    }
+                } else {
+                    System.out.print("> (search / status / bag / move): ");
+                }
+                */
+
+                // old version consistent display
                 if (state.inSafeZone) {
                     SafeZoneSystem.displaySafeZoneMenu(state);
+                    System.out.print("> ");
                 } else {
                     System.out.print("> (search / status / bag / move): ");
                 }
@@ -114,9 +130,8 @@ public class GameLoop {
                     // 🆕 NEW: Bag command
                     case "bag":
                         try {
-                            // BagSystem.showBag(state); //test
                             StatusSystem.showBag(state); // new ui
-                            // StatusSystem.showBag(state);
+                            
                         } catch (Exception e) {
                             TextEffect.typeWriter("Unable to open your bag right now.", 40);
                             System.err.println("Bag error -> " + e.getMessage());
