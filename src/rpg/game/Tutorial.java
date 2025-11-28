@@ -15,9 +15,6 @@ import rpg.ui.UIDesign; //new
 import rpg.items.Consumable;
 import rpg.game.GameState;
 
-//new BagSystem import for cleaner code
-import rpg.systems.BagSystem;
-
 import rpg.ui_design.Intro;
 import rpg.systems.StatusSystem;
 

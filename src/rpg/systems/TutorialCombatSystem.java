@@ -8,7 +8,7 @@ import rpg.characters.Enemy;
 import rpg.items.Consumable;
 import rpg.game.GameState;
 import rpg.items.Weapon;
-import rpg.systems.BagSystem;
+// import rpg.systems.BagSystem; --> deleted
 
 import rpg.ui.UIDesign; //new
 

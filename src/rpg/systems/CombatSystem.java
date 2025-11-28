@@ -10,7 +10,7 @@ import rpg.skills.Skill;
 import rpg.items.Consumable;
 import rpg.items.Weapon;
 import rpg.game.GameState;
-import rpg.systems.BagSystem;
+// import rpg.systems.BagSystem; --> deleted
 
 import rpg.ui.UIDesign; //new
 

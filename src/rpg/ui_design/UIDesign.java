@@ -434,9 +434,9 @@ private static void wrapAndPrint(String text, int maxWidth) {
         
         // Show revival potions (but can't use in combat)
         if (state.revivalPotions > 0) {
-            System.out.printf("║  [%d] 💊 Revival Potion          (Combat Lock)  x%-4d ║%n", 
+            System.out.printf("║  [%d] 💊 Revival Potion          (Combat Lock)  x%-4d     ║%n", 
                 optionNum++, state.revivalPotions);
-            System.out.println("║      └─ Can only be used outside of combat              ║");
+            System.out.println("║      └─ Can only be used outside of combat               ║");
             hasItems = true;
         }
         
