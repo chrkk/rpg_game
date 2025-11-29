@@ -23,10 +23,10 @@ public class WorldData {
             case 2:
                 return new ZoneConfig(
                         "Ruined Lab",
-                        "Shattered corridors filled with failed experiments.",
+                        "Shattered corridors filled with failed computer experiments.",
                         new Enemy[] {
                                 // 🆕 ZONE 2 MOBS: Lab/Tech Failures
-                                new Enemy("Failed Prototype", 55, 10, 14, 20),
+                                new Enemy("Failed Thesis", 55, 10, 14, 20),
                                 new Enemy("Malfunctioning PC", 80, 14, 20, 30),
                                 new Enemy("Spilled Matcha Drink", 65, 12, 18, 25)
                         },
