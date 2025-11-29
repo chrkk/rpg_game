@@ -37,6 +37,7 @@ javac -d out (Get-ChildItem -Recurse -Path src -Filter *.java).FullName
 
 # Run
 java -cp out rpg.Main or
+chcp 65001; javac -encoding UTF-8 -d out -sourcepath src src/rpg/Main.java; java "-Dfile.encoding=UTF-8" -cp out rpg.Main
 
 # Or
 We will just make it an executable
