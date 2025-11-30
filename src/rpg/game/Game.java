@@ -242,9 +242,25 @@ public class Game {
             state.zone4IntroShown = zone > 3;
             if (zone >= 2)
                 state.shopUnlocked = true;
+            ensureWeaponProgressForZone(zone);
             System.out.println(">> Zone set to " + zone + ". Progress counters reset.");
         } catch (NumberFormatException e) {
             System.out.println("Invalid number for zone.");
+        }
+    }
+
+    private void ensureWeaponProgressForZone(int zone) {
+        if (zone >= 2) {
+            state.stage1WeaponCrafted = true;
+        }
+        if (zone >= 3) {
+            state.stage2WeaponCrafted = true;
+        }
+        if (zone >= 4) {
+            state.stage3WeaponCrafted = true;
+        }
+        if (zone >= 5) {
+            state.stage4WeaponCrafted = true;
         }
     }
 
