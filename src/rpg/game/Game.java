@@ -224,12 +224,12 @@ public class Game {
     }
 
     private void configureZoneOverride() {
-        System.out.print("Enter desired zone (1-4): ");
+        System.out.print("Enter desired zone (1-5): ");
         String input = scanner.nextLine();
         try {
             int zone = Integer.parseInt(input);
-            if (zone < 1 || zone > 4) {
-                System.out.println("Zone must be between 1 and 4.");
+            if (zone < 1 || zone > 5) {
+                System.out.println("Zone must be between 1 and 5.");
                 return;
             }
             state.zone = zone;
