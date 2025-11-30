@@ -15,6 +15,7 @@ public class SafeZoneSystem {
         // Normal entry logic
         SafeZone zone = SafeZoneFactory.getZone(state.zone);
         state.inSafeZone = true; // mark as inside
+        state.safeZoneMenuShown = false;
         zone.enter(player, state, scanner);
     }
 
