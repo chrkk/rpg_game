@@ -11,10 +11,10 @@ public class ArchmageSkills {
     };
 
     // 🧿 Secondary Skill
-    public static Skill arcaneShield = new Skill("Arcane Shield", 12, 0) {
+    public static Skill arcaneShield = new Skill("Arcane Pulse", 12, 0) {
         @Override
         public String useSkill() {
-            return "You summon an ethereal barrier, reducing damage temporarily!";
+            return "You summon an ethereal arcane!";
         }
     };
 

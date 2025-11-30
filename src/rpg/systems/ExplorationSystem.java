@@ -339,8 +339,8 @@ public class ExplorationSystem {
                     // handle interruption
                 }
 
-                TextEffect.typeWriter("\n[The Choice] \"To the left: The Code. The Logic. The CS Path you started.\"", 90);
-                TextEffect.typeWriter("[The Choice] \"To the right: The Systems. The Networks. The IT Path you crave.\"", 90);
+                TextEffect.typeWriter("\n[The Choice] \"To the left: The Code. The Logic. The CS Path you started, your 'Multo' program.\"", 90);
+                TextEffect.typeWriter("[The Choice] \"To the right: The Systems. The Networks. The IT Path for your peace of mind.\"", 90);
                 TextEffect.typeWriter("[The Choice] \"Choose wrong, and you waste everything. Are you quitting? Or evolving?\"", 90);
 
                 try {

@@ -32,9 +32,9 @@ public class Intro {
     "║      │ Bonuses: +HP, +Defense                                     │      ║\n" +
     "║      │                                                            │      ║\n" +
     "║      │ Skills:                                                    │      ║\n" +
-    "║      │  • Power Punch (Basic)        - Bone-crushing strike       │      ║\n" +
-    "║      │  • War Cry (Secondary)        - Morale boost               │      ║\n" +
-    "║      │  • Earth Breaker (Ultimate)   - Ground-slam shockwave      │      ║\n" +
+    "║      │  • Pacman Punch (Basic)       - Just like a shotgun        │      ║\n" +
+    "║      │  • Deadly Roar (Secondary)    - Roar so deadly             │      ║\n" +
+    "║      │  • Earth Shaker (Ultimate)    - Ground-slam shockwave      │      ║\n" +
     "║      └────────────────────────────────────────────────────────────┘      ║\n" +
     "║                                                                          ║\n" +
     "║  [3] 🔮 ARCHMAGE                                                         ║\n" +
@@ -43,7 +43,7 @@ public class Intro {
     "║      │                                                            │      ║\n" +
     "║      │ Skills:                                                    │      ║\n" +
     "║      │  • Fire Bolt (Basic)          - Blazing fire attack        │      ║\n" +
-    "║      │  • Arcane Shield (Secondary)  - Damage barrier             │      ║\n" +
+    "║      │  • Arcane Pulse (Secondary)   - Pulse of the arcane        │      ║\n" +
     "║      │  • Meteor Storm (Ultimate)    - Cataclysmic meteor rain    │      ║\n" +
     "║      └────────────────────────────────────────────────────────────┘      ║\n" +
     "║                                                                          ║\n" +

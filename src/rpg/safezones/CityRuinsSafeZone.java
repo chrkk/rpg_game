@@ -52,7 +52,7 @@ public class CityRuinsSafeZone implements SafeZone {
         
         TextEffect.typeWriter("\n[Raze] \"Yanig, the Earth-Shaker. He's blocking the path to the Source.\"", 70);
         TextEffect.typeWriter("\"He's made of the very concrete that crushed this city.\"", 70);
-        TextEffect.typeWriter("\"You'll need something heavy to break him. Or fire to melt him down.\"", 70);
+        TextEffect.typeWriter("\"You'll need something heavy to break him.\"", 70);
         
         try {
             Thread.sleep(800);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 // import rpg.systems.BagSystem; --> deleted
 
 import rpg.systems.SafeZoneSystem;
-import rpg.ui.UIDesign; //new
+import rpg.ui.UIDesign; 
 
 public class GameLoop {
     private final Player player;
@@ -33,21 +33,6 @@ public class GameLoop {
 
         while (running) {
             try {
-                // new version if u want to display menu only once
-                /*
-                if (state.inSafeZone) {
-                    if (!state.safeZoneMenuShown) {
-                        SafeZoneSystem.displaySafeZoneMenu(state);
-                        state.safeZoneMenuShown = true;
-                    } else {
-                        System.out.print("> ");
-                    }
-                } else {
-                    System.out.print("> (search / status / bag / move): ");
-                }
-                */
-
-                // old version consistent display
                 if (state.inSafeZone) {
                     SafeZoneSystem.displaySafeZoneMenu(state);
                     System.out.print("> ");
@@ -61,21 +46,30 @@ public class GameLoop {
                     case "craft":
                         if (state.inSafeZone) {
                             try {
-                                // Crafting menu
-                                if (state.unlockedRecipes.isEmpty()) {
-                                    TextEffect.typeWriter("You don't know any recipes yet.", 50);
+                                // 🆕 UPDATED: Display only the weapon relevant to the CURRENT ZONE
+                                String targetWeapon = "";
+                                if (state.zone == 1) targetWeapon = "Pencil Blade";
+                                else if (state.zone == 2) targetWeapon = "Logic Blade";
+                                else if (state.zone == 3) targetWeapon = "Aftershock Hammer";
+                                else if (state.zone == 4) targetWeapon = "Trident of Storms";
+                                else targetWeapon = "Unknown";
+
+                                if (targetWeapon.equals("Unknown")) {
+                                    TextEffect.typeWriter("No crafting available in this zone.", 40);
                                     break;
                                 }
 
-                                TextEffect.typeWriter("⚒️ Available recipes:", 50);
-                                List<String> recipes = new ArrayList<>(state.unlockedRecipes); // convert Set to List
-                                for (int i = 0; i < recipes.size(); i++) {
-                                    String recipe = recipes.get(i);
-                                    boolean discovered = state.recipeItems.getOrDefault(recipe, false);
-                                    TextEffect.typeWriter(
-                                            (i + 1) + ". " + recipe + (discovered ? " (discovered)" : " (not found)"),
-                                            40);
-                                }
+                                // Check status for display
+                                boolean hasBlueprint = state.unlockedRecipes.contains(targetWeapon) || targetWeapon.equals("Pencil Blade");
+                                boolean hasRecipe = state.recipeItems.getOrDefault(targetWeapon, false);
+                                
+                                String statusTag;
+                                if (!hasBlueprint) statusTag = " [Blueprint Required]";
+                                else if (!hasRecipe) statusTag = " [Recipe Missing]";
+                                else statusTag = " [Ready to Craft]";
+
+                                TextEffect.typeWriter("⚒️  Zone " + state.zone + " Forge:", 50);
+                                TextEffect.typeWriter("1. " + targetWeapon + statusTag, 40);
                                 TextEffect.typeWriter("0. Cancel", 40);
 
                                 System.out.print("> Choose a recipe number: ");
@@ -85,10 +79,9 @@ public class GameLoop {
                                     int option = Integer.parseInt(choice);
                                     if (option == 0) {
                                         TextEffect.typeWriter("Crafting cancelled.", 40);
-                                    } else if (option > 0 && option <= recipes.size()) {
-                                        String target = recipes.get(option - 1);
-                                        state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state,
-                                                target);
+                                    } else if (option == 1) {
+                                        // Try to craft the target weapon
+                                        state.crystals = CraftingSystem.craftWeapon(player, state.crystals, state, targetWeapon);
                                     } else {
                                         TextEffect.typeWriter("Invalid choice.", 40);
                                     }
@@ -127,11 +120,9 @@ public class GameLoop {
                         }
                         break;
 
-                    // 🆕 NEW: Bag command
                     case "bag":
                         try {
-                            StatusSystem.showBag(state); // new ui
-                            
+                            StatusSystem.showBag(state);
                         } catch (Exception e) {
                             TextEffect.typeWriter("Unable to open your bag right now.", 40);
                             System.err.println("Bag error -> " + e.getMessage());
@@ -162,7 +153,6 @@ public class GameLoop {
 
                     case "move":
                         try {
-                            // Enforce at-least-one-equipped supporter only if the player has supporters
                             if (state.inSafeZone && !state.supporters.isEmpty()) {
                                 boolean anyEquipped = false;
                                 for (rpg.characters.Supporter s : state.supporters) {
@@ -170,7 +160,6 @@ public class GameLoop {
                                 }
                                 if (!anyEquipped) {
                                     TextEffect.typeWriter("You must equip at least one supporter before venturing out.", 50);
-                                    // Open supporter menu to let player equip
                                     rpg.systems.SafeZoneSystem.openSupporterMenu(player, state, scanner);
                                     break;
                                 }
@@ -195,11 +184,9 @@ public class GameLoop {
                 }
 
             } catch (Exception e) {
-                // 🌐 Global catch for unexpected runtime errors
                 TextEffect.typeWriter("An unexpected error occurred. Please try again.", 40);
                 System.err.println("GameLoop error -> " + e.getMessage());
             } finally {
-                // This runs every loop iteration (good place for logging or state checks)
             }
         }
     }
