@@ -73,6 +73,8 @@ package rpg.systems;
 
 import rpg.characters.Player;
 import rpg.game.GameState;
+import rpg.items.Consumable;
+import rpg.items.Consumable.Type;
 import rpg.utils.TextEffect;
 import rpg.ui.UIDesign; // 🆕 NEW IMPORT
 
@@ -90,5 +92,35 @@ public class StatusSystem {
 
     public static void showItemMenu(GameState state) {
         UIDesign.displayItemMenu(state);
+    }
+
+    public static boolean handleItemSelection(GameState state, Player player, int selection) {
+        int optionCursor = 1;
+
+        if (state.meat > 0) {
+            if (selection == optionCursor) {
+                new Consumable(Type.MEAT, "Meat", 10).consume(player, state);
+                return true;
+            }
+            optionCursor++;
+        }
+
+        if (state.mediumPotions > 0) {
+            if (selection == optionCursor) {
+                new Consumable(Type.MEDIUM_POTION, "Potion (Medium)", 25).consume(player, state);
+                return true;
+            }
+            optionCursor++;
+        }
+
+        if (state.revivalPotions > 0) {
+            if (selection == optionCursor) {
+                TextEffect.typeWriter("Revival Potions can only be used outside combat!", 40);
+                return true;
+            }
+            optionCursor++;
+        }
+
+        return false;
     }
 }

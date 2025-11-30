@@ -5,9 +5,6 @@ import java.util.Random;
 import rpg.utils.TextEffect;
 import rpg.characters.Player;
 import rpg.characters.Enemy;
-import rpg.characters.Supporter;
-import rpg.skills.Skill;
-import rpg.items.Consumable;
 import rpg.items.Weapon;
 import rpg.game.GameState;
 // import rpg.systems.BagSystem; --> deleted
@@ -100,35 +97,29 @@ public class CombatSystem {
                             break;
 
                         case "item":
-                        try {
-                            // 🆕 NEW: Show fancy item menu
-                            StatusSystem.showItemMenu(state);
-                            System.out.print("> Choose item: ");
-                            String itemChoice = scanner.nextLine();
-
                             try {
-                                int itemOption = Integer.parseInt(itemChoice);
-                                if (itemOption == 1 && state.meat > 0) {
-                                    if (player.getHp() == player.getMaxHp()) {
-                                        TextEffect.typeWriter("Your HP is already full!", 40);
+                                StatusSystem.showItemMenu(state);
+                                System.out.print("> Choose item: ");
+                                String itemChoice = scanner.nextLine();
+
+                                try {
+                                    int itemOption = Integer.parseInt(itemChoice);
+                                    if (itemOption == 0) {
+                                        TextEffect.typeWriter("You close your bag.", 40);
                                     } else {
-                                        Consumable meat = new Consumable("Meat", 10);
-                                        meat.consume(player, state);
+                                        boolean handled = StatusSystem.handleItemSelection(state, player, itemOption);
+                                        if (!handled) {
+                                            TextEffect.typeWriter("Invalid choice or item unavailable!", 40);
+                                        }
                                     }
-                                } else if (itemOption == 0) {
-                                    TextEffect.typeWriter("You close your bag.", 40);
-                                } else {
-                                    TextEffect.typeWriter("Invalid choice or item unavailable!", 40);
+                                } catch (NumberFormatException e) {
+                                    TextEffect.typeWriter("Invalid choice!", 40);
                                 }
-                            } catch (NumberFormatException e) {
-                                TextEffect.typeWriter("Invalid choice!", 40);
+                            } catch (Exception e) {
+                                TextEffect.typeWriter("Something went wrong while using items!", 40);
+                                System.err.println("Item use error -> " + e.getMessage());
                             }
-                        } catch (Exception e) {
-                            // Fallback: handle unexpected errors gracefully
-                            TextEffect.typeWriter("Something went wrong while using items!", 40);
-                            e.printStackTrace(); // optional: log error for debugging
-                        }
-                        break;
+                            break;
 
                         case "run":
                             try {

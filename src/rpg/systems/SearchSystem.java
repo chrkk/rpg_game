@@ -18,7 +18,8 @@ public class SearchSystem {
             state.meat++;
             TextEffect.typeWriter("You hunt around and find some Meat.", 50);
         } else if (roll < 90) {
-            TextEffect.typeWriter("You discover a small vial of medicine — it might help later.", 50);
+            state.mediumPotions++;
+            TextEffect.typeWriter("You discover a Potion (Medium)! It should restore a good chunk of HP.", 50);
         } else {
             TextEffect.typeWriter("You search the area but find nothing of value.", 50);
         }

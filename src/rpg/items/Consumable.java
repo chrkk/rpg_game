@@ -5,10 +5,17 @@ import rpg.game.GameState;
 import rpg.utils.TextEffect;
 
 public class Consumable {
-    private String name;
-    private int healAmount;
+    public enum Type {
+        MEAT,
+        MEDIUM_POTION
+    }
 
-    public Consumable(String name, int healAmount) {
+    private final String name;
+    private final int healAmount;
+    private final Type type;
+
+    public Consumable(Type type, String name, int healAmount) {
+        this.type = type;
         this.name = name;
         this.healAmount = healAmount;
     }
@@ -16,30 +23,49 @@ public class Consumable {
     public void consume(Player player, GameState state) {
         if (player == null || state == null) return;
 
-        // Check if player has any meat
-        if (state.meat <= 0) {
-            TextEffect.typeWriter("No meat available!", 40);
+        int available = getCount(state);
+        if (available <= 0) {
+            TextEffect.typeWriter("No " + name + " available!", 40);
             return;
         }
 
-        int currentHp = player.getHp();
-        int maxHp = player.getMaxHp();
-        int newHp = currentHp + healAmount;
-
-        // Prevent overhealing
-        if (newHp > maxHp) {
-            newHp = maxHp;
+        if (player.getHp() >= player.getMaxHp()) {
+            TextEffect.typeWriter("Your HP is already full!", 40);
+            return;
         }
 
-        // Heal player using proper setter
+        int newHp = Math.min(player.getHp() + healAmount, player.getMaxHp());
         player.setHp(newHp);
 
-        // Use one meat
-        state.meat -= 1;
+        setCount(state, available - 1);
 
-        TextEffect.typeWriter(player.getName() + " ate Meat and restored " + healAmount + " HP!",40);
+        TextEffect.typeWriter(player.getName() + " used " + name + " and restored " + healAmount + " HP!", 40);
         TextEffect.typeWriter("Current HP: " + player.getHp() + "/" + player.getMaxHp(), 40);
-        TextEffect.typeWriter("Remaining Meat: " + state.meat, 40);
+        TextEffect.typeWriter("Remaining " + name + ": " + getCount(state), 40);
+    }
+
+    private int getCount(GameState state) {
+        switch (type) {
+            case MEAT:
+                return state.meat;
+            case MEDIUM_POTION:
+                return state.mediumPotions;
+            default:
+                return 0;
+        }
+    }
+
+    private void setCount(GameState state, int value) {
+        switch (type) {
+            case MEAT:
+                state.meat = Math.max(0, value);
+                break;
+            case MEDIUM_POTION:
+                state.mediumPotions = Math.max(0, value);
+                break;
+            default:
+                break;
+        }
     }
 
     public String getName() {
