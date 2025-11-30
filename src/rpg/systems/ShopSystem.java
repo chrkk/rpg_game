@@ -9,7 +9,7 @@ public class ShopSystem {
 
     public static void openShop(GameState state, Scanner scanner) {
         try {
-            TextEffect.typeWriter("🛒 Welcome to my shop! What would you like to buy?", 50);
+            TextEffect.typeWriter("🛒 [System] > Merchant Interface Loaded. Browse wares.", 50);
 
             // Get available blueprints based on current zone
             List<Blueprint> availableBlueprints = getAvailableBlueprints(state);
@@ -97,23 +97,20 @@ public class ShopSystem {
         }
     }
 
-    // NEW METHOD: Get blueprints available for current zone
     private static List<Blueprint> getAvailableBlueprints(GameState state) {
         List<Blueprint> available = new ArrayList<>();
         
-        // Zone 2: Crystal Sword only
         if (state.zone >= 2) {
-            available.add(new Blueprint("Crystal Sword Blueprint", "Crystal Sword", 10));
+            available.add(new Blueprint("Logic Blade Blueprint", "Logic Blade", 10));
         }
         
-        // Zone 3: Add Flame Axe (unlock when reaching Zone 3)
         if (state.zone >= 3) {
-            available.add(new Blueprint("Flame Axe Blueprint", "Flame Axe", 15));
+            available.add(new Blueprint("Aftershock Hammer Blueprint", "Aftershock Hammer", 15));
         }
         
-        // Zone 4: Add Thunder Spear (unlock when reaching Zone 4)
+        // ✅ UPDATED: Trident of Storms
         if (state.zone >= 4) {
-            available.add(new Blueprint("Thunder Spear Blueprint", "Thunder Spear", 25));
+            available.add(new Blueprint("Trident of Storms Blueprint", "Trident of Storms", 25));
         }
         
         return available;

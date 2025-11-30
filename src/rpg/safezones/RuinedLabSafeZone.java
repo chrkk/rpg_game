@@ -12,7 +12,7 @@ public class RuinedLabSafeZone implements SafeZone {
         player.healFull();
         state.inSafeZone = true;
         TextEffect.typeWriter("\n[System] > Entering Sector: RUINED_LAB.", 60);
-        TextEffect.typeWriter("The air smells of burnt paper and corrosive chemicals. Your stats have been restored.", 60);
+        TextEffect.typeWriter("The air smells of burnt paper and destroyed PC's. Your stats have been restored.", 60);
 
         if (!state.zone2IntroShown) {
             TextEffect.typeWriter("\n[Memory Echo - Prof. Ashiro] \"We pushed them too hard... The pressure... it broke them.\"", 60);
