@@ -85,6 +85,7 @@ public class UIDesign {
         System.out.println("║  🍖 CONSUMABLES                                          ║");
         System.out.println("║  ────────────────────────────────────────────────────    ║");
         System.out.printf("║     Meat %-47s ║%n", "x" + state.meat);
+            System.out.printf("║     Potion (Medium) %-34s ║%n", "x" + state.mediumPotions);
         System.out.printf("║     Revival Potions %-36s ║%n", "x" + state.revivalPotions);
         System.out.println("║                                                          ║");
         
@@ -321,6 +322,12 @@ public class UIDesign {
         if (state.meat > 0) {
             System.out.printf("║  [%d] 🍖 Meat                    Heal 10 HP      x%-4d    ║%n", 
                 optionNum++, state.meat);
+            hasItems = true;
+        }
+        
+        if (state.mediumPotions > 0) {
+            System.out.printf("║  [%d] 🧪 Potion (Medium)         Heal 25 HP      x%-4d    ║%n",
+                optionNum++, state.mediumPotions);
             hasItems = true;
         }
         

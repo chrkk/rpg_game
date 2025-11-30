@@ -16,10 +16,12 @@ public class ShopSystem {
 
             final int REVIVAL_PRICE = 6;
             final int CRYSTAL_PRICE = 10;
+            final int MEDIUM_POTION_PRICE = 4;
 
             int menuIndex = 1;
             TextEffect.typeWriter((menuIndex++) + ". Revival Potion (" + REVIVAL_PRICE + " Shards)", 40);
             TextEffect.typeWriter((menuIndex++) + ". Crystal (" + CRYSTAL_PRICE + " Shards)", 40);
+            TextEffect.typeWriter((menuIndex++) + ". Potion (Medium) (" + MEDIUM_POTION_PRICE + " Shards)", 40);
 
             // Show only zone-appropriate blueprints
             for (int i = 0; i < availableBlueprints.size(); i++) {
@@ -47,6 +49,7 @@ public class ShopSystem {
                 int base = 1;
                 int revivalOption = base; base++;
                 int crystalOption = base; base++;
+                int mediumPotionOption = base; base++;
                 int firstBlueprintOption = base;
 
                 if (option == revivalOption) {
@@ -62,6 +65,14 @@ public class ShopSystem {
                         state.shards -= CRYSTAL_PRICE;
                         state.crystals += 1;
                         TextEffect.typeWriter("You bought a Crystal. You now have " + state.crystals + " crystals.", 60);
+                    } else {
+                        TextEffect.typeWriter("You don't have enough shards.", 60);
+                    }
+                } else if (option == mediumPotionOption) {
+                    if (state.shards >= MEDIUM_POTION_PRICE) {
+                        state.shards -= MEDIUM_POTION_PRICE;
+                        state.mediumPotions += 1;
+                        TextEffect.typeWriter("You bought a Potion (Medium). You now have " + state.mediumPotions + ".", 60);
                     } else {
                         TextEffect.typeWriter("You don't have enough shards.", 60);
                     }
