@@ -85,7 +85,7 @@ public class UIDesign {
         System.out.println("║  🍖 CONSUMABLES                                          ║");
         System.out.println("║  ────────────────────────────────────────────────────    ║");
         System.out.printf("║     Meat %-47s ║%n", "x" + state.meat);
-            System.out.printf("║     Potion (Medium) %-34s ║%n", "x" + state.mediumPotions);
+            System.out.printf("║     Potion (Medium) %-36s ║%n", "x" + state.mediumPotions);
         System.out.printf("║     Revival Potions %-36s ║%n", "x" + state.revivalPotions);
         System.out.println("║                                                          ║");
         
@@ -173,7 +173,7 @@ public class UIDesign {
         
         System.out.println("\n╔══════════════════════════════════════════════════════════╗");
         System.out.printf("║                  🏠 %-35s  ║%n", zoneName.toUpperCase());
-        System.out.printf("║              (Zone %d Safe Haven)                         ║%n", zone);
+        System.out.printf("║                    (Safe Zone %d)                         ║%n", zone);
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         System.out.println("║                                                          ║");
         
@@ -204,7 +204,7 @@ public class UIDesign {
         
         System.out.println("\n╔══════════════════════════════════════════════════════════╗");
         System.out.printf("║                  🏠 %-35s  ║%n", zoneName.toUpperCase());
-        System.out.printf("║                  (Safe Zone %d)                           ║%n", zone);
+        System.out.printf("║                    (Safe Zone %d)                         ║%n", zone);
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         System.out.println("║                                                          ║");
         

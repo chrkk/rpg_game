@@ -6,24 +6,18 @@ import rpg.game.GameState;
 import rpg.safezones.SafeZone;
 import rpg.safezones.SafeZoneFactory;
 import rpg.utils.TextEffect;
-
 import rpg.ui.UIDesign;
 
 public class SafeZoneSystem {
     public static void enterSafeZone(Player player, GameState state, Scanner scanner) {
-
-        // Normal entry logic
         SafeZone zone = SafeZoneFactory.getZone(state.zone);
-        state.inSafeZone = true; // mark as inside
+        state.inSafeZone = true;
         state.safeZoneMenuShown = false;
         zone.enter(player, state, scanner);
     }
 
-     
-    // 🆕 NEW: Display the safe zone hub menu with fancy UI
     public static void displaySafeZoneMenu(GameState state) {
-        boolean shopUnlocked = state.zone > 1; // Shop unlocks in Zone 2+
-        // Zone 1 (tutorial rooftop) uses the same UI but without supporter management
+        boolean shopUnlocked = state.zone > 1;
         if (state.zone == 1) {
             UIDesign.displaySafeZoneHubNoSupporter(state.zone, shopUnlocked);
         } else {
@@ -40,14 +34,14 @@ public class SafeZoneSystem {
         }
     }
 
-    // Open supporter management menu (view and toggle equip)
+    // ✅ UPDATED: Enhanced supporter menu with better UI
     public static void openSupporterMenu(Player player, GameState state, Scanner scanner) {
         if (!state.inSafeZone) {
             TextEffect.typeWriter("You must be inside a Safe Zone to manage supporters.", 40);
             return;
         }
 
-        // Show a one-time Stage 2 intro the first time the player opens the supporter menu in Stage 2
+        // Show intro for Stage 2
         try {
             if (state.zone == 2 && !state.supporterMenuIntroStage2Shown) {
                 TextEffect.typeWriter("You notice weathered statues scattered outside the lab — echoes of people who once stood guard. You can awaken a statue using a Revival Potion (available from the shop for 6 shards).\nRevived Supporters follow you and lend short, practical aid in combat. After Sir Khai's arrival, more statues may appear while you explore. Equip one Supporter in a Safe Zone to enable their perk.", 60);
@@ -65,19 +59,14 @@ public class SafeZoneSystem {
         boolean done = false;
         while (!done) {
             try {
-                System.out.println();
-                TextEffect.typeWriter("Supporter Menu:\n1) View / Toggle Supporters\n0) Exit", 30);
+                displaySupporterMenuUI(state);
                 System.out.print("> ");
                 String choice = scanner.nextLine().trim();
 
                 switch (choice) {
                     case "1":
-                        for (int i = 0; i < state.supporters.size(); i++) {
-                            rpg.characters.Supporter s = state.supporters.get(i);
-                            TextEffect.typeWriter((i + 1) + ") " + s.toString(), 20);
-                        }
-                        TextEffect.typeWriter("0) Back", 20);
-                        System.out.print("> Toggle number: ");
+                        displaySupporterList(state);
+                        System.out.print("> Toggle number (0 to cancel): ");
                         String sel = scanner.nextLine().trim();
                         try {
                             int idx = Integer.parseInt(sel);
@@ -86,20 +75,7 @@ public class SafeZoneSystem {
                                 TextEffect.typeWriter("Invalid supporter number.", 40);
                                 break;
                             }
-                            rpg.characters.Supporter s = state.supporters.get(idx - 1);
-                            if (!s.isRevived()) {
-                                TextEffect.typeWriter("That supporter is not revived yet.", 40);
-                                break;
-                            }
-                            boolean newState = !s.isEquipped();
-                            if (newState) {
-                                // Unequip all others when equipping this one (single-equipped behavior)
-                                for (rpg.characters.Supporter other : state.supporters) {
-                                    if (other != null && other != s) other.setEquipped(false);
-                                }
-                            }
-                            s.setEquipped(newState);
-                            TextEffect.typeWriter((s.isEquipped() ? "Equipped " : "Unequipped ") + s.getName(), 40);
+                            toggleSupporter(state, idx - 1);
                         } catch (NumberFormatException nfe) {
                             TextEffect.typeWriter("Invalid input.", 40);
                         }
@@ -118,5 +94,68 @@ public class SafeZoneSystem {
                 done = true;
             }
         }
+    }
+
+    // ✅ NEW: Display supporter menu header
+    private static void displaySupporterMenuUI(GameState state) {
+        System.out.println("\n╔══════════════════════════════════════════════════════════╗");
+        System.out.println("║                  👥  SUPPORTER MENU  👥                  ║");
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        System.out.println("║                                                          ║");
+        System.out.println("║  [1] 👁️  View / Toggle Supporters                         ║");
+        System.out.println("║  [0] 🚪 Exit                                             ║");
+        System.out.println("║                                                          ║");
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+    }
+
+    // ✅ NEW: Display supporter list with status icons
+    private static void displaySupporterList(GameState state) {
+        System.out.println("\n╔══════════════════════════════════════════════════════════╗");
+        System.out.println("║                   📋  SUPPORTER LIST  📋                 ║");
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        System.out.println("║                                                          ║");
+        
+        for (int i = 0; i < state.supporters.size(); i++) {
+            rpg.characters.Supporter s = state.supporters.get(i);
+            String revivedIcon = s.isRevived() ? "✅" : "❌";
+            String equippedIcon = s.isEquipped() ? "[E]" : "   ";
+            String line = String.format("║  [%d] %s %s %-38s║", 
+                i + 1, 
+                revivedIcon, 
+                equippedIcon,
+                truncate(s.getName() + " (" + s.getAbility() + ")", 60)
+            );
+            System.out.println(line);
+        }
+        
+        System.out.println("║                                                          ║");
+        System.out.println("║  Legend: ✅ Revived  ❌ Not Revived  [E] Equipped        ║");
+        System.out.println("║                                                          ║");
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+    }
+
+    // ✅ NEW: Toggle supporter equipment
+    private static void toggleSupporter(GameState state, int index) {
+        rpg.characters.Supporter s = state.supporters.get(index);
+        if (!s.isRevived()) {
+            TextEffect.typeWriter("That supporter is not revived yet.", 40);
+            return;
+        }
+        
+        boolean newState = !s.isEquipped();
+        if (newState) {
+            // Unequip all others
+            for (rpg.characters.Supporter other : state.supporters) {
+                if (other != null && other != s) other.setEquipped(false);
+            }
+        }
+        s.setEquipped(newState);
+        TextEffect.typeWriter((s.isEquipped() ? "✅ Equipped " : "❌ Unequipped ") + s.getName(), 40);
+    }
+
+    private static String truncate(String text, int maxLength) {
+        if (text == null) return "";
+        if (text.length() <= maxLength) return text;
+        return text.substring(0, maxLength - 3) + "...";
     }
 }

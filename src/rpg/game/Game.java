@@ -25,13 +25,10 @@ public class Game {
         try {
             while (running) {
                 try {
-                    TextEffect.typeWriter("----------------- DR. CAPSTONE -----------------", 20);
-                    TextEffect.typeWriter("1. START", 20);
-                    TextEffect.typeWriter("2. EXIT", 20);
-                    System.out.print("INPUT: ");
-
+                    //new ui
+                    Intro.displayMainMenu();
                     String choice = scanner.nextLine();
-
+                    
                     switch (choice) {
                         case "1":
                             if (!devSkipIntro) {
