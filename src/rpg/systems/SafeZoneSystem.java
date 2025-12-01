@@ -109,30 +109,55 @@ public class SafeZoneSystem {
     }
 
     // ✅ NEW: Display supporter list with status icons
+    // private static void displaySupporterList(GameState state) {
+    //     System.out.println("\n╔══════════════════════════════════════════════════════════╗");
+    //     System.out.println("║                   📋  SUPPORTER LIST  📋                 ║");
+    //     System.out.println("╠══════════════════════════════════════════════════════════╣");
+    //     System.out.println("║                                                          ║");
+        
+    //     for (int i = 0; i < state.supporters.size(); i++) {
+    //         rpg.characters.Supporter s = state.supporters.get(i);
+    //         String revivedIcon = s.isRevived() ? "✅" : "❌";
+    //         String equippedIcon = s.isEquipped() ? "[E]" : "   ";
+    //         String line = String.format("║  [%d] %s %s %-38s║", 
+    //             i + 1, 
+    //             revivedIcon, 
+    //             equippedIcon,
+    //             truncate(s.getName() + " (" + s.getAbility() + ")", 60)
+    //         );
+    //         System.out.println(line);
+    //     }
+        
+    //     System.out.println("║                                                          ║");
+    //     System.out.println("║  Legend: ✅ Revived  ❌ Not Revived  [E] Equipped        ║");
+    //     System.out.println("║                                                          ║");
+    //     System.out.println("╚══════════════════════════════════════════════════════════╝");
+    // }
+
     private static void displaySupporterList(GameState state) {
-        System.out.println("\n╔══════════════════════════════════════════════════════════╗");
-        System.out.println("║                   📋  SUPPORTER LIST  📋                 ║");
-        System.out.println("╠══════════════════════════════════════════════════════════╣");
-        System.out.println("║                                                          ║");
-        
-        for (int i = 0; i < state.supporters.size(); i++) {
-            rpg.characters.Supporter s = state.supporters.get(i);
-            String revivedIcon = s.isRevived() ? "✅" : "❌";
-            String equippedIcon = s.isEquipped() ? "[E]" : "   ";
-            String line = String.format("║  [%d] %s %s %-38s║", 
-                i + 1, 
-                revivedIcon, 
-                equippedIcon,
-                truncate(s.getName() + " (" + s.getAbility() + ")", 60)
-            );
-            System.out.println(line);
-        }
-        
-        System.out.println("║                                                          ║");
-        System.out.println("║  Legend: ✅ Revived  ❌ Not Revived  [E] Equipped        ║");
-        System.out.println("║                                                          ║");
-        System.out.println("╚══════════════════════════════════════════════════════════╝");
+    System.out.println("\n╔════════════════════════════════════════════════════════════════════╗");
+    System.out.println("║                      📋  SUPPORTER LIST  📋                        ║");
+    System.out.println("╠════════════════════════════════════════════════════════════════════╣");
+    System.out.println("║                                                                    ║");
+    
+    for (int i = 0; i < state.supporters.size(); i++) {
+        rpg.characters.Supporter s = state.supporters.get(i);
+        String revivedIcon = s.isRevived() ? "✅" : "❌";
+        String equippedIcon = s.isEquipped() ? "[E]" : "   ";
+        String line = String.format("║  [%d] %s %s %-50s ║", 
+            i + 1, 
+            revivedIcon, 
+            equippedIcon,
+            truncate(s.getName() + " (" + s.getAbility() + ")", 42) // Adjust text truncation for proper alignment
+        );
+        System.out.println(line);
     }
+    
+    System.out.println("║                                                                    ║");
+    System.out.println("║  Legend: ✅ Revived  ❌ Not Revived  [E] Equipped                  ║");
+    System.out.println("║                                                                    ║");
+    System.out.println("╚════════════════════════════════════════════════════════════════════╝");
+}
 
     // ✅ NEW: Toggle supporter equipment
     private static void toggleSupporter(GameState state, int index) {
