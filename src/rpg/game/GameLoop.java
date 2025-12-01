@@ -35,8 +35,11 @@ public class GameLoop {
                     if (!state.safeZoneMenuShown) {
                         SafeZoneSystem.displaySafeZoneMenu(state);
                         state.safeZoneMenuShown = true;
+                        System.out.print("> ");
+                    } else {
+                        System.out.print("> (craft / search / status / bag / shop / supporter / move): ");
                     }
-                    System.out.print("> ");
+                    
                 } else {
                     state.safeZoneMenuShown = false;
                     System.out.print("> (search / status / bag / move): ");

@@ -116,7 +116,8 @@ public class Game {
         TextEffect.typeWriter("\n[System] > Identify yourself.", 60);
         System.out.print("> Enter your name: ");
         String name = scanner.nextLine();
-
+        TextEffect.typeWriter("\n[System] > Ah, a brave soul enters this broken world...", 40);
+        
         Intro.displayClassSelection(); 
 
         System.out.print("Choice: ");

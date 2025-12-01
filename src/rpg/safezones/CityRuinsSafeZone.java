@@ -47,7 +47,7 @@ public class CityRuinsSafeZone implements SafeZone {
             Thread.currentThread().interrupt();
         }
         
-        TextEffect.typeWriter("\n[Random Person] \"Name's Raze. I've been trying to map the fault lines.\"", 60);
+        TextEffect.typeWriter("\n[Random Person] \"Name's Auralim. I've been trying to map the fault lines.\"", 60);
         TextEffect.typeWriter("\"You feel those tremors? That's not nature. That's HIM.\"", 60);
         
         TextEffect.typeWriter("\n[Auralim] \"Yanig, the Earth-Shaker. He's blocking the path to the Source.\"", 70);

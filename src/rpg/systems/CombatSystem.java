@@ -35,23 +35,11 @@ public class CombatSystem {
                 // increment turn counter at the start of the player's turn
                 turnCount++;
                 try {
-                    // --- Player Turn ---
-                    // TextEffect.typeWriter("\nYour HP: " + player.getHp() + "/" + player.getMaxHp() +
-                    //         " | Mana: " + player.getMana() + "/" + player.getMaxMana() +
-                    //         " | Enemy HP: " + enemy.getHp(), 40);
-                    
                     //new ui display
                     // UIDesign.displayCombatFrame(player, enemy, enemyMaxHp, flavorText); --> will implement soon
                     UIDesign.displayCombatStatus(player, enemy, enemyMaxHp);
                     boolean hasSkills = player.getLevel() >= 2 && player.getSkills().length > 0;
                     UIDesign.displayCombatActions(hasSkills);
-
-                    // ✅ Show skill option only if player has unlocked skills (Level >= 2 and skills assigned)
-                    // if (player.getLevel() >= 2 && player.getSkills().length > 0) {
-                    //     TextEffect.typeWriter("Choose action: attack / defend / skill / item / run", 30);
-                    // } else {
-                    //     TextEffect.typeWriter("Choose action: attack / defend / item / run", 30);
-                    // }
 
                     System.out.print("> ");
                     String action = scanner.nextLine();
