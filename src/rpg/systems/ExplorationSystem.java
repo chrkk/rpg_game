@@ -49,10 +49,10 @@ public class ExplorationSystem {
                 }
             } else {
                 switch (dir.toLowerCase()) {
-                    case "backward":
+                    case "backward", "0": 
                         handleBackward(state, safeZoneAction, zone, player, rand);
                         break;
-                    case "forward":
+                    case "forward", "1":
                         handleForward(player, scanner, rand, state, zone);
                         break;
                     default:
@@ -69,7 +69,7 @@ public class ExplorationSystem {
         if (state.forwardSteps >= 5 && state.bossGateDiscovered) {
             TextEffect.typeWriter("Choose your action:\n1) Safe Zone\n2) Farm\n3) Boss", 40);
         } else {
-            TextEffect.typeWriter("Do you move forward or backward? (forward/backward)", 40);
+            TextEffect.typeWriter("Do you move [1] forward or [0] backward ?", 40);
         }
     }
 
