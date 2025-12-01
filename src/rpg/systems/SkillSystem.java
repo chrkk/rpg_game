@@ -128,33 +128,42 @@ public static void useSkill(Player player, Enemy enemy, Scanner scanner) {
         }
     }
 
-    // ✅ NEW: Fancy skill menu with damage display
-    private static void displaySkillMenu(Skill[] skills, Player player) {
-        System.out.println("\n╔══════════════════════════════════════════════════════════╗");
-        System.out.println("║                   🔮  SKILL MENU  🔮                     ║");
-        System.out.println("╠══════════════════════════════════════════════════════════╣");
-        System.out.println("║                                                          ║");
+    // ✅ NEW: Fancy skill menu with damage display and available mana
+private static void displaySkillMenu(Skill[] skills, Player player) {
+    System.out.println("\n╔══════════════════════════════════════════════════════════╗");
+    System.out.println("║                   🔮  SKILL MENU  🔮                     ║");
+    System.out.println("╠══════════════════════════════════════════════════════════╣");
+    System.out.printf("║  💧 Available Mana: %-36s ║%n", 
+        player.getMana() + "/" + player.getMaxMana());
+    // System.out.println("╠══════════════════════════════════════════════════════════╣");
+    System.out.println("║                                                          ║");
+    
+    for (int i = 0; i < skills.length; i++) {
+        Skill skill = skills[i];
+        int baseDamage = skill.getPower();
+        int totalDamage = baseDamage + (player.getIntelligence() / 2);
         
-        for (int i = 0; i < skills.length; i++) {
-            Skill skill = skills[i];
-            int baseDamage = skill.getPower();
-            int totalDamage = baseDamage + (player.getIntelligence() / 2);
-            
-            String skillLine = String.format(
-                "║  [%d] %-20s MC: %-3d  DMG: %-4d             ║",
-                i + 1,
-                truncate(skill.getName(), 20),
-                skill.getManaCost(),
-                totalDamage
-            );
-            System.out.println(skillLine);
-        }
+        // Check if player has enough mana for this skill
+        boolean canAfford = player.getMana() >= skill.getManaCost();
+        String affordIndicator = canAfford ? "" : " ❌";
         
-        System.out.println("║                                                          ║");
-        System.out.println("║  💡 Damage = Base + (Intelligence / 2)                   ║");
-        System.out.println("║                                                          ║");
-        System.out.println("╚══════════════════════════════════════════════════════════╝");
+        String skillLine = String.format(
+            "║  [%d] %-20s MC: %-3d  DMG: %-4d%s             ║",
+            i + 1,
+            truncate(skill.getName(), 20),
+            skill.getManaCost(),
+            totalDamage,
+            affordIndicator
+        );
+        System.out.println(skillLine);
     }
+    
+    System.out.println("║                                                          ║");
+    System.out.println("║  💡 Damage = Base + (Intelligence / 2)                   ║");
+    // System.out.println("║  ❌ = Not enough mana to cast                            ║");
+    System.out.println("║                                                          ║");
+    System.out.println("╚══════════════════════════════════════════════════════════╝");
+}
 
     private static String truncate(String text, int maxLength) {
         if (text == null) return "";

@@ -56,15 +56,21 @@ public class UIDesign {
     }
 
     public static void displayCombatStatus(Player player, Enemy enemy, int enemyMaxHp) {
-        System.out.println("\n╔═════════════════════════════════════════════════════════════╗");
-        System.out.printf("║   [ENEMY] %-24s HP: %-20s ║%n", 
-            truncate(enemy.getName(), 24),
-            createHealthBar(enemy.getHp(), enemyMaxHp, 10));
-        System.out.printf("║   [YOU]   %-24s HP: %-20s ║%n",
-            truncate(player.getName(), 24),
-            createHealthBar(player.getHp(), player.getMaxHp(), 10));
-        System.out.println("╚═════════════════════════════════════════════════════════════╝");
-    }
+    System.out.println("╔═════════════════════════════════════════════════════════════╗");
+    System.out.println("║                    ⚔️  COMBAT START  ⚔️                       ║");
+    System.out.println("╠═════════════════════════════════════════════════════════════╣");
+    System.out.printf("║   [ENEMY] %-24s HP: %-20s ║%n", 
+        truncate(enemy.getName(), 24),
+        createHealthBar(enemy.getHp(), enemyMaxHp, 10));
+
+    System.out.printf("║   [YOU]   %-24s HP: %-20s ║%n",
+        truncate(player.getName(), 24),
+        createHealthBar(player.getHp(), player.getMaxHp(), 10));
+    System.out.printf("║           %-24s MP: %-20s ║%n",
+        "",
+        createManaBar(player.getMana(), player.getMaxMana(), 10));
+    System.out.println("╚═════════════════════════════════════════════════════════════╝");
+}
 
     // ═══════════════════════════════════════════════════════════
     // BAG SYSTEM UI - UPDATED
@@ -333,7 +339,7 @@ public class UIDesign {
         }
 
         if (state.manaPotions > 0) {
-            System.out.printf("║  [%d] 🔹 Mana Potion            Restore 20 MP   x%-4d    ║%n",
+            System.out.printf("║  [%d] 🔹 Mana Potion             Restore 20 MP   x%-4d    ║%n",
                 optionNum++, state.manaPotions);
             hasItems = true;
         }
