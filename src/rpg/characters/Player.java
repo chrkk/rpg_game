@@ -4,11 +4,9 @@ import rpg.items.Weapon;
 
 // 🆕 Newly added - Skills
 import rpg.skills.Skill;
-import rpg.utils.TextEffect;
 import rpg.skills.ScientistSkills;
 import rpg.skills.FighterSkills;
 import rpg.skills.ArchmageSkills;
-import rpg.characters.Enemy;
 
 public class Player {
     private Weapon weapon;
@@ -279,17 +277,25 @@ public class Player {
             hp = maxHp;
             mana = maxMana;
 
-            TextEffect.typeWriter(
-                "==============================================\n" +
-                "               ✨ LEVEL UP! ✨\n" +
-                "==============================================\n" +
-                "❤️  Max HP +10\n" +
-                "🔮  Max Mana +5\n" +
-                "🛡️  Defense +1\n" +
-                "🧠  Intelligence +1\n" +
-                "==============================================",
-    20
-            );
+            // 🆕 Enhanced Level Up UI
+            String levelUpBanner = 
+                "\n" +
+                "╔══════════════════════════════════════════════════════════╗\n" +
+                "║                   🌟  L E V E L   U P !  🌟              ║\n" +
+                "╠══════════════════════════════════════════════════════════╣\n" +
+                "║                                                          ║\n" +
+                String.format("║  Congratulations! You reached Level %-3d                  ║\n", level) +
+                "║                                                          ║\n" +
+                "║  📈 STATS INCREASED:                                     ║\n" +
+                "║  ────────────────────────────────────────────────────    ║\n" +
+                "║     ❤️  Max HP        +20                                ║\n" +
+                "║     🔮 Max Mana      +10                                ║\n" +
+                "║     🛡️  Defense       +1                                 ║\n" +
+                "║     🧠 Intelligence  +2                                 ║\n" +
+                "║                                                          ║\n" +
+                "╚══════════════════════════════════════════════════════════╝\n";
+
+            System.out.println(levelUpBanner);
 
             // Unlock skills at Level 2
             if (level == 2 && (skills == null || skills.length == 0)) {

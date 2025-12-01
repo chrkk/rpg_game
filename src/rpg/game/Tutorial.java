@@ -112,14 +112,14 @@ public class Tutorial {
                                 state.forwardSteps++;
 
                                 TutorialCombatSystem tutorialCombat = new TutorialCombatSystem(state);
-                                Enemy tutorialEnemy = new Enemy("Wild Beast", 20, 5, 8, 15);
+                                Enemy tutorialEnemy = new Enemy("Friends asking you to Drink", 20, 5, 8, 15);
 
                                 boolean win = tutorialCombat.startTutorialCombat(player, tutorialEnemy);
 
                                 if (win) {
-                                    TextEffect.typeWriter("✅ You overcame the Wild Beast. The path forward is clear.",
+                                    TextEffect.typeWriter("✅ You overcame the Friends asking you to Drink. The path forward is clear.",
                                             80);
-                                    TextEffect.typeWriter("⚔️ Remember: the Wild Beast was only an obstacle.", 80);
+                                    TextEffect.typeWriter("⚔️ Remember: the Friends asking you to Drink was only an obstacle.", 80);
                                     TextEffect.typeWriter(
                                             "🎯 Your true goal is to keep moving forward get stronger until you face the Fractured Logo.",
                                             80);
