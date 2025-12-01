@@ -28,7 +28,7 @@ public class Game {
                     //new ui
                     Intro.displayMainMenu();
                     String choice = scanner.nextLine();
-
+                    
                     switch (choice) {
                         case "1":
                             if (!devSkipIntro) {

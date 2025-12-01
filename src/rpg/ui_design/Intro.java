@@ -48,7 +48,7 @@ public class Intro {
         System.out.println("    ║                                                 ║");
         System.out.println("    ═══════════════════════════════════════════════════");
         System.out.println();
-        System.out.print(" > ");
+        System.out.print(" > Enter your choice: ");
     }
 
     public static void displayClassSelection() {
