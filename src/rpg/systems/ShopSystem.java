@@ -228,16 +228,32 @@ public class ShopSystem {
         System.out.println("╠══════════════════════════════════════════════════════════╣");
     }
 
-    // ✅ NEW: Display individual shop items with better formatting
+     // ✅ NEW: Display individual shop items with better formatting
     private static void displayShopItem(int index, String itemName, int price, boolean owned) {
         String status = owned ? " [OWNED]" : "";
-        String line = String.format("║  [%d] %-35s %3d 💎%-7s   ║", 
-            index, 
-            truncate(itemName, 35), 
-            price,
-            status
-        );
-        System.out.println(line);
+        
+        // Check if it's a blueprint (longer name with "Blueprint" in it)
+        boolean isBlueprint = itemName.toLowerCase().contains("blueprint");
+        
+        if (isBlueprint) {
+            // Blueprint format - slightly tighter spacing
+            String line = String.format("║  [%d] %-32s %3d 💎%s     ║", 
+                index, 
+                truncate(itemName, 32), 
+                price,
+                status
+            );
+            System.out.println(line);
+        } else {
+            // Regular item format
+            String line = String.format("║  [%d] %-35s %3d 💎%-7s   ║", 
+                index, 
+                truncate(itemName, 35), 
+                price,
+                status
+            );
+            System.out.println(line);
+        }
     }
 
     // ✅ NEW: Helper method for purchasing with feedback
