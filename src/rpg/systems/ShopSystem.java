@@ -136,6 +136,8 @@ import rpg.game.GameState;
 import rpg.items.Blueprint;
 
 public class ShopSystem {
+    // Width used for padded shop content so the right border aligns with the frame
+    private static final int SHOP_INNER_WIDTH = 55;
 
     public static void openShop(GameState state, Scanner scanner) {
         try {
@@ -236,29 +238,21 @@ public class ShopSystem {
      // ✅ NEW: Display individual shop items with better formatting
     private static void displayShopItem(int index, String itemName, int price, boolean owned) {
         String status = owned ? " [OWNED]" : "";
-        
-        // Check if it's a blueprint (longer name with "Blueprint" in it)
-        boolean isBlueprint = itemName.toLowerCase().contains("blueprint");
-        
-        if (isBlueprint) {
-            // Blueprint format - slightly tighter spacing
-            String line = String.format("║  [%d] %-32s %3d 💎%s     ║", 
-                index, 
-                truncate(itemName, 32), 
-                price,
-                status
-            );
-            System.out.println(line);
-        } else {
-            // Regular item format
-            String line = String.format("║  [%d] %-35s %3d 💎%-7s   ║", 
-                index, 
-                truncate(itemName, 35), 
-                price,
-                status
-            );
-            System.out.println(line);
+        String label = String.format("[%d] %s", index, itemName);
+        // Reserve room for the price column and status badge to avoid overflowing the frame
+        int labelMax = Math.max(1, SHOP_INNER_WIDTH - 12);
+        label = truncate(label, labelMax);
+        String priceTag = String.format("%3d 💎", price);
+        String content = String.format("%-" + labelMax + "s  %-7s%s", label, priceTag, status);
+        printShopLine(content);
+    }
+
+    private static void printShopLine(String content) {
+        if (content == null) {
+            content = "";
         }
+        content = truncate(content, SHOP_INNER_WIDTH);
+        System.out.printf("║  %-" + SHOP_INNER_WIDTH + "s ║%n", content);
     }
 
     // ✅ NEW: Helper method for purchasing with feedback
@@ -293,7 +287,8 @@ public class ShopSystem {
 
     private static String truncate(String text, int maxLength) {
         if (text == null) return "";
+        if (maxLength <= 0) return "";
         if (text.length() <= maxLength) return text;
-        return text.substring(0, maxLength - 3) + "...";
+        return text.substring(0, Math.max(0, maxLength - 3)) + "...";
     }
 }

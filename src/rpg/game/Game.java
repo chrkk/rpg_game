@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.Random;
 import rpg.utils.TextEffect;
 import rpg.characters.Player;
+import rpg.characters.Supporter;
 import rpg.items.Weapon;
 import rpg.ui_design.Intro;
 
@@ -241,6 +242,7 @@ public class Game {
             if (zone >= 2)
                 state.shopUnlocked = true;
             ensureWeaponProgressForZone(zone);
+            ensureSirKhaiForZone(zone);
             System.out.println(">> Zone set to " + zone + ". Progress counters reset.");
         } catch (NumberFormatException e) {
             System.out.println("Invalid number for zone.");
@@ -259,6 +261,41 @@ public class Game {
         }
         if (zone >= 5) {
             state.stage4WeaponCrafted = true;
+        }
+    }
+
+    private void ensureSirKhaiForZone(int zone) {
+        if (zone < 2) {
+            return;
+        }
+
+        Supporter sirKhai = null;
+        for (Supporter supporter : state.supporters) {
+            if (supporter != null && supporter.getName() != null
+                    && supporter.getName().equalsIgnoreCase("Sir Khai")) {
+                sirKhai = supporter;
+                break;
+            }
+        }
+
+        if (sirKhai == null) {
+            sirKhai = new Supporter("Sir Khai", "Mentor", "Guidance Heal");
+            state.supporters.add(sirKhai);
+        }
+
+        sirKhai.setRevived(true);
+        state.metSirKhai = true;
+
+        boolean supporterEquipped = false;
+        for (Supporter supporter : state.supporters) {
+            if (supporter != null && supporter.isEquipped()) {
+                supporterEquipped = true;
+                break;
+            }
+        }
+
+        if (!supporterEquipped) {
+            sirKhai.setEquipped(true);
         }
     }
 
