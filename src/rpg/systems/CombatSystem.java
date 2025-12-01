@@ -157,7 +157,7 @@ public class CombatSystem {
 
                             int actualDamage = player.takeDamage(dmgTaken);
                             TextEffect.typeWriter(
-                                    "The " + enemy.getName() + " attacks! You take " + actualDamage + " damage.", 40);
+                                    "The [" + enemy.getName() + "] attacks! You take " + actualDamage + " damage.", 40);
                         } catch (Exception e) {
                             TextEffect.typeWriter("The enemy falters in its attack.", 40);
                             System.err.println("Enemy action error -> " + e.getMessage());
