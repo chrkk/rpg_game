@@ -18,7 +18,7 @@ public class SupporterPool {
         pool.put(2, Arrays.asList(
             new Supporter("School Security Guard", "Guardian", "Protect"),
             new Supporter("Canteen Staff", "Merchant", "Snack Aid"),
-            new Supporter("Ma'am Dean", "Discipline", "Command")
+            new Supporter("Ma'am Cath", "Discipline", "Command")
         ));
 
         // Stage 3 – City Ruins
@@ -29,8 +29,8 @@ public class SupporterPool {
 
         // Stage 4 – Fractured Sky
         pool.put(4, Arrays.asList(
-            new Supporter("Skybridge Surveyor", "Scout", "Updraft"),
-            new Supporter("Glass Elevator Operator", "Engineer", "Stabilize")
+            new Supporter("Kuya Kim", "Scout", "Updraft"),
+            new Supporter("Mr. Topnotcher", "Engineer", "Stabilize")
         ));
     }
 

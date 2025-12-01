@@ -8,8 +8,6 @@ import rpg.systems.ExplorationSystem;
 import rpg.systems.StatusSystem;
 import rpg.systems.ShopSystem;
 import rpg.utils.TextEffect;
-import java.util.List;
-import java.util.ArrayList;
 // import rpg.systems.BagSystem; --> deleted
 
 import rpg.systems.SafeZoneSystem;

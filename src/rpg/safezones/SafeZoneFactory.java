@@ -1,8 +1,7 @@
 package rpg.safezones;
 
 //----> Remove Scanner
-import rpg.characters.Player;
-import rpg.game.GameState;
+
 
 public class SafeZoneFactory {
     public static SafeZone getZone(int zone) {

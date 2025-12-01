@@ -9,14 +9,7 @@ import rpg.items.Weapon;
 import rpg.characters.Enemy;
 import rpg.systems.TutorialCombatSystem;
 
-import rpg.ui.UIDesign; //new
-
-// new imports for meat consumable
-import rpg.items.Consumable;
-import rpg.game.GameState;
-
 import rpg.ui_design.Intro;
-import rpg.systems.StatusSystem;
 
 public class Tutorial {
     private final Scanner scanner;

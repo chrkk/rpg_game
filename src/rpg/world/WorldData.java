@@ -43,7 +43,7 @@ public class WorldData {
                                 new Enemy("Mental Block", 100, 20, 28, 42),
                                 new Enemy("Academic Burnout", 85, 17, 24, 38)
                         },
-                        new Enemy("Ang Lindol, the Academic-Shaker", 220, 25, 35, 90), 
+                        new Enemy("Lindol Academic-Shaker", 220, 25, 35, 90), 
                         new Weapon("Aftershock Hammer", 16, 24, 0.10, 1.6));
 
             case 4:
