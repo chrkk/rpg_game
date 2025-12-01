@@ -222,6 +222,15 @@ public class Player {
         mana = Math.max(0, mana - cost);
     }
 
+    public int restoreMana(int amount) {
+        if (amount <= 0) {
+            return 0;
+        }
+        int beforeMana = mana;
+        mana = Math.min(maxMana, mana + amount);
+        return mana - beforeMana;
+    }
+
     public void healFull() {
         hp = maxHp;
         mana = maxMana;

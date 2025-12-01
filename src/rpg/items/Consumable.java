@@ -7,17 +7,18 @@ import rpg.utils.TextEffect;
 public class Consumable {
     public enum Type {
         MEAT,
-        MEDIUM_POTION
+        MEDIUM_POTION,
+        MANA_POTION
     }
 
     private final String name;
-    private final int healAmount;
+    private final int effectAmount;
     private final Type type;
 
-    public Consumable(Type type, String name, int healAmount) {
+    public Consumable(Type type, String name, int effectAmount) {
         this.type = type;
         this.name = name;
-        this.healAmount = healAmount;
+        this.effectAmount = effectAmount;
     }
 
     public void consume(Player player, GameState state) {
@@ -29,18 +30,41 @@ public class Consumable {
             return;
         }
 
-        if (player.getHp() >= player.getMaxHp()) {
-            TextEffect.typeWriter("Your HP is already full!", 40);
+        int restoredAmount = 0;
+        switch (type) {
+            case MEAT:
+            case MEDIUM_POTION:
+                if (player.getHp() >= player.getMaxHp()) {
+                    TextEffect.typeWriter("Your HP is already full!", 40);
+                    return;
+                }
+                int beforeHp = player.getHp();
+                player.setHp(player.getHp() + effectAmount);
+                restoredAmount = player.getHp() - beforeHp;
+                break;
+            case MANA_POTION:
+                if (player.getMana() >= player.getMaxMana()) {
+                    TextEffect.typeWriter("Your mana is already full!", 40);
+                    return;
+                }
+                restoredAmount = player.restoreMana(effectAmount);
+                break;
+            default:
+                break;
+        }
+
+        if (restoredAmount <= 0) {
             return;
         }
 
-        int newHp = Math.min(player.getHp() + healAmount, player.getMaxHp());
-        player.setHp(newHp);
-
         setCount(state, available - 1);
 
-        TextEffect.typeWriter(player.getName() + " used " + name + " and restored " + healAmount + " HP!", 40);
-        TextEffect.typeWriter("Current HP: " + player.getHp() + "/" + player.getMaxHp(), 40);
+        String restoredStat = (type == Type.MANA_POTION) ? "Mana" : "HP";
+        TextEffect.typeWriter(player.getName() + " used " + name + " and restored " + restoredAmount + " " + restoredStat + "!", 40);
+        String currentStat = (type == Type.MANA_POTION)
+                ? player.getMana() + "/" + player.getMaxMana()
+                : player.getHp() + "/" + player.getMaxHp();
+        TextEffect.typeWriter("Current " + restoredStat + ": " + currentStat, 40);
         TextEffect.typeWriter("Remaining " + name + ": " + getCount(state), 40);
     }
 
@@ -50,6 +74,8 @@ public class Consumable {
                 return state.meat;
             case MEDIUM_POTION:
                 return state.mediumPotions;
+            case MANA_POTION:
+                return state.manaPotions;
             default:
                 return 0;
         }
@@ -63,6 +89,9 @@ public class Consumable {
             case MEDIUM_POTION:
                 state.mediumPotions = Math.max(0, value);
                 break;
+            case MANA_POTION:
+                state.manaPotions = Math.max(0, value);
+                break;
             default:
                 break;
         }
@@ -73,6 +102,6 @@ public class Consumable {
     }
 
     public int getHealAmount() {
-        return healAmount;
+        return effectAmount;
     }
 }

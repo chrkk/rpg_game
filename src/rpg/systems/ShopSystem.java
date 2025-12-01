@@ -147,12 +147,14 @@ public class ShopSystem {
             final int REVIVAL_PRICE = 6;
             final int CRYSTAL_PRICE = 10;
             final int MEDIUM_POTION_PRICE = 4;
+            final int MANA_POTION_PRICE = 5;
 
             int menuIndex = 1;
             System.out.println("║                                                          ║");
             displayShopItem(menuIndex++, "Revival Potion", REVIVAL_PRICE, false);
             displayShopItem(menuIndex++, "Crystal", CRYSTAL_PRICE, false);
             displayShopItem(menuIndex++, "Potion (Medium)", MEDIUM_POTION_PRICE, false);
+            displayShopItem(menuIndex++, "Mana Potion", MANA_POTION_PRICE, false);
 
             // Show zone-appropriate blueprints
             for (Blueprint bp : availableBlueprints) {
@@ -179,6 +181,7 @@ public class ShopSystem {
                 int revivalOption = base++;
                 int crystalOption = base++;
                 int mediumPotionOption = base++;
+                int manaPotionOption = base++;
                 int firstBlueprintOption = base;
 
                 if (option == revivalOption) {
@@ -187,6 +190,8 @@ public class ShopSystem {
                     purchaseItem(state, "Crystal", CRYSTAL_PRICE, () -> state.crystals++);
                 } else if (option == mediumPotionOption) {
                     purchaseItem(state, "Potion (Medium)", MEDIUM_POTION_PRICE, () -> state.mediumPotions++);
+                } else if (option == manaPotionOption) {
+                    purchaseItem(state, "Mana Potion", MANA_POTION_PRICE, () -> state.manaPotions++);
                 } else if (option >= firstBlueprintOption && option < firstBlueprintOption + availableBlueprints.size()) {
                     int idx = option - firstBlueprintOption;
                     Blueprint selected = availableBlueprints.get(idx);
