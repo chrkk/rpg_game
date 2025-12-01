@@ -113,6 +113,14 @@ public class StatusSystem {
             optionCursor++;
         }
 
+        if (state.manaPotions > 0) {
+            if (selection == optionCursor) {
+                new Consumable(Type.MANA_POTION, "Mana Potion", 20).consume(player, state);
+                return true;
+            }
+            optionCursor++;
+        }
+
         if (state.revivalPotions > 0) {
             if (selection == optionCursor) {
                 TextEffect.typeWriter("Revival Potions can only be used outside combat!", 40);

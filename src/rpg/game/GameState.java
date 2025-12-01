@@ -17,6 +17,7 @@ public class GameState {
     public int shards = 0;
     public int meat = 0;
     public int mediumPotions = 0;
+    public int manaPotions = 0;
     public int revivalPotions = 0;
     public Enemy currentZoneBoss;
     public boolean inSafeZone = false;
