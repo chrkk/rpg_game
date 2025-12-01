@@ -428,7 +428,7 @@ public class ExplorationSystem {
         TextEffect.typeWriter("\nIt's a glowing blue Crystal Shard.", 100);
 
         TextEffect.typeWriter("\nAnd then, text appears... floating in the air right in front of your face:", 60);
-        TextEffect.typeWriter("\n[System] > New Game Plus Available. Do you wish to continue?", 80);
+        TextEffect.typeWriter("\n[System] > New Game Available. Do you wish to continue?", 80);
 
         TextEffect.typeWriter("\nTHANK YOU FOR PLAYING DR. CAPSTONE.", 100);
     }
