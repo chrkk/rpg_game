@@ -41,12 +41,12 @@ public class ObservationDeckSafeZone implements SafeZone {
         pause(600);
 
         TextEffect.typeWriter("A familiar rasp echoes from a maintenance alcove.", 60);
-        TextEffect.typeWriter("[Kuro] 'Bit wet up here, isn't it?'", 60);
-        TextEffect.typeWriter("[Kuro] 'That thing outside... Bagyong Tino. It's not just a storm.'", 60);
-        TextEffect.typeWriter("[Kuro] 'It's pure rage. You'll need the Trident of Storms to pierce the eye.'", 60);
-        TextEffect.typeWriter("Kuro has set up a compact shop here. The Trident of Storms blueprint is now for sale.", 60);
+        TextEffect.typeWriter("[Tamago] 'Bit wet up here, isn't it?'", 60);
+        TextEffect.typeWriter("[Tamago] 'That thing outside... Bagyong Tino. It's not just a storm.'", 60);
+        TextEffect.typeWriter("[Tamago] 'It's pure rage. You'll need the Trident of Storms to pierce the eye.'", 60);
+        TextEffect.typeWriter("Tamago has set up a compact shop here. The Trident of Storms blueprint is now for sale.", 60);
 
-        System.out.print("Browse Kuro's wares now? (yes/no): ");
+        System.out.print("Browse Tamago's wares now? (yes/no): ");
         String choice = scanner.nextLine();
         if (choice.equalsIgnoreCase("yes")) {
             ShopSystem.openShop(state, scanner);
