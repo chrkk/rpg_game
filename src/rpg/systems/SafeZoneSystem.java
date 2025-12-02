@@ -36,7 +36,6 @@ public class SafeZoneSystem {
         }
     }
 
-    // ✅ UPDATED: Enhanced supporter menu with better UI
     public static void openSupporterMenu(Player player, GameState state, Scanner scanner) {
         if (!state.inSafeZone) {
             TextEffect.typeWriter("You must be inside a Safe Zone to manage supporters.", 40);
@@ -98,7 +97,6 @@ public class SafeZoneSystem {
         }
     }
 
-    // ✅ NEW: Display supporter menu header
     private static void displaySupporterMenuUI(GameState state) {
         System.out.println("\n╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                  👥  SUPPORTER MENU  👥                  ║");
@@ -149,7 +147,6 @@ public class SafeZoneSystem {
         supporterLine("");
     }
 
-    // ✅ NEW: Toggle supporter equipment
     private static void toggleSupporter(GameState state, int index) {
         rpg.characters.Supporter s = state.supporters.get(index);
         if (!s.isRevived()) {
