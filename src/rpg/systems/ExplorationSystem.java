@@ -271,7 +271,7 @@ public class ExplorationSystem {
                 }
             }
             if (sirKhai == null) {
-                sirKhai = new Supporter("Sir Khai", "Mentor", "Guidance Heal");
+                sirKhai = new Supporter("Sir Khai", "Guidance Heal");
                 state.supporters.add(sirKhai);
             }
 

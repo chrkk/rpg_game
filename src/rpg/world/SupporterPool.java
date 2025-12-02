@@ -11,26 +11,26 @@ public class SupporterPool {
     static {
         // Stage 1 – School Rooftop (only Sir Khai; others introduced later)
         pool.put(1, Arrays.asList(
-            new Supporter("Sir Khai", "Teacher", "Guidance") // scripted, kept
+            new Supporter("Sir Khai", "Guidance") // scripted, kept
         ));
 
         // Stage 2 – Ruined Lab
         pool.put(2, Arrays.asList(
-            new Supporter("School Security Guard", "Guardian", "Protect"),
-            new Supporter("Canteen Staff", "Merchant", "Snack Aid"),
-            new Supporter("Ma'am Cath", "Discipline", "Command")
+            new Supporter("School Security Guard", "Protect"),
+            new Supporter("Canteen Staff", "Snack Aid"),
+            new Supporter("Ma'am Cath", "Command")
         ));
 
         // Stage 3 – City Ruins
         pool.put(3, Arrays.asList(
-            new Supporter("Jeepney Philosopher", "Philosopher", "Musing"),
-            new Supporter("Mr. CodeChum", "Coder", "Debug")
+            new Supporter("Jeepney Philosopher", "Musing"),
+            new Supporter("Mr. CodeChum", "Debug")
         ));
 
         // Stage 4 – Fractured Sky
         pool.put(4, Arrays.asList(
-            new Supporter("Kuya Kim", "Scout", "Updraft"),
-            new Supporter("Mr. Topnotcher", "Engineer", "Stabilize")
+            new Supporter("Kuya Kim", "Updraft"),
+            new Supporter("Mr. Topnotcher", "Stabilize")
         ));
     }
 

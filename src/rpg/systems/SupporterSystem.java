@@ -48,7 +48,7 @@ public class SupporterSystem {
                 // ensure a combat state exists
                 combatState.putIfAbsent(s, new SupporterCombatState());
 
-                // For the small unique set of supporters we check by name/trait
+                // For the small unique set of supporters we check by name/ability label
                 String lname = s.getName() == null ? "" : s.getName().toLowerCase();
                 if (lname.contains("sir khai") || lname.contains("khai")) {
                     TextEffect.typeWriter(s.getName() + " offers guidance from the sidelines — you feel steadier. (DEF +5 for this fight)", 40);
@@ -73,6 +73,7 @@ public class SupporterSystem {
 
                 // Use name/ability-based unique supporter behaviors for the small fixed set
                 String lname = s.getName() == null ? "" : s.getName().toLowerCase();
+                String lability = s.getAbility() == null ? "" : s.getAbility().toLowerCase();
                 if (lname.contains("sir khai") || lname.contains("khai")) {
                     String[] khaiLines = new String[] {
                         "Sir Khai: 'Breathe, and strike with purpose.'",
@@ -89,20 +90,20 @@ public class SupporterSystem {
                         player.addTemporaryIntelligence(3);
                         st.inspireRemaining = 2;
                     }
-                } else if (lname.contains("dean")) {
-                    String[] deanLines = new String[] {
-                        "Ma'am Dean: 'Stay disciplined — control the fight.'",
-                        "Ma'am Dean: 'Maintain your stance!'",
-                        "Ma'am Dean: 'Don't let your guard drop.'"
+                } else if (lname.contains("cath")) {
+                    String[] cathLines = new String[] {
+                        "Ma'am Cath: 'Stay disciplined — control the fight.'",
+                        "Ma'am Cath: 'Maintain your stance!'",
+                        "Ma'am Cath: 'Don't let your guard drop.'"
                     };
-                    if (rand.nextInt(100) < speakChance) TextEffect.typeWriter(deanLines[rand.nextInt(deanLines.length)], 25);
+                    if (rand.nextInt(100) < speakChance) TextEffect.typeWriter(cathLines[rand.nextInt(cathLines.length)], 25);
 
                     if (st.defRemaining == 0 && turnCount % 4 == 0 && rand.nextInt(100) < 30) {
                         TextEffect.typeWriter(s.getName() + " barks an order — you plant your feet. (+DEF +4 for 1 turn)", 40);
                         player.addTemporaryDefense(4);
                         st.defRemaining = 1;
                     }
-                } else if (lname.contains("canteen") || (s.getTrait() != null && s.getTrait().toLowerCase().contains("merchant")) || lname.contains("kael")) {
+                } else if (lname.contains("canteen") || lname.contains("kael") || lability.contains("snack")) {
                     String[] canteenLines = new String[] {
                         "Canteen Staff: 'You need energy? I've got something warm.'",
                         "Canteen Staff: 'Eat up — this'll keep you going.'",
