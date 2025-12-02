@@ -97,7 +97,6 @@ public class Intro {
         System.out.print(selection);
     }
 
-    // ✅ FIXED: Now uses the same wrapping logic as UIDesign
     public static void displayTutorialSafeZone() {
         String zoneName = "School Rooftop";
         String zoneDescription = "The wind is calm here. Vines creep across shattered tiles.";
@@ -108,7 +107,6 @@ public class Intro {
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         System.out.println("║                                                          ║");
 
-        // ✅ USE THE SAME WRAPPING METHOD AS UIDesign
         wrapAndPrint(zoneDescription, 54);
 
         System.out.println("║                                                          ║");
@@ -124,7 +122,6 @@ public class Intro {
         System.out.println("╚══════════════════════════════════════════════════════════╝");
     }
 
-    // ✅ ADDED: Copy of the wrapping method from UIDesign to ensure consistency
     private static void wrapAndPrint(String text, int maxWidth) {
         if (text == null || text.isEmpty()) return;
         

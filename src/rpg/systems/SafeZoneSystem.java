@@ -9,6 +9,8 @@ import rpg.utils.TextEffect;
 import rpg.ui.UIDesign;
 
 public class SafeZoneSystem {
+    // Width for supporter list content so borders line up with the frame (60 chars total)
+    private static final int SUPPORTER_INNER_WIDTH = 55;
     public static void enterSafeZone(Player player, GameState state, Scanner scanner) {
         SafeZone zone = SafeZoneFactory.getZone(state.zone);
         state.inSafeZone = true;
@@ -34,7 +36,6 @@ public class SafeZoneSystem {
         }
     }
 
-    // ✅ UPDATED: Enhanced supporter menu with better UI
     public static void openSupporterMenu(Player player, GameState state, Scanner scanner) {
         if (!state.inSafeZone) {
             TextEffect.typeWriter("You must be inside a Safe Zone to manage supporters.", 40);
@@ -96,7 +97,6 @@ public class SafeZoneSystem {
         }
     }
 
-    // ✅ NEW: Display supporter menu header
     private static void displaySupporterMenuUI(GameState state) {
         System.out.println("\n╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                  👥  SUPPORTER MENU  👥                  ║");
@@ -108,58 +108,45 @@ public class SafeZoneSystem {
         System.out.println("╚══════════════════════════════════════════════════════════╝");
     }
 
-    // ✅ NEW: Display supporter list with status icons
-    // private static void displaySupporterList(GameState state) {
-    //     System.out.println("\n╔══════════════════════════════════════════════════════════╗");
-    //     System.out.println("║                   📋  SUPPORTER LIST  📋                 ║");
-    //     System.out.println("╠══════════════════════════════════════════════════════════╣");
-    //     System.out.println("║                                                          ║");
-        
-    //     for (int i = 0; i < state.supporters.size(); i++) {
-    //         rpg.characters.Supporter s = state.supporters.get(i);
-    //         String revivedIcon = s.isRevived() ? "✅" : "❌";
-    //         String equippedIcon = s.isEquipped() ? "[E]" : "   ";
-    //         String line = String.format("║  [%d] %s %s %-38s║", 
-    //             i + 1, 
-    //             revivedIcon, 
-    //             equippedIcon,
-    //             truncate(s.getName() + " (" + s.getAbility() + ")", 60)
-    //         );
-    //         System.out.println(line);
-    //     }
-        
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("║  Legend: ✅ Revived  ❌ Not Revived  [E] Equipped        ║");
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("╚══════════════════════════════════════════════════════════╝");
-    // }
-
     private static void displaySupporterList(GameState state) {
-    System.out.println("\n╔════════════════════════════════════════════════════════════════════╗");
-    System.out.println("║                      📋  SUPPORTER LIST  📋                        ║");
-    System.out.println("╠════════════════════════════════════════════════════════════════════╣");
-    System.out.println("║                                                                    ║");
-    
-    for (int i = 0; i < state.supporters.size(); i++) {
-        rpg.characters.Supporter s = state.supporters.get(i);
-        String revivedIcon = s.isRevived() ? "✅" : "❌";
-        String equippedIcon = s.isEquipped() ? "[E]" : "   ";
-        String line = String.format("║  [%d] %s %s %-50s ║", 
-            i + 1, 
-            revivedIcon, 
-            equippedIcon,
-            truncate(s.getName() + " (" + s.getAbility() + ")", 42) // Adjust text truncation for proper alignment
-        );
-        System.out.println(line);
-    }
-    
-    System.out.println("║                                                                    ║");
-    System.out.println("║  Legend: ✅ Revived  ❌ Not Revived  [E] Equipped                  ║");
-    System.out.println("║                                                                    ║");
-    System.out.println("╚════════════════════════════════════════════════════════════════════╝");
-}
+        System.out.println("\n╔══════════════════════════════════════════════════════════╗");
+        supporterLine(centerText("👥 SUPPORTER LIST 👥"));
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        supporterSpacer();
 
-    // ✅ NEW: Toggle supporter equipment
+        for (int i = 0; i < state.supporters.size(); i++) {
+            rpg.characters.Supporter supporter = state.supporters.get(i);
+            String equippedIcon = supporter.isEquipped() ? "⭐" : "  ";
+            String prefix = String.format("[%d] %s ", i + 1, equippedIcon);
+            int remaining = Math.max(1, SUPPORTER_INNER_WIDTH - prefix.length());
+            String details = truncate(supporter.getName() + " (" + supporter.getAbility() + ")", remaining);
+            supporterLine(prefix + details);
+        }
+
+        supporterSpacer();
+        supporterLine("Legend: ⭐ Equipped");
+        supporterSpacer();
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+    }
+
+    private static void supporterLine(String text) {
+        if (text == null) {
+            text = "";
+        }
+        String trimmed = truncateDisplayWidth(text, SUPPORTER_INNER_WIDTH);
+        int displayWidth = getDisplayWidth(trimmed);
+        StringBuilder sb = new StringBuilder(trimmed);
+        while (displayWidth < SUPPORTER_INNER_WIDTH) {
+            sb.append(' ');
+            displayWidth++;
+        }
+        System.out.println("║  " + sb + " ║");
+    }
+
+    private static void supporterSpacer() {
+        supporterLine("");
+    }
+
     private static void toggleSupporter(GameState state, int index) {
         rpg.characters.Supporter s = state.supporters.get(index);
         if (!s.isRevived()) {
@@ -180,7 +167,62 @@ public class SafeZoneSystem {
 
     private static String truncate(String text, int maxLength) {
         if (text == null) return "";
+        if (maxLength <= 0) return "";
         if (text.length() <= maxLength) return text;
-        return text.substring(0, maxLength - 3) + "...";
+        return text.substring(0, Math.max(0, maxLength - 3)) + "...";
+    }
+
+    private static String centerText(String text) {
+        if (text == null) {
+            return "";
+        }
+        int displayWidth = getDisplayWidth(text);
+        if (displayWidth >= SUPPORTER_INNER_WIDTH) {
+            return truncateDisplayWidth(text, SUPPORTER_INNER_WIDTH);
+        }
+        int totalPadding = SUPPORTER_INNER_WIDTH - displayWidth;
+        int left = totalPadding / 2;
+        int right = totalPadding - left;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < left; i++) sb.append(' ');
+        sb.append(text);
+        for (int i = 0; i < right; i++) sb.append(' ');
+        return sb.toString();
+    }
+
+    private static String truncateDisplayWidth(String text, int maxWidth) {
+        if (text == null || maxWidth <= 0) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        int width = 0;
+        for (int i = 0; i < text.length();) {
+            int codePoint = text.codePointAt(i);
+            int glyphWidth = isWideGlyph(codePoint) ? 2 : 1;
+            if (width + glyphWidth > maxWidth) {
+                break;
+            }
+            sb.appendCodePoint(codePoint);
+            width += glyphWidth;
+            i += Character.charCount(codePoint);
+        }
+        return sb.toString();
+    }
+
+    private static int getDisplayWidth(String text) {
+        if (text == null) {
+            return 0;
+        }
+        int width = 0;
+        for (int i = 0; i < text.length();) {
+            int codePoint = text.codePointAt(i);
+            width += isWideGlyph(codePoint) ? 2 : 1;
+            i += Character.charCount(codePoint);
+        }
+        return width;
+    }
+
+    private static boolean isWideGlyph(int codePoint) {
+        return codePoint == 0x2B50 /* ⭐ */ || codePoint == 0x1F465 /* 👥 */;
     }
 }
