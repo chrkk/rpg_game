@@ -9,7 +9,7 @@ import rpg.items.Weapon;
 import rpg.characters.Enemy;
 import rpg.systems.TutorialCombatSystem;
 
-import rpg.ui_design.Intro;
+import rpg.ui.Intro;
 
 public class Tutorial {
     private final Scanner scanner;

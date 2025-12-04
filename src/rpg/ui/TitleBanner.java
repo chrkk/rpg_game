@@ -1,4 +1,4 @@
-package rpg.ui_design;
+package rpg.ui;
 
 public class TitleBanner {
     public static void displayTitleBanner() {

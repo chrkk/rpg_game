@@ -2,7 +2,7 @@ package rpg;
 
 import rpg.game.Game;
 import java.util.Scanner;
-import rpg.ui_design.TitleBanner;
+import rpg.ui.TitleBanner;
 
 public class Main {
     public static void main(String[] args) {

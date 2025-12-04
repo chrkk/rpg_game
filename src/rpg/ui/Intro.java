@@ -1,4 +1,4 @@
-package rpg.ui_design;
+package rpg.ui;
 
 import rpg.characters.Player;
 import rpg.characters.Enemy;
@@ -7,23 +7,6 @@ import rpg.utils.TextEffect;
 import rpg.ui.UIDesign;
 
 public class Intro {
-    
-    // public static void displayMainMenu() {
-    //     System.out.println("\n╔══════════════════════════════════════════════════════════╗");
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("║                    DR. CAPSTONE                          ║");
-    //     System.out.println("║               A Simulation of Survival                   ║");
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("╠══════════════════════════════════════════════════════════╣");
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("║  [1] 🎮 START GAME                                       ║");
-    //     System.out.println("║  [2] 🚪 EXIT                                             ║");
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("║  💡 Developer: Type 'devmenu' for debug options          ║");
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("╚══════════════════════════════════════════════════════════╝");
-    //     System.out.print("\n> INPUT: ");
-    // }
 
     //initial idea -> open for suggestions
     public static void displayMainMenu() {
