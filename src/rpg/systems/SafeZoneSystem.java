@@ -45,7 +45,7 @@ public class SafeZoneSystem {
         // Show intro for Stage 2
         try {
             if (state.zone == 2 && !state.supporterMenuIntroStage2Shown) {
-                TextEffect.typeWriter("You notice weathered statues scattered outside the lab — echoes of people who once stood guard. You can awaken a statue using a Revival Potion (available from the shop for 6 shards).\nRevived Supporters follow you and lend short, practical aid in combat. After Sir Khai's arrival, more statues may appear while you explore. Equip one Supporter in a Safe Zone to enable their perk.", 60);
+                TextEffect.typeWriter("You notice weathered statues scattered outside the lab — echoes of people who once stood guard. \n[SYSTEM] > You can awaken a statue using a Revival Potion (available from the shop for 6 shards).\n[SYSTEM] > Revived Supporters follow you and lend short, practical aid in combat. \n[SYSTEM] > After Sir Khai's arrival, more statues may appear while you explore. \n[SYSTEM] > Equip one Supporter in a Safe Zone to enable their perk.", 60);
                 state.supporterMenuIntroStage2Shown = true;
             }
         } catch (Exception e) {

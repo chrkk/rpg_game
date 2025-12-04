@@ -6,7 +6,7 @@ public class Enemy {
     private String name;
     private int hp;
     private int attack;
-    private int specialAttack;
+    private int specialAttack;  
     private int expReward; // ---> new added
 
     public Enemy(String name, int hp, int attack, int specialAttack, int expReward) {
