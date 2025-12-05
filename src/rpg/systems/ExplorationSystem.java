@@ -301,7 +301,7 @@ public class ExplorationSystem {
     // ✅ BOSS INTRO: The Choice (CS vs IT)
     // -------------------------------------------------------------
     private static void addBossIntroDialogue(Enemy boss, int zone) {
-        TextEffect.typeWriter("\n[System] > ⚠️ Warning: High Stress Levels Detected. The air grows heavy...", 70);
+        TextEffect.typeWriter("\n[System] > ⚠️   Warning: High Stress Levels Detected. The air grows heavy...", 70);
 
         try {
             Thread.sleep(800);

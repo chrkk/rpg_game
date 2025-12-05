@@ -1,4 +1,4 @@
-package rpg.ui_design;
+package rpg.ui;
 
 import rpg.characters.Player;
 import rpg.characters.Enemy;
@@ -7,44 +7,52 @@ import rpg.utils.TextEffect;
 import rpg.ui.UIDesign;
 
 public class Intro {
-    
-    // public static void displayMainMenu() {
-    //     System.out.println("\n╔══════════════════════════════════════════════════════════╗");
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("║                    DR. CAPSTONE                          ║");
-    //     System.out.println("║               A Simulation of Survival                   ║");
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("╠══════════════════════════════════════════════════════════╣");
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("║  [1] 🎮 START GAME                                       ║");
-    //     System.out.println("║  [2] 🚪 EXIT                                             ║");
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("║  💡 Developer: Type 'devmenu' for debug options          ║");
-    //     System.out.println("║                                                          ║");
-    //     System.out.println("╚══════════════════════════════════════════════════════════╝");
-    //     System.out.print("\n> INPUT: ");
-    // }
 
     //initial idea -> open for suggestions
-    public static void displayMainMenu() {
+    // public static void displayMainMenu() {
+    //     System.out.println();
+    //     System.out.println("    ═══════════════════════════════════════════════════");
+    //     System.out.println("    ║                                                 ║");
+    //     System.out.println("    ║    ██░░░░░▒▒▒▒▒▓▓▓▓▓  R̷E̴A̵L̴I̵T̶Y̴  ▓▓▓▓▒▒▒░░░░██    ║");
+    //     System.out.println("    ║    ██░░░░░▒▒▒▒▒▓▓▓▓▓  E̸R̶R̶O̴R̷  ▓▓▓▓▒▒▒░░░░██      ║");
+    //     System.out.println("    ║                                                 ║");
+    //     System.out.println("    ║         「 Something is wrong here... 」        ║");
+    //     System.out.println("    ║                                                 ║");
+    //     System.out.println("    ║    The world around you f̶r̶a̶c̶t̶u̶r̶e̶s̶               ║");
+    //     System.out.println("    ║    Your memories s̶h̶a̶t̶t̶e̶r̶                        ║");
+    //     System.out.println("    ║    But you can still... c̶h̶o̶o̶s̶e̶?                 ║");
+    //     System.out.println("    ║                                                 ║");
+    //     System.out.println("    ═══════════════════════════════════════════════════");
+    //     System.out.println("    ║                                                 ║");
+    //     System.out.println("    ║    ▸ 1  —  E̸N̷T̴E̷R̴ ̶T̵H̷E̴ ̷S̸I̵M̷U̸L̷A̵T̴I̷O̴N̷                 ║");
+    //     System.out.println("    ║    ▸ 2  —  R̶E̷F̸U̴S̶E̷ ̴/̷ ̵E̶S̴C̴A̷P̸E̴                      ║");
+    //     System.out.println("    ║                                                 ║");
+    //     System.out.println("    ║         [devmenu = access debug console]        ║");
+    //     System.out.println("    ║                                                 ║");
+    //     System.out.println("    ═══════════════════════════════════════════════════");
+    //     System.out.println();
+    //     System.out.print(" > Enter your choice: ");
+    // }
+
+   public static void displayMainMenu() {
         System.out.println();
         System.out.println("    ═══════════════════════════════════════════════════");
         System.out.println("    ║                                                 ║");
-        System.out.println("    ║    ██░░░░░▒▒▒▒▒▓▓▓▓▓  R̷E̴A̵L̴I̵T̶Y̴  ▓▓▓▓▒▒▒░░░░██    ║");
-        System.out.println("    ║    ██░░░░░▒▒▒▒▒▓▓▓▓▓  E̸R̶R̶O̴R̷  ▓▓▓▓▒▒▒░░░░██      ║");
+        System.out.println("    ║         . . . w h e r e   a m   I ?             ║");
         System.out.println("    ║                                                 ║");
-        System.out.println("    ║         「 Something is wrong here... 」        ║");
+        System.out.println("    ║    [System attempting to boot...]               ║");
+        System.out.println("    ║    ▓▓▓▓▓▓▓░░░░░░░░░░░ 43% LOADED                ║");
         System.out.println("    ║                                                 ║");
-        System.out.println("    ║    The world around you f̶r̶a̶c̶t̶u̶r̶e̶s̶               ║");
-        System.out.println("    ║    Your memories s̶h̶a̶t̶t̶e̶r̶                        ║");
-        System.out.println("    ║    But you can still... c̶h̶o̶o̶s̶e̶?                 ║");
+        System.out.println("    ║    > CONSCIOUSNESS: ██████░░░░  RESTORED        ║");
+        System.out.println("    ║    > MEMORY ACCESS: ████░░░░░░  CORRUPTED       ║");
+        System.out.println("    ║    > FREE WILL:     ██████████  ACTIVE (?)      ║");
         System.out.println("    ║                                                 ║");
         System.out.println("    ═══════════════════════════════════════════════════");
         System.out.println("    ║                                                 ║");
-        System.out.println("    ║    ▸ 1  —  E̸N̷T̴E̷R̴ ̶T̵H̷E̴ ̷S̸I̵M̷U̸L̷A̵T̴I̷O̴N̷                 ║");
-        System.out.println("    ║    ▸ 2  —  R̶E̷F̸U̴S̶E̷ ̴/̷ ̵E̶S̴C̴A̷P̸E̴                      ║");
+        System.out.println("    ║    ▸ 1  —  Wake Up / Start Over                 ║");
+        System.out.println("    ║    ▸ 2  —  Stay Asleep / Exit                   ║");
         System.out.println("    ║                                                 ║");
-        System.out.println("    ║         [devmenu = access debug console]        ║");
+        System.out.println("    ║         [devmenu = a̶c̶c̶e̶s̶s̶ G̶O̶D̶ M̶O̶D̶E̶]             ║");
         System.out.println("    ║                                                 ║");
         System.out.println("    ═══════════════════════════════════════════════════");
         System.out.println();

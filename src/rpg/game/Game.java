@@ -6,7 +6,7 @@ import rpg.utils.TextEffect;
 import rpg.characters.Player;
 import rpg.characters.Supporter;
 import rpg.items.Weapon;
-import rpg.ui_design.Intro;
+import rpg.ui.Intro;
 
 public class Game {
     private Scanner scanner = new Scanner(System.in);
