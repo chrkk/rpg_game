@@ -50,7 +50,8 @@ public class CombatSystem {
                             try {
                                 Weapon weapon = player.getWeapon();
                                 if (weapon != null) {
-                                    int dmg = weapon.rollDamage(rand) + (player.getIntelligence() / 2);
+                                    double bonusCrit = supporterSystem.getCritBonus(state);
+                                    int dmg = weapon.rollDamage(rand, bonusCrit) + (player.getIntelligence() / 2);
                                     enemy.takeDamage(dmg);
                                     TextEffect.typeWriter("You strike with your " + weapon.getName() +
                                             " for " + dmg + " damage!", 40);
@@ -134,14 +135,17 @@ public class CombatSystem {
                     }
 
                     // Let SupporterSystem handle per-turn supporter actions
-                    supporterSystem.performSupporterTurns(state, player, enemy, turnCount, rand);
+                    supporterSystem.performSupporterTurns(state, player, turnCount, rand);
 
                     // --- Enemy Turn ---
                     if (enemy.isAlive()) {
                         try {
                             int dmgTaken = enemy.enemyAction();
+                            boolean specialAttack = enemy.wasLastAttackSpecial();
                             if (defended)
                                 dmgTaken /= 2;
+
+                            dmgTaken = supporterSystem.modifyIncomingDamage(state, dmgTaken, specialAttack);
 
                             int actualDamage = player.takeDamage(dmgTaken);
                             TextEffect.typeWriter(
@@ -152,7 +156,9 @@ public class CombatSystem {
                         }
                     }
 
-                    // SupporterSystem decrements its own timers; nothing to do here
+                    supporterSystem.endOfTurn(player);
+
+                    // Supporter timers already advanced via supporterSystem.endOfTurn
 
                 } catch (Exception e) {
                     TextEffect.typeWriter("Something went wrong during your turn.", 40);

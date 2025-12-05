@@ -25,8 +25,13 @@ public class Weapon {
 
     // 🎲 Roll damage dynamically
     public int rollDamage(Random rand) {
+        return rollDamage(rand, 0.0);
+    }
+
+    public int rollDamage(Random rand, double bonusCritChance) {
         int dmg = rand.nextInt(maxDamage - minDamage + 1) + minDamage;
-        if (rand.nextDouble() < critChance) {
+        double totalCrit = Math.min(1.0, Math.max(0.0, critChance + Math.max(0.0, bonusCritChance)));
+        if (rand.nextDouble() < totalCrit) {
             System.out.println("💥 Critical Hit!");
             dmg = (int)(dmg * critMultiplier);
         }

@@ -8,6 +8,7 @@ public class Enemy {
     private int attack;
     private int specialAttack;  
     private int expReward; // ---> new added
+    private boolean lastAttackSpecial;
 
     public Enemy(String name, int hp, int attack, int specialAttack, int expReward) {
         this.name = name;
@@ -34,7 +35,12 @@ public class Enemy {
 
     public int enemyAction() {
         Random rand = new Random();
-        // 70% chance normal attack, 30% chance special
-        return rand.nextInt(100) < 70 ? attack : specialAttack;
+        int roll = rand.nextInt(100);
+        lastAttackSpecial = roll >= 70;
+        return lastAttackSpecial ? specialAttack : attack;
+    }
+
+    public boolean wasLastAttackSpecial() {
+        return lastAttackSpecial;
     }
 }
